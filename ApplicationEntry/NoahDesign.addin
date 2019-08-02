@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>Advanced BIM Editor</Name>
+    <Assembly>NoahDesign.dll</Assembly>
+    <FullClassName>NoahDesign.App</FullClassName>
+    <ClientId>159f0ea9-ad59-423e-aecc-c1f0f7571eac</ClientId>
+    <VendorId>jp.noah-design</VendorId>
+    <VendorDescription>Jaebum Kim, https://noah-design.jp</VendorDescription>
+  </AddIn>
+</RevitAddIns>
