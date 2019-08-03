@@ -8,9 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NoahDesign.Folder_Command;
-
+using NoahDesign.Folder_Component;
+using BuildingCoder;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+
 
 namespace NoahDesign.Folder_WinForm
 {
@@ -43,10 +45,57 @@ namespace NoahDesign.Folder_WinForm
 
     private void ButtonOk_Click( object sender, EventArgs e )
     {
-      UIDocument uidoc = _dataBuffer.UIDocument;
-      Document doc = uidoc.Document;
+      listView1.Refresh();
 
-      
+      if ( listView1.CheckedItems.Count != 0 )
+      {
+        foreach ( ListViewItem item in listView1.CheckedItems )
+          _insideMass.Add( _dictFilters[item.Index] );
+
+        using ( SubTransaction subTransaction = new SubTransaction( _dataBuffer.Document ) )
+        {
+          List<Solid> intersecs = new List<Solid>();
+          List<Solid> solids = new List<Solid>();
+
+          Solid massSolid = Util_ConcreteVolume.GetElementSolid( _dataBuffer.Element );
+
+          try
+          {
+            foreach ( var item in _insideMass )
+            {
+              var solid = Util_ConcreteVolume.GetElementSolid( item );
+              solids.Add( solid );
+            }
+
+            foreach ( Solid solid in solids )
+            {
+              var inter = BooleanOperationsUtils.ExecuteBooleanOperation( massSolid, solid,
+              BooleanOperationsType.Intersect );
+              intersecs.Add( inter );
+            }
+
+            if ( intersecs != null )
+            {
+              Util_ConcreteVolume.CreateDirectShapeNoneVolume( _dataBuffer.Document, intersecs );
+              TaskDialog.Show( _dataBuffer.TaskDialogTitle, "完了しました。\n" +
+              "体積は「コメント」パラメータを参考してください。", TaskDialogCommonButtons.Close );
+            }
+
+          }
+          catch ( Exception ex )
+          {
+            TaskDialog.Show( _dataBuffer.TaskDialogTitle, "範囲を正しく指定してください。\n" +
+              "RCではないインスタンスが含まれています。" );
+            this.Dispose();
+            this.DialogResult = DialogResult.Retry;
+          }
+          finally
+          {
+            this.Dispose();
+          }
+        }
+      }
+
     }
 
     private void Button1_Click( object sender, EventArgs e )
@@ -145,5 +194,27 @@ namespace NoahDesign.Folder_WinForm
       return listOfElements;
     }
     #endregion
+
+
+    
+    void GetSideFaces(List<Face> verticalFaces, Solid solid )
+    {
+      FaceArray faces = solid.Faces;
+      foreach ( Face f in faces )
+      {
+        if ( f is PlanarFace )
+        {
+          if ( Util.IsVertical( f as PlanarFace ) )
+            verticalFaces.Add( f );
+        }
+        if ( f is CylindricalFace )
+        {
+          if ( Util.IsVertical( f as CylindricalFace ) )
+            verticalFaces.Add( f );
+        }
+      }
+    }
+
+
   }
 }

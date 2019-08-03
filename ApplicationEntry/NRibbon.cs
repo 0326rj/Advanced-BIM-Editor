@@ -31,7 +31,7 @@ namespace NoahDesign
       RibbonPanel panel_Info = UICrdApp.CreateRibbonPanel( tabName, "Info" );
 
 
-      #region Geometry+ -> CmdConcreteUtil.cs
+      #region Geometry+ -> CmdConcreteUtil
       // 1. Push Button 과 Command 연결
       PushButtonData data_conVolume = new PushButtonData(
           "ConcreteVolume", "RC\n体積計算", path,
@@ -49,7 +49,7 @@ namespace NoahDesign
       #endregion
       panel_GeometryPlus.AddSeparator();
 
-      #region Geometry+ -> CmdConcreteFormwork.cs
+      #region Geometry+ -> CmdConcreteFormwork
       // 1. Push Button 과 Command 연결
       PushButtonData data_conForm = new PushButtonData(
           "Formwork", "RC\n型枠計算", path,
@@ -65,9 +65,26 @@ namespace NoahDesign
       // 2. 버튼 데이터 추가
       RibbonItem itemConForm = panel_GeometryPlus.AddItem( data_conForm );
       #endregion
-      
 
-      #region VersionInfo -> ShowVersionInfo.cs
+
+      #region VersionInfo -> CmdTest
+      // 1. Push Button 과 Command 연결
+      PushButtonData data_Test = new PushButtonData(
+          "TestCMD", "TEST", path,
+          "NoahDesign.GeoPuls_CmdTest.CmdTest" );
+      BitmapSource testLogo = GetEmbededImage(
+          "NoahDesign.Folder_Image.test32.png" );
+
+      data_Test.LargeImage = testLogo;
+      data_Test.ToolTip = "TEST";
+
+      // 2. 버튼 데이터 추가
+      RibbonItem itemTest = panel_Info.AddItem( data_Test );
+      #endregion
+
+      //panel_Info.AddSeparator();
+
+      #region VersionInfo -> ShowVersionInfo
       // 1. Push Button 과 Command 연결
       PushButtonData data_Version = new PushButtonData(
           "vesionInfo", "バージョン\n情報", path,

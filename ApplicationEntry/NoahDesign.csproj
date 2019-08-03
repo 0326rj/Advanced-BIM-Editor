@@ -62,6 +62,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Folder_Component\Util_CreateDirectShape.cs" />
     <Compile Include="GeoPlus_CmdConcreteFormwork\CmdConcreteFormwork.cs" />
     <Compile Include="Folder_Component\FilterRuleBuilder.cs" />
     <Compile Include="Folder_Component\FiltersUtil.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="GeoPlus_CmdConcreteVolume\FormConcreteVolume.Designer.cs">
       <DependentUpon>FormConcreteVolume.cs</DependentUpon>
     </Compile>
+    <Compile Include="GeoPuls_CmdTest\CmdTest.cs" />
     <Compile Include="NRibbon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -105,10 +107,10 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Folder_Image\formwork32.png" />
+    <EmbeddedResource Include="Folder_Image\test32.png" />
     <Content Include="NoahDesign.addin" />
     <EmbeddedResource Include="Folder_Image\cube32.png" />
     <EmbeddedResource Include="Folder_Image\Noah32.png" />
-    <EmbeddedResource Include="Folder_Image\test32.png" />
     <EmbeddedResource Include="Folder_Image\Box32.png" />
     <EmbeddedResource Include="GeoPlus_CmdConcreteFormwork\FormConcreteFormwork.resx">
       <DependentUpon>FormConcreteFormwork.cs</DependentUpon>
@@ -130,6 +132,7 @@
       <DependentUpon>AddInInfo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if exist "$(AppData)\Autodesk\REVIT\Addins\2018" copy "$(ProjectDir)*.addin" "$(AppData)\Autodesk\REVIT\Addins\2018"

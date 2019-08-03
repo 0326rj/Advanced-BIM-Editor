@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB;
+using System.Diagnostics;
 
 namespace NoahDesign.Folder_Component
 {
@@ -322,5 +323,145 @@ namespace NoahDesign.Folder_Component
       doc.ActiveView.SetElementOverrides( ds.Id, ogs );
       #endregion
     }
+
+    public static void CreateDirectShapeNoneVolume( Document doc, List<Solid> solidList )
+    {
+      #region DS Setting
+
+      Category category = Category.GetCategory( doc, BuiltInCategory.OST_GenericModel );
+      DirectShapeType directShapeType = DirectShapeType.Create( doc, "VolumeModel", category.Id );
+      DirectShape ds = DirectShape.CreateElement( doc, category.Id );
+
+      List<GeometryObject> geometryObjectList = new List<GeometryObject>();
+      foreach ( var solid in solidList )
+      {
+        if ( ds.IsValidGeometry( solid ) )
+          geometryObjectList.Add( solid );
+      }
+      ds.SetTypeId( directShapeType.Id );
+      ds.SetName( "JK_VolumeModel" );
+      #endregion
+
+      ds.SetShape( geometryObjectList );
+
+      #region DS Color Settings
+      FillPatternElement solidFill;
+      solidFill = FillPatternElement
+        .GetFillPatternElementByName( doc, FillPatternTarget.Drafting, "Solid fill" );
+
+      Color greenblue = new Color( 130, 250, 220 ); // green
+      Color lineColor = new Color( 0, 0, 0 ); // black
+      Color navy = new Color( 035, 053, 102 ); // navy
+      OverrideGraphicSettings ogs = new OverrideGraphicSettings();
+
+      ogs.SetProjectionLineColor( lineColor );
+      ogs.SetProjectionFillColor( greenblue );
+      ogs.SetCutFillPatternId( solidFill.Id );
+      ogs.SetProjectionFillPatternVisible( true );
+      ogs.SetProjectionFillPatternId( solidFill.Id );
+      ogs.SetSurfaceTransparency( 0 ); // Transparency
+      ogs.SetCutFillColor( navy );
+      ogs.SetCutLineColor( lineColor );
+
+      doc.ActiveView.SetElementOverrides( ds.Id, ogs );
+      #endregion
+    }
+
+
+
+    public static void CreateDirectShapeByFaces( Document doc, List<Face> faceList )
+    {
+
+      TessellatedShapeBuilder builder = new TessellatedShapeBuilder();
+      builder.OpenConnectedFaceSet( false );
+
+      List<Mesh> meshes = new List<Mesh>();
+
+      foreach ( Face face in faceList )
+      {
+        Mesh mesh = face.Triangulate();
+        meshes.Add( mesh );
+      }
+
+
+
+
+
+      #region DS Setting
+
+      Category category = Category.GetCategory( doc, BuiltInCategory.OST_GenericModel );
+      DirectShapeType directShapeType = DirectShapeType.Create( doc, "VolumeModel", category.Id );
+      DirectShape ds = DirectShape.CreateElement( doc, category.Id );
+
+      List<GeometryObject> geometryObjectList = new List<GeometryObject>();
+      foreach ( var face in faceList )
+      {
+          geometryObjectList.Add( face );
+      }
+      ds.SetTypeId( directShapeType.Id );
+      ds.SetName( "JK_VolumeModel" );
+
+      #endregion
+
+
+
+      XYZ[] triangleCorners = new XYZ[3];
+      foreach ( var mesh in meshes )
+      {
+        for ( int i = 0; i < mesh.NumTriangles; i++ )
+        {
+          MeshTriangle triangle = mesh.get_Triangle( i );
+
+          triangleCorners[0] = triangle.get_Vertex( 0 );
+          triangleCorners[1] = triangle.get_Vertex( 1 );
+          triangleCorners[2] = triangle.get_Vertex( 2 );
+
+          XYZ normal = Util_CreateDirectShape.GetNormal( triangleCorners );
+
+          SketchPlane sketchPlane = Util_CreateDirectShape.GetSketchPlane( doc, triangleCorners[0], normal );
+
+          TessellatedFace tesseFace = new TessellatedFace( triangleCorners, ElementId.InvalidElementId );
+
+          if ( builder.DoesFaceHaveEnoughLoopsAndVertices( tesseFace ) )
+          {
+            builder.AddFace( tesseFace );
+          }
+
+        }
+      }
+
+      builder.CloseConnectedFaceSet();
+
+      builder.Target = TessellatedShapeBuilderTarget.AnyGeometry;
+      builder.Fallback = TessellatedShapeBuilderFallback.Mesh;
+
+      builder.Build();
+      TessellatedShapeBuilderResult result = builder.GetBuildResult();
+
+      ds.SetShape( result.GetGeometricalObjects() );
+
+      #region DS Color Settings
+      FillPatternElement solidFill;
+      solidFill = FillPatternElement
+        .GetFillPatternElementByName( doc, FillPatternTarget.Drafting, "Solid fill" );
+
+      Color greenblue = new Color( 130, 250, 220 ); // green
+      Color lineColor = new Color( 0, 0, 0 ); // black
+      OverrideGraphicSettings ogs = new OverrideGraphicSettings();
+
+      ogs.SetProjectionLineColor( lineColor );
+      ogs.SetProjectionFillColor( greenblue );
+      ogs.SetProjectionFillPatternVisible( true );
+      ogs.SetProjectionFillPatternId( solidFill.Id );
+      ogs.SetSurfaceTransparency( 0 ); // Transparency
+
+      doc.ActiveView.SetElementOverrides( ds.Id, ogs );
+      #endregion
+    }
+
+  
+
+
+
   }
 }
