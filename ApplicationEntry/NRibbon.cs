@@ -70,10 +70,10 @@ namespace NoahDesign
       #region VersionInfo -> CmdTest
       // 1. Push Button 과 Command 연결
       PushButtonData data_Test = new PushButtonData(
-          "TestCMD", "TEST", path,
+          "TestCMD", "テスト\n実行", path,
           "NoahDesign.GeoPuls_CmdTest.CmdTest" );
       BitmapSource testLogo = GetEmbededImage(
-          "NoahDesign.Folder_Image.nuclear32.png" );
+          "NoahDesign.Folder_Image.test32.png" );
 
       data_Test.LargeImage = testLogo;
       data_Test.ToolTip = "TEST";
@@ -81,8 +81,7 @@ namespace NoahDesign
       // 2. 버튼 데이터 추가
       RibbonItem itemTest = panel_Info.AddItem( data_Test );
       #endregion
-
-      //panel_Info.AddSeparator();
+      panel_Info.AddSeparator();
 
       #region VersionInfo -> ShowVersionInfo
       // 1. Push Button 과 Command 연결
@@ -98,6 +97,7 @@ namespace NoahDesign
       // 2. 버튼 데이터 추가
       RibbonItem versionInfo = panel_Info.AddItem( data_Version );
       #endregion
+      panel_Info.AddSeparator();
     }
 
     public static BitmapSource GetEmbededImage( string name )

@@ -3138,7 +3138,7 @@ namespace BuildingCoder
   }
   #endregion // Compatibility Methods by Magson Leone
 
-
+ 
   public static class UnitConvert
   {
     public static double FeetToMillimetersLenth( double feet )
@@ -3146,6 +3146,5 @@ namespace BuildingCoder
       double meter = UnitUtils.Convert( feet, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_MILLIMETERS );
       return meter;
     }
-
   }
 }
