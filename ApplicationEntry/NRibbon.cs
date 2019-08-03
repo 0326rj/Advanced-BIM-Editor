@@ -73,7 +73,7 @@ namespace NoahDesign
           "TestCMD", "TEST", path,
           "NoahDesign.GeoPuls_CmdTest.CmdTest" );
       BitmapSource testLogo = GetEmbededImage(
-          "NoahDesign.Folder_Image.test32.png" );
+          "NoahDesign.Folder_Image.nuclear32.png" );
 
       data_Test.LargeImage = testLogo;
       data_Test.ToolTip = "TEST";

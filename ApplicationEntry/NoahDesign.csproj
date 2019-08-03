@@ -107,7 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Folder_Image\formwork32.png" />
-    <EmbeddedResource Include="Folder_Image\test32.png" />
+    <EmbeddedResource Include="Folder_Image\nuclear32.png" />
     <Content Include="NoahDesign.addin" />
     <EmbeddedResource Include="Folder_Image\cube32.png" />
     <EmbeddedResource Include="Folder_Image\Noah32.png" />
