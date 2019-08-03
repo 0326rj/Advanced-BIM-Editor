@@ -1931,9 +1931,6 @@ namespace BuildingCoder
     }
     #endregion // Compatibility fix for spelling error change
 
-
-
-
   }
 
   #region Extension Method Classes
@@ -3149,7 +3146,6 @@ namespace BuildingCoder
       double meter = UnitUtils.Convert( feet, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_MILLIMETERS );
       return meter;
     }
+
   }
-
-
 }
