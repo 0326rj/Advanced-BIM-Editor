@@ -18,25 +18,35 @@ namespace NoahDesign.GeoPuls_CmdTest
   public class CmdTest : IExternalCommand
   {
     #region Field
-    const string _familyName = "DynamoControlled_slab1";
-    const string _typeName1 = "set1";
-    const string _typeName2 = "set2";
-    const string _typeName3 = "set3";
-    const string _typeName4 = "set4";
-    const string _typeName5 = "set5";
-    const string _typeName6 = "set6";
 
     const string _param_name1 = "床スラブ_CON天端レベル";
     const string _param_name2 = "床スラブ_構造体天端レベル";
     const string _param_name3 = "床スラブ_部分ふかし";
-  
-    private BuiltInParameter tenba = BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM;
+
+    ElementId _tagType1 = new ElementId( 4545935 ); // ふかしあり
+    ElementId _tagType2 = new ElementId( 4545933 ); // 一般
+    ElementId _tagType3 = new ElementId( 4545945 ); // 一般_上部
+    ElementId _tagType4 = new ElementId( 5218253 ); // 下端打放し
+    ElementId _tagType5 = new ElementId( 4545937 ); // 断熱材あり
+    ElementId _tagType6 = new ElementId( 5218251 ); // 断熱材・ふかしあり
+    ElementId _tagType7 = new ElementId( 4946329 ); // 構造体勾配
+    ElementId _tagType8 = new ElementId( 4946329 ); // 構造体勾配
 
     #endregion
 
     #region Property
+
+    private string dialogTitle;
     private UIDocument uidoc;
     private Document doc;
+    private string heightLevel1;
+    private double heightLevel2;
+
+    public string DialogTitle
+    {
+      get { return dialogTitle; }
+      set { dialogTitle = value; }
+    }
 
     public UIDocument UIDocument
     {
@@ -48,21 +58,25 @@ namespace NoahDesign.GeoPuls_CmdTest
       get { return doc; }
     }
 
-    #endregion
+    public string HeightLevel1
+    {
+      get { return heightLevel1; }
+      set { heightLevel1 = value; }
+    }
 
-    ElementId _tagType1 = new ElementId( 4545935 ); // ふかしあり
-    ElementId _tagType2 = new ElementId( 4545933 ); // 一般
-    ElementId _tagType3 = new ElementId( 4545945 ); // 一般_上部
-    ElementId _tagType4 = new ElementId( 5218253 ); // 下端打放し
-    ElementId _tagType5 = new ElementId( 4545937 ); // 断熱材あり
-    ElementId _tagType6 = new ElementId( 5218251 ); // 断熱材・ふかしあり
-    ElementId _tagType7 = new ElementId( 4946329 ); // 構造体勾配
-    ElementId _tagType8 = new ElementId( 4946329 ); // 構造体勾配
+    public double HeightLevel2
+    {
+      get { return heightLevel2; }
+      set { heightLevel2 = value; }
+    }
+
+    #endregion
 
     public Result Execute( ExternalCommandData commandData, ref string message, ElementSet elements )
     {
       uidoc = commandData.Application.ActiveUIDocument;
       doc = uidoc.Document;
+      DialogTitle = "Automatic Tag Control";
 
       List<Reference> selectedFloors = uidoc.Selection.PickObjects( ObjectType.Element ) as List<Reference>;
       
@@ -80,27 +94,38 @@ namespace NoahDesign.GeoPuls_CmdTest
             List<Element> els = new List<Element>();
             foreach ( var item in selectedFloors )
             {
-              IndependentTag tag = CreateFloorTag( doc, item );
-
               Element e = doc.GetElement( item );
-         
-              ChangeTagTypeByFloorCondition( doc, e as Floor , tag );
-            }
-            TaskDialog.Show( "title", "タグ生成完了" );
+
+              if ( e is Floor )
+              {
+                IndependentTag tag = CreateFloorTag( doc, item );
+                ChangeTagTypeByFloorCondition( doc, e as Floor, tag );
+
+                ResetTagParameter( e as Floor );
+              }
+              else
+              {
+                TaskDialog.Show( DialogTitle, "床が選択されませんでした。" );
+                return Result.Failed;
+              }         
+            }            
           }
           else
           {
-            TaskDialog.Show( "Auto Tag System", "床を選択してください。" );
+            TaskDialog.Show( DialogTitle, "床を選択してください。" );
             return Result.Cancelled;
           }
+
           tx.Commit();
         }
         catch ( Exception ex )
         {
-          TaskDialog.Show( "...", ex.Message );
+          TaskDialog.Show( DialogTitle, ex.Message );
           return Result.Failed;
         }      
       }
+
+      TaskDialog.Show( DialogTitle, "タグ生成完了" );
       return Result.Succeeded;
     }
 
@@ -149,17 +174,9 @@ namespace NoahDesign.GeoPuls_CmdTest
     }
     #endregion
 
-    void ChangeTagType( Document doc, IndependentTag independentTag )
-    {
-      var hostElement = independentTag.GetTaggedLocalElement();
+    #region Floor Tag Type Control
 
-      if ( hostElement.Category.Id == new ElementId( BuiltInCategory.OST_Floors ) )
-      {
-
-      }
-    }
-
-    void ChangeTagTypeByFloorCondition(Document doc, Floor floor, IndependentTag tag )
+    void ChangeTagTypeByFloorCondition( Document doc, Floor floor, IndependentTag tag )
     {
       FloorType floorType = floor.FloorType;
 
@@ -171,34 +188,107 @@ namespace NoahDesign.GeoPuls_CmdTest
         Category floorCat = categories.get_Item( BuiltInCategory.OST_Floors );
         // Material floorMat = floorCat.Material;
 
-        foreach ( CompoundStructureLayer stl in comStruct.GetLayers() ) 
+        foreach ( CompoundStructureLayer stl in comStruct.GetLayers() )
         {
           // Material layerMaterial = doc.GetElement( stl.MaterialId ) as Material;
 
-          if ( comStruct.LayerCount == 1 && stl.Function == MaterialFunctionAssignment.Structure )
+          // 바닥 레이어가 1개인 경우
+          if ( comStruct.LayerCount == 1 )
           {
             tag.ChangeTypeId( _tagType2 );
           }
 
+          // 바닥 레이어가 2개인 경우
           else if ( comStruct.LayerCount == 2 )
           {
-            if ( stl.Function == MaterialFunctionAssignment.Insulation )
+            if ( stl.LayerId == 0 && stl.Function == MaterialFunctionAssignment.Substrate )
+            {
+              tag.ChangeTypeId( _tagType1 );
+            }
+            else if ( stl.LayerId == 1 && stl.Function == MaterialFunctionAssignment.Substrate )
+            {
+              tag.ChangeTypeId( _tagType4 );
+            }
+            else if ( stl.LayerId == 1 && stl.Function == MaterialFunctionAssignment.Insulation )
+            {
               tag.ChangeTypeId( _tagType5 );
-            else
-              tag.ChangeTypeId( _tagType1 );        
+            }
           }
 
-          else if ( comStruct.LayerCount == 3 
-            && stl.Function == MaterialFunctionAssignment.Insulation
-            && stl.Function == MaterialFunctionAssignment.Structure
-            && stl.Function == MaterialFunctionAssignment.Substrate)
+          // 바닥 레이어가 3개인 경우
+          else if ( comStruct.LayerCount == 3 )
           {
-            tag.ChangeTypeId( _tagType6 );
+            if ( stl.LayerId == 2 && stl.Function == MaterialFunctionAssignment.Insulation )
+            {
+              tag.ChangeTypeId( _tagType6 );
+            }
+            else
+            {
+              tag.ChangeTypeId( _tagType1 );
+            }
           }
 
+          else if ( comStruct.LayerCount > 3 )
+          {
+            TaskDialog.Show( DialogTitle, "床の構造レイヤーが4つ以上のものが含まれています。" );
+          }
 
+          else
+            return;
         }
       }
+    }
+    #endregion
+
+    void ResetTagParameter( Floor floor )
+    {
+      // No1. 床スラブ_CON天端レベル
+      heightLevel1 = floor.get_Parameter( BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM ).AsValueString();
+
+      if ( heightLevel1 == "0" )
+      {
+        HeightLevel1 = "±0";
+        floor.LookupParameter( _param_name1 ).Set( HeightLevel1 );
+      }
+      else
+      {
+        floor.LookupParameter( _param_name1 ).Set( HeightLevel1 );
+      }
+
+
+      // No2. 床スラブ_構造体天端レベル
+
+      double structThk = 0;
+
+      FloorType floorType = floor.FloorType;
+      CompoundStructure comStruct = floorType.GetCompoundStructure();
+
+      foreach ( CompoundStructureLayer stl in comStruct.GetLayers() )
+      {
+        if ( stl.Function != MaterialFunctionAssignment.Structure )
+        {
+          structThk += stl.Width;
+          //heightLevel2 = floor.get_Parameter( BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM ).AsDouble();
+        }     
+      }
+      double floorThk = floor.get_Parameter( BuiltInParameter.FLOOR_ATTR_THICKNESS_PARAM ).AsDouble();
+      var level = floor.get_Parameter( BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM ).AsDouble();
+
+      var stt = UnitUtils.Convert( structThk, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_MILLIMETERS );
+      var flt = UnitUtils.Convert( floorThk, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_MILLIMETERS );
+      var lvh = UnitUtils.Convert( level, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_MILLIMETERS );
+
+      HeightLevel2 = ( flt - stt ) - lvh;
+
+      floor.LookupParameter( _param_name2 ).Set( HeightLevel2.ToString() );
+
+      var srt = String.Format( "floorThk : {0}\n structThk : {1} ", flt, stt );
+      TaskDialog.Show( "ddd", srt );
+
+
+
+
+      // No3. 床スラブ_部分ふかし
     }
   }
 }

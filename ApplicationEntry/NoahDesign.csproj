@@ -96,6 +96,12 @@
       <DependentUpon>FormConcreteVolume.cs</DependentUpon>
     </Compile>
     <Compile Include="GeoPuls_CmdTest\CmdTest.cs" />
+    <Compile Include="GeoPuls_CmdTest\FormAutoTag.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GeoPuls_CmdTest\FormAutoTag.Designer.cs">
+      <DependentUpon>FormAutoTag.cs</DependentUpon>
+    </Compile>
     <Compile Include="NRibbon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -117,6 +123,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GeoPlus_CmdConcreteVolume\FormConcreteVolume.resx">
       <DependentUpon>FormConcreteVolume.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GeoPuls_CmdTest\FormAutoTag.resx">
+      <DependentUpon>FormAutoTag.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
