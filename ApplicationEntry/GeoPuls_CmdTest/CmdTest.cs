@@ -1,4 +1,5 @@
-﻿using System;
+﻿#region 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,8 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using NoahDesign.Folder_WinForm;
-using System.Diagnostics;
+using System.Diagnostics; 
+#endregion
 
 // 2019. 08. 05 Jaebum Kim
 
@@ -214,7 +216,7 @@ namespace NoahDesign.GeoPuls_CmdTest
             {
               tag.ChangeTypeId( _tagType1 );
             }
-            else if ( ( stl.LayerId == 1 )
+            else if ( ( stl.LayerId == 1 ) 
               && ( stl.Function == MaterialFunctionAssignment.Substrate ) )
             {
               tag.ChangeTypeId( _tagType4 );
@@ -244,7 +246,7 @@ namespace NoahDesign.GeoPuls_CmdTest
           else if ( comStruct.LayerCount > 3 )
           {
             TaskDialog.Show( DialogTitle,
-              "床の構造レイヤーが4つ以上のものが含まれています。" );
+              "The slab contains more than four layers." );
             return;
           }
 
