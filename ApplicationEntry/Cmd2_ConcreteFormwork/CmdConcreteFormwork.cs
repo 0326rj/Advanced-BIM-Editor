@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ApplicationEntry.Folder_WinForm;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
-using NoahDesign.Folder_WinForm;
 
-namespace NoahDesign.Folder_Command
+namespace NoahDesign.Cmd2_ConcreteFormwork
 {
   [Transaction( TransactionMode.Manual )]
   public class CmdConcreteFormwork : IExternalCommand

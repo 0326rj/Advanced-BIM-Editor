@@ -24,18 +24,17 @@ namespace NoahDesign
       string tabName = "Noah Design";
       UICrdApp.CreateRibbonTab( tabName );
 
-
       // Ribbon Panel 작성
       RibbonPanel panel_GeometryPlus = UICrdApp.CreateRibbonPanel( tabName, "Geometry+" );
-      //RibbonPanel panel_DrawingPlus = UICrdApp.CreateRibbonPanel( tabName, "Drawing+" );
+      RibbonPanel panel_DrawingPlus = UICrdApp.CreateRibbonPanel( tabName, "Drawing+" );
       RibbonPanel panel_Info = UICrdApp.CreateRibbonPanel( tabName, "Info" );
 
 
-      #region Geometry+ -> CmdConcreteUtil
+      #region Geometry+ -> Cmd1_ConcreteVolume
       // 1. Push Button 과 Command 연결
       PushButtonData data_conVolume = new PushButtonData(
           "ConcreteVolume", "RC\n体積計算", path,
-          "NoahDesign.Folder_Command.CmdConcreteUtil" );
+          "NoahDesign.Cmd1_ConcreteVolume.CmdConcreteUtil" );
       BitmapSource conVolume = GetEmbededImage(
           "NoahDesign.Folder_Image.cube32.png" );
 
@@ -49,11 +48,11 @@ namespace NoahDesign
       #endregion
       panel_GeometryPlus.AddSeparator();
 
-      #region Geometry+ -> CmdConcreteFormwork
+      #region Geometry+ -> Cmd2_ConcreteFormwork
       // 1. Push Button 과 Command 연결
       PushButtonData data_conForm = new PushButtonData(
           "Formwork", "RC\n型枠計算", path,
-          "NoahDesign.Folder_Command.CmdConcreteFormwork" );
+          "NoahDesign.Cmd2_ConcreteFormwork.CmdConcreteFormwork" );
       BitmapSource conForm = GetEmbededImage(
           "NoahDesign.Folder_Image.cube32.png" );
 
@@ -67,21 +66,37 @@ namespace NoahDesign
       #endregion
 
 
-      #region VersionInfo -> CmdTest
+      #region Drawing+ -> Cmd3_FloorTagControl
       // 1. Push Button 과 Command 연결
-      PushButtonData data_Test = new PushButtonData(
-          "TestCMD", "テスト\n実行", path,
-          "NoahDesign.GeoPuls_CmdTest.CmdTest" );
+      PushButtonData data_floortag = new PushButtonData(
+          "FloorTagCMD", "床タグ\n配置", path,
+          "NoahDesign.Cmd3_FloorTagControl.CmdFloorTagControl" );
       BitmapSource testLogo = GetEmbededImage(
-          "NoahDesign.Folder_Image.test32.png" );
+          "NoahDesign.Folder_Image.floorTag32.png" );
 
-      data_Test.LargeImage = testLogo;
-      data_Test.ToolTip = "TEST";
+      data_floortag.LargeImage = testLogo;
+      data_floortag.ToolTip = "TEST";
 
       // 2. 버튼 데이터 추가
-      RibbonItem itemTest = panel_Info.AddItem( data_Test );
+      RibbonItem itemTest = panel_DrawingPlus.AddItem( data_floortag );
       #endregion
-      panel_Info.AddSeparator();
+      panel_DrawingPlus.AddSeparator();
+
+      #region Drawing+ -> Cmd4_Test
+      // 1. Push Button 과 Command 연결
+      PushButtonData data_cmd4test = new PushButtonData(
+          "TestCMD", "TEST\n実行", path,
+          "NoahDesign.Cmd4_Test.CmdTest" );
+      BitmapSource logo4 = GetEmbededImage(
+          "NoahDesign.Folder_Image.test32_2.png" );
+
+      data_cmd4test.LargeImage = logo4;
+      data_cmd4test.ToolTip = "TEST";
+
+      // 2. 버튼 데이터 추가
+      RibbonItem itemTest4 = panel_DrawingPlus.AddItem( data_cmd4test );
+      #endregion
+
 
       #region VersionInfo -> ShowVersionInfo
       // 1. Push Button 과 Command 연결

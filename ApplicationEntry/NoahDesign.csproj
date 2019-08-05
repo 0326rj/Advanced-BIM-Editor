@@ -62,14 +62,16 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cmd4_Test\CmdTest.cs" />
     <Compile Include="Folder_Component\Util_CreateDirectShape.cs" />
-    <Compile Include="GeoPlus_CmdConcreteFormwork\CmdConcreteFormwork.cs" />
+    <Compile Include="Cmd2_ConcreteFormwork\CmdConcreteFormwork.cs" />
     <Compile Include="Folder_Component\FilterRuleBuilder.cs" />
     <Compile Include="Folder_Component\FiltersUtil.cs" />
     <Compile Include="Folder_Component\Util_ConcreteVolume.cs" />
     <Compile Include="Folder_Command\CmdAdvanceFaceWall.cs" />
     <Compile Include="Folder_Command\CmdAutoFloorTag.cs" />
-    <Compile Include="GeoPlus_CmdConcreteVolume\CmdConcreteUtil.cs" />
+    <Compile Include="Cmd2_ConcreteFormwork\Util_Formwork.cs" />
+    <Compile Include="Cmd1_ConcreteVolume\CmdConcreteUtil.cs" />
     <Compile Include="Folder_Command\CmdPickPoint3dDist.cs" />
     <Compile Include="Folder_Command\CmdPickPoint3d.cs" />
     <Compile Include="Folder_Component\BooleanOperation.cs" />
@@ -83,25 +85,19 @@
     </Compile>
     <Compile Include="App.cs" />
     <Compile Include="Folder_Command\ShowVersionInfo.cs" />
-    <Compile Include="GeoPlus_CmdConcreteFormwork\FormConcreteFormwork.cs">
+    <Compile Include="Cmd2_ConcreteFormwork\Form_ConcreteFormwork.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GeoPlus_CmdConcreteFormwork\FormConcreteFormwork.Designer.cs">
-      <DependentUpon>FormConcreteFormwork.cs</DependentUpon>
+    <Compile Include="Cmd2_ConcreteFormwork\Form_ConcreteFormwork.Designer.cs">
+      <DependentUpon>Form_ConcreteFormwork.cs</DependentUpon>
     </Compile>
-    <Compile Include="GeoPlus_CmdConcreteVolume\FormConcreteVolume.cs">
+    <Compile Include="Cmd1_ConcreteVolume\FormConcreteVolume.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GeoPlus_CmdConcreteVolume\FormConcreteVolume.Designer.cs">
+    <Compile Include="Cmd1_ConcreteVolume\FormConcreteVolume.Designer.cs">
       <DependentUpon>FormConcreteVolume.cs</DependentUpon>
     </Compile>
-    <Compile Include="GeoPuls_CmdTest\CmdTest.cs" />
-    <Compile Include="GeoPuls_CmdTest\FormAutoTag.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GeoPuls_CmdTest\FormAutoTag.Designer.cs">
-      <DependentUpon>FormAutoTag.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Cmd3_FloorTagControl\CmdFloorTagControl.cs" />
     <Compile Include="NRibbon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -109,24 +105,22 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="TestClass.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Folder_Image\formwork32.png" />
     <EmbeddedResource Include="Folder_Image\test32.png" />
+    <EmbeddedResource Include="Folder_Image\floorTag32.png" />
+    <EmbeddedResource Include="Folder_Image\test32_2.png" />
     <Content Include="NoahDesign.addin" />
     <EmbeddedResource Include="Folder_Image\cube32.png" />
     <EmbeddedResource Include="Folder_Image\Noah32.png" />
     <EmbeddedResource Include="Folder_Image\Box32.png" />
-    <EmbeddedResource Include="GeoPlus_CmdConcreteFormwork\FormConcreteFormwork.resx">
-      <DependentUpon>FormConcreteFormwork.cs</DependentUpon>
+    <EmbeddedResource Include="Cmd2_ConcreteFormwork\Form_ConcreteFormwork.resx">
+      <DependentUpon>Form_ConcreteFormwork.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GeoPlus_CmdConcreteVolume\FormConcreteVolume.resx">
+    <EmbeddedResource Include="Cmd1_ConcreteVolume\FormConcreteVolume.resx">
       <DependentUpon>FormConcreteVolume.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GeoPuls_CmdTest\FormAutoTag.resx">
-      <DependentUpon>FormAutoTag.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

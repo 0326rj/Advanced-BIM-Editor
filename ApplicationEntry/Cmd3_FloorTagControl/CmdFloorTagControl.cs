@@ -9,15 +9,16 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using NoahDesign.Folder_WinForm;
-using System.Diagnostics; 
+using System.Diagnostics;
 #endregion
 
-// 2019. 08. 05 Jaebum Kim
+// 2019. 08. 06 Jaebum Kim
+// 최신버전 디피씨에 있음. 카피해올것 (본 클래스명 CmdFloorTagControl 변경금지)
 
-namespace NoahDesign.GeoPuls_CmdTest
+namespace NoahDesign.Cmd3_FloorTagControl
 {
   [Transaction(TransactionMode.Manual)]
-  public class CmdTest : IExternalCommand
+  public class CmdFloorTagControl : IExternalCommand
   {
     #region Field
     const string _param_name1 = "床スラブ_CON天端レベル";
@@ -35,11 +36,18 @@ namespace NoahDesign.GeoPuls_CmdTest
     #endregion
 
     #region Property
+    private List<Reference> _references;
     private string _dialogTitle;
     private UIDocument _uidoc;
     private Document _doc;
     private string _heightLevel1;
     private double _heightLevel2;
+
+    public List<Reference> References
+    {
+      get { return _references; }
+      set { _references = value; }
+    }
 
     public string DialogTitle
     {
@@ -79,20 +87,27 @@ namespace NoahDesign.GeoPuls_CmdTest
       _doc = _uidoc.Document;
       DialogTitle = "Automatic Tag Control by Kimmy";
 
-      List<Reference> selectedFloors = _uidoc.Selection
+      try
+      {
+        References = _uidoc.Selection
         .PickObjects( ObjectType.Element ) as List<Reference>;
+      }
+      catch ( Exception )
+      {
+        return Result.Cancelled;
+      }
       
       using ( Transaction tx = new Transaction( _doc, "TestCommand" ) )
       {
         try
         {
-          if ( selectedFloors != null &&
+          if ( _references != null &&
             (_doc.ActiveView.ViewType == ViewType.EngineeringPlan ||
             _doc.ActiveView.ViewType == ViewType.CeilingPlan ||
             _doc.ActiveView.ViewType == ViewType.FloorPlan) )
           {
             List<Element> els = new List<Element>();
-            foreach ( var item in selectedFloors )
+            foreach ( var item in _references )
             {
               Element e = _doc.GetElement( item );
 
