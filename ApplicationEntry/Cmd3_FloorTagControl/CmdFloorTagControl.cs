@@ -13,7 +13,6 @@ using System.Diagnostics;
 #endregion
 
 // 2019. 08. 06 Jaebum Kim
-// 최신버전 디피씨에 있음. 카피해올것 (본 클래스명 CmdFloorTagControl 변경금지)
 
 namespace NoahDesign.Cmd3_FloorTagControl
 {
@@ -36,18 +35,12 @@ namespace NoahDesign.Cmd3_FloorTagControl
     #endregion
 
     #region Property
-    private List<Reference> _references;
     private string _dialogTitle;
     private UIDocument _uidoc;
     private Document _doc;
-    private string _heightLevel1;
+    private List<Reference> _floorRefs;
+    private double _heightLevel1;
     private double _heightLevel2;
-
-    public List<Reference> References
-    {
-      get { return _references; }
-      set { _references = value; }
-    }
 
     public string DialogTitle
     {
@@ -65,7 +58,13 @@ namespace NoahDesign.Cmd3_FloorTagControl
       get { return _doc; }
     }
 
-    public string HeightLevel1
+    public List<Reference> FloorRefs
+    {
+      get { return _floorRefs; }
+      set { _floorRefs = value; }
+    }
+
+    public double HeightLevel1
     {
       get { return _heightLevel1; }
       set { _heightLevel1 = value; }
@@ -78,45 +77,46 @@ namespace NoahDesign.Cmd3_FloorTagControl
     }
     #endregion
 
-    public Result Execute( 
+    public Result Execute(
       ExternalCommandData commandData,
       ref string message,
       ElementSet elements )
     {
       _uidoc = commandData.Application.ActiveUIDocument;
       _doc = _uidoc.Document;
-      DialogTitle = "Automatic Tag Control by Kimmy";
+      DialogTitle = "JK Automatic Tag Control";
 
       try
       {
-        References = _uidoc.Selection
-        .PickObjects( ObjectType.Element ) as List<Reference>;
+        FloorRefs = _uidoc.Selection
+          .PickObjects( ObjectType.Element ) as List<Reference>;
       }
-      catch ( Exception )
+      catch ( Exception ex )
       {
+        TaskDialog.Show( _dialogTitle, "Cancelled", TaskDialogCommonButtons.Ok );
         return Result.Cancelled;
       }
-      
+
       using ( Transaction tx = new Transaction( _doc, "TestCommand" ) )
       {
         try
         {
-          if ( _references != null &&
-            (_doc.ActiveView.ViewType == ViewType.EngineeringPlan ||
+          if ( _floorRefs != null &&
+            ( _doc.ActiveView.ViewType == ViewType.EngineeringPlan ||
             _doc.ActiveView.ViewType == ViewType.CeilingPlan ||
-            _doc.ActiveView.ViewType == ViewType.FloorPlan) )
+            _doc.ActiveView.ViewType == ViewType.FloorPlan ) )
           {
             List<Element> els = new List<Element>();
-            foreach ( var item in _references )
+            foreach ( var floors in _floorRefs )
             {
-              Element e = _doc.GetElement( item );
+              Element e = _doc.GetElement( floors );
 
               tx.Start();
 
               if ( e is Floor )
               {
                 // 1. タグ生成
-                IndependentTag tag = CreateFloorTag( _doc, item );
+                IndependentTag tag = CreateFloorTag( _doc, floors );
                 // 2. タイプ変換
                 ChangeTagTypeByFloorCondition( _doc, e as Floor, tag );
                 // 3. Parameter入力
@@ -130,23 +130,23 @@ namespace NoahDesign.Cmd3_FloorTagControl
 
               tx.Commit();
 
-            }            
+            }
           }
           else
           {
             TaskDialog.Show( DialogTitle, "Please select the slab only.",
               TaskDialogCommonButtons.Close );
             return Result.Cancelled;
-          }      
+          }
         }
         catch ( Exception ex )
         {
           TaskDialog.Show( DialogTitle, ex.Message );
           return Result.Failed;
-        }      
+        }
       }
 
-      TaskDialog.Show( DialogTitle, "slab Tag creation completed successfully.",
+      TaskDialog.Show( DialogTitle, "Slab tag creation completed successfully.",
         TaskDialogCommonButtons.Ok );
       return Result.Succeeded;
     }
@@ -197,7 +197,7 @@ namespace NoahDesign.Cmd3_FloorTagControl
     #endregion
 
     #region Floor Tag Type Changing Method
-    void ChangeTagTypeByFloorCondition( 
+    void ChangeTagTypeByFloorCondition(
       Document doc,
       Floor floor,
       IndependentTag tag )
@@ -231,12 +231,12 @@ namespace NoahDesign.Cmd3_FloorTagControl
             {
               tag.ChangeTypeId( _tagType1 );
             }
-            else if ( ( stl.LayerId == 1 ) 
+            else if ( ( stl.LayerId == 1 )
               && ( stl.Function == MaterialFunctionAssignment.Substrate ) )
             {
               tag.ChangeTypeId( _tagType4 );
             }
-            else if ( ( stl.LayerId == 1 ) 
+            else if ( ( stl.LayerId == 1 )
               && ( stl.Function == MaterialFunctionAssignment.Insulation ) )
             {
               tag.ChangeTypeId( _tagType5 );
@@ -246,7 +246,7 @@ namespace NoahDesign.Cmd3_FloorTagControl
           // レイヤーが 3つの場合、タイプ判定
           else if ( comStruct.LayerCount == 3 )
           {
-            if ( ( stl.LayerId == 2 ) 
+            if ( ( stl.LayerId == 2 )
               && ( stl.Function == MaterialFunctionAssignment.Insulation ) )
             {
               tag.ChangeTypeId( _tagType6 );
@@ -275,21 +275,31 @@ namespace NoahDesign.Cmd3_FloorTagControl
     #region Floor Parameter Value Sync Method
     private void SyncFloorParameterValue( Floor floor )
     {
-      // No1. 床スラブ_CON天端レベル 設定
-      _heightLevel1 = floor.get_Parameter( BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM ).AsValueString();
 
-      if ( _heightLevel1 == "0" )
+      #region No1. 床スラブ_CON天端レベル 設定
+      _heightLevel1 = floor
+          .get_Parameter( BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM ).AsDouble();
+
+      var hl1 = UnitUtils
+        .Convert( _heightLevel1, DisplayUnitType.DUT_DECIMAL_FEET
+        , DisplayUnitType.DUT_MILLIMETERS );
+
+      if ( hl1 == 0 )
       {
-        HeightLevel1 = "±0";
-        floor.LookupParameter( _param_name1 ).Set( HeightLevel1 );
+        floor.LookupParameter( _param_name1 ).Set( "±0" );
+      }
+      else if ( hl1 > 0 )
+      {
+        String str = String.Format( "+{0:N0}", hl1 );
+        floor.LookupParameter( _param_name1 ).Set( str );
       }
       else
       {
-        floor.LookupParameter( _param_name1 ).Set( HeightLevel1 );
+        floor.LookupParameter( _param_name1 ).Set( hl1.ToString() );
       }
+      #endregion
 
-
-      // No2. 床スラブ_構造体天端レベル 設定
+      #region No2. 床スラブ_構造体天端レベル 設定
       double firstLayerThk = 0;
       FloorType floorType = floor.FloorType;
       CompoundStructure comStruct = floorType.GetCompoundStructure();
@@ -298,14 +308,16 @@ namespace NoahDesign.Cmd3_FloorTagControl
       {
         if ( comStruct.LayerCount >= 2 )
         {
-          if ( ( stl.LayerId == 0 ) && ( stl.Function != MaterialFunctionAssignment.Structure ) )
+          if ( ( stl.LayerId == 0 )
+            && ( stl.Function != MaterialFunctionAssignment.Structure ) )
             firstLayerThk += stl.Width;
         }
         else
           return;
       }
 
-      var level = floor.get_Parameter( BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM ).AsDouble();
+      var level = floor
+        .get_Parameter( BuiltInParameter.FLOOR_HEIGHTABOVELEVEL_PARAM ).AsDouble();
 
       var frt = UnitUtils
         .Convert( firstLayerThk, DisplayUnitType.DUT_DECIMAL_FEET
@@ -316,18 +328,24 @@ namespace NoahDesign.Cmd3_FloorTagControl
 
       HeightLevel2 = ( lvh - frt );
 
-      if ( HeightLevel2 != 0 )
+      if ( ( HeightLevel2 != 0 ) && ( hl1 != HeightLevel2 ) )
       {
-        floor.LookupParameter( _param_name2 ).Set( HeightLevel2.ToString() );
+        if ( HeightLevel2 > 0 )
+        {
+          String str = String.Format( "+{0:N0}", HeightLevel2 );
+          floor.LookupParameter( _param_name2 ).Set( str );
+        }
+        else
+          floor.LookupParameter( _param_name2 ).Set( HeightLevel2.ToString() );
       }
       else
-      {
         floor.LookupParameter( _param_name2 ).Set( "" );
-      }
 
+      #endregion
 
       // No3. 床スラブ_部分ふかし (作成予定)
-    } 
+    }
     #endregion
+
   }
 }

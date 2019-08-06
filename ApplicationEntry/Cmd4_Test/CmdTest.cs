@@ -20,47 +20,84 @@ namespace NoahDesign.Cmd4_Test
   [Transaction(TransactionMode.Manual)]
   class CmdTest : IExternalCommand
   {
+    #region Property
     public UIDocument _uidoc { get; private set; }
     public Document _doc { get; private set; }
 
-    public Result Execute( ExternalCommandData commandData, ref string message, ElementSet elements )
+    public List<ElementId> _elementId { get; private set; }
+    public List<Element> _elements { get; private set; }
+    public List<Face> _faces { get; private set; } 
+    #endregion
+
+    public Result Execute( ExternalCommandData commandData,
+      ref string message, ElementSet elements )
     {
       _uidoc = commandData.Application.ActiveUIDocument;
       _doc = _uidoc.Document;
 
+      var id = _uidoc.Selection.PickObject( ObjectType.Element ).ElementId;
+      var ele = _doc.GetElement( id );
+
+      Face face = null;
+
       try
       {
-        var elementId = _uidoc.Selection.PickObject( ObjectType.Element );
-        var element = _doc.GetElement( elementId );
-
-        var floorElement = ( Floor )element;
-        HostObject hostObj = floorElement as HostObject;
-   
-        Options options = new Options();
-        options.ComputeReferences = true;
-
-        var topfaces = HostObjectUtils.GetTopFaces( hostObj );
-        foreach ( var refe in topfaces )
+        if ( ele is Floor )
         {
-          var e = _doc.GetElement( refe );
-          var geoObj = e.get_Geometry( options ) as GeometryObject;
+          Floor floor = _doc.GetElement( id ) as Floor;
+          var topFace = HostObjectUtils.GetTopFaces( floor );
 
-          var face = geoObj as Face;
-
-          TaskDialog.Show( "...", face.Area.ToString() );
-        }      
+          face = _doc
+            .GetElement( topFace[0] )
+            .GetGeometryObjectFromReference( topFace[0] ) as Face;      
+        }
+        TaskDialog.Show( "...", face.Area.ToString() );
       }
       catch ( Exception ex )
       {
         TaskDialog.Show( "...", ex.Message );
-        return Result.Cancelled;
+        return Result.Failed;
       }
 
       return Result.Succeeded;
     }
 
 
+    private bool FaceAnalyzer( Document doc, Floor floor )
+    {
+      bool flag = false;
+  
+      var refe = HostObjectUtils.GetTopFaces( floor );
+      var singleFace = doc
+        .GetElement( refe[0] )
+        .GetGeometryObjectFromReference( refe[0] ) as Face;
+
+      var lines = new List<Line>();
+
+      if ( singleFace.Area > 0 )
+      {
+        var crvs = singleFace.GetEdgesAsCurveLoops() as IList<Curve>;
+
+        foreach ( var crv in crvs )
+        {
+          if ( crv is Line )
+          {
+            lines.Add( crv as Line );
+          }
+        }
+      }
+
+      if ( lines != null )
+      {
+        foreach ( var line in lines )
+        {
+          XYZ pt1 = line.GetEndPoint( 0 );
+          XYZ pt2 = line.GetEndPoint( 1 );
 
 
+        }
+      }
+    }
   }
 }
+
