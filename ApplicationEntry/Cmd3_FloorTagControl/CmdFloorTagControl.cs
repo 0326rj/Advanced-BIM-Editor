@@ -42,6 +42,8 @@ namespace NoahDesign.Cmd3_FloorTagControl
     private double _heightLevel1;
     private double _heightLevel2;
 
+    public IndependentTag _independentTag { get; set; }
+
     public string DialogTitle
     {
       get { return _dialogTitle; }
@@ -77,6 +79,13 @@ namespace NoahDesign.Cmd3_FloorTagControl
     }
     #endregion
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="commandData"></param>
+    /// <param name="message"></param>
+    /// <param name="elements"></param>
+    /// <returns></returns>
     public Result Execute(
       ExternalCommandData commandData,
       ref string message,
@@ -101,43 +110,56 @@ namespace NoahDesign.Cmd3_FloorTagControl
       {
         try
         {
-          if ( _floorRefs != null &&
-            ( _doc.ActiveView.ViewType == ViewType.EngineeringPlan ||
-            _doc.ActiveView.ViewType == ViewType.CeilingPlan ||
-            _doc.ActiveView.ViewType == ViewType.FloorPlan ) )
+
+
+          using ( FormProgressBar progress = new FormProgressBar() )
           {
-            List<Element> els = new List<Element>();
-            foreach ( var floors in _floorRefs )
+            progress.Show();
+
+            tx.Start();
+
+            if ( _floorRefs != null &&
+              ( _doc.ActiveView.ViewType == ViewType.EngineeringPlan ||
+              _doc.ActiveView.ViewType == ViewType.CeilingPlan ||
+              _doc.ActiveView.ViewType == ViewType.FloorPlan ) )
             {
-              Element e = _doc.GetElement( floors );
+              List<Element> els = new List<Element>();
 
-              tx.Start();
-
-              if ( e is Floor )
+              foreach ( var floors in _floorRefs )
               {
-                // 1. タグ生成
-                IndependentTag tag = CreateFloorTag( _doc, floors );
-                // 2. タイプ変換
-                ChangeTagTypeByFloorCondition( _doc, e as Floor, tag );
-                // 3. Parameter入力
-                SyncFloorParameterValue( e as Floor );
-              }
-              else
-              {
-                TaskDialog.Show( DialogTitle, "No slab selected." );
-                return Result.Failed;
-              }
+                Element e = _doc.GetElement( floors );
 
-              tx.Commit();
-
+                if ( e is Floor )
+                {
+                  // 1. タグ生成
+                  _independentTag = CreateFloorTag( _doc, floors );
+                  // 2. タイプ変換
+                  ChangeTagTypeByFloorCondition( _doc, e as Floor, _independentTag );
+                  // 3. Parameter入力
+                  SyncFloorParameterValue( e as Floor );
+                }
+                else
+                {
+                  TaskDialog.Show( DialogTitle, "No slab selected." );
+                  tx.RollBack();
+                  return Result.Failed;
+                }
+              }
             }
+            else
+            {
+              TaskDialog.Show( DialogTitle, "Please select the slab only.",
+                TaskDialogCommonButtons.Close );
+              return Result.Cancelled;
+            }
+
+            tx.Commit();
+
+            progress.Close();
           }
-          else
-          {
-            TaskDialog.Show( DialogTitle, "Please select the slab only.",
-              TaskDialogCommonButtons.Close );
-            return Result.Cancelled;
-          }
+
+
+         
         }
         catch ( Exception ex )
         {
@@ -152,6 +174,13 @@ namespace NoahDesign.Cmd3_FloorTagControl
     }
 
     #region Floor Tag Creation Method
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="doc"></param>
+    /// <param name="floors"></param>
+    /// <returns></returns>
     private IndependentTag CreateFloorTag( Document doc, Reference floors )
     {
       var tag = IndependentTag.Create(
@@ -168,11 +197,22 @@ namespace NoahDesign.Cmd3_FloorTagControl
       return tag;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tag"></param>
+    /// <param name="pt"></param>
     private static void MoveTag( IndependentTag tag, XYZ pt )
     {
       tag.TagHeadPosition = pt;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="element"></param>
+    /// <param name="doc"></param>
+    /// <returns></returns>
     private static XYZ PointToXYZ( Element element, Document doc )
     {
       var max = element.get_BoundingBox( doc.ActiveView ).Max;
@@ -181,6 +221,12 @@ namespace NoahDesign.Cmd3_FloorTagControl
       return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="p1"></param>
+    /// <param name="p2"></param>
+    /// <returns></returns>
     private static XYZ MidPoint( XYZ p1, XYZ p2 )
     {
       double x1 = p1.X;
@@ -197,6 +243,12 @@ namespace NoahDesign.Cmd3_FloorTagControl
     #endregion
 
     #region Floor Tag Type Changing Method
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="doc"></param>
+    /// <param name="floor"></param>
+    /// <param name="tag"></param>
     void ChangeTagTypeByFloorCondition(
       Document doc,
       Floor floor,
@@ -262,17 +314,20 @@ namespace NoahDesign.Cmd3_FloorTagControl
           {
             TaskDialog.Show( DialogTitle,
               "The slab contains more than four layers." );
-            return;
+            break;
           }
-
           else
-            return;
+            break;
         }
       }
     }
     #endregion
 
     #region Floor Parameter Value Sync Method
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="floor"></param>
     private void SyncFloorParameterValue( Floor floor )
     {
 
@@ -308,9 +363,12 @@ namespace NoahDesign.Cmd3_FloorTagControl
       {
         if ( comStruct.LayerCount >= 2 )
         {
-          if ( ( stl.LayerId == 0 )
+          // *** GetFirtsCoreLayerIndex() 
+          if ( ( stl.LayerId <= comStruct.GetFirstCoreLayerIndex() ) 
             && ( stl.Function != MaterialFunctionAssignment.Structure ) )
+          {
             firstLayerThk += stl.Width;
+          }                
         }
         else
           return;

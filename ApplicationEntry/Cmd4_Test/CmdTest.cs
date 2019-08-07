@@ -23,10 +23,10 @@ namespace NoahDesign.Cmd4_Test
   class CmdTest : IExternalCommand
   {
     #region Property
-    public UIApplication _uiapp { get; private set; }
-    public Application _app { get; private set; }
-    public UIDocument _uidoc { get; private set; }
-    public Document _doc { get; private set; }
+    public UIApplication _uiapp { get; set; }
+    public Application _app { get; set; }
+    public UIDocument _uidoc { get; set; }
+    public Document _doc { get; set; }
 
     public List<ElementId> _elementId { get; private set; }
     public List<Element> _elements { get; private set; }
@@ -56,11 +56,30 @@ namespace NoahDesign.Cmd4_Test
           face = _doc
             .GetElement( topFace[0] )
             .GetGeometryObjectFromReference( topFace[0] ) as Face;
-
-          FaceAnalyzer( _doc, floor );
-
         }
-        TaskDialog.Show( "...", face.Area.ToString() );
+
+        using ( Transaction tx = new Transaction( _doc, "trans" ) )
+        {
+          tx.Start();
+
+          UV uV = new UV();
+          var normal = face.ComputeNormal( uV );
+          XYZ pt = new XYZ( normal.X, normal.Y, normal.Z );
+
+          Plane plane = Plane.CreateByNormalAndOrigin( normal, pt );
+          SketchPlane sketchPlane = SketchPlane.Create( _doc, plane );
+
+
+          var loop = face.GetEdgesAsCurveLoops();
+          foreach ( var crv in loop[0] )
+          {
+
+            _doc.Create.NewModelCurve( crv, sketchPlane );
+
+          }
+
+          tx.Commit();
+        }  
       }
       catch ( Exception ex )
       {
@@ -69,44 +88,6 @@ namespace NoahDesign.Cmd4_Test
       }
 
       return Result.Succeeded;
-    }
-
-
-    private void FaceAnalyzer( Document doc, Floor floor )
-    {
-      var refe = HostObjectUtils.GetTopFaces( floor );
-
-      var singleFace = doc
-        .GetElement( refe[0] )
-        .GetGeometryObjectFromReference( refe[0] ) as Face;
-
-      var lines = new List<Line>();
-
-      if ( singleFace.Area > 0 )
-      {
-        var crvs = singleFace.GetEdgesAsCurveLoops() as IList<Curve>;
-
-        foreach ( var crv in crvs )
-        {
-          if ( crv is Line )
-            lines.Add( crv as Line );
-        }
-      }
-
-      if ( lines != null )
-      {
-        var ptList = new List<XYZ>();
-
-        foreach ( var line in lines )
-        {
-          XYZ p1 = line.GetEndPoint( 0 );
-          XYZ p2 = line.GetEndPoint( 1 );
-          var midpt = Util.Midpoint( p1, p2 );
-          ptList.Add( midpt );
-        }
-
-        TaskDialog.Show( "...", ptList.Count.ToString() );
-      }
     }
   }
 }
