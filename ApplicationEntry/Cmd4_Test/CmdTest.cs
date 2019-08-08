@@ -16,8 +16,8 @@ using BuildingCoder;
 
 namespace NoahDesign.Cmd4_Test
 {
-  // Note: To get the reference of a face that is part of a solid,
-  // need to set Option.ComputeReferences = true.
+  // Test1
+  // Z coordが異なるポイント同士、ModelCurveを作成
 
   [Transaction(TransactionMode.Manual)]
   class CmdTest : IExternalCommand
@@ -46,21 +46,64 @@ namespace NoahDesign.Cmd4_Test
 
       Face face = null;
 
+      List<Curve> crvlist = new List<Curve>();
+      List<XYZ> pts = new List<XYZ>();
+
       try
       {
         if ( ele is Floor )
-        {
-          Floor floor = _doc.GetElement( id ) as Floor;
-          var topFace = HostObjectUtils.GetTopFaces( floor );
-           
-          face = _doc
-            .GetElement( topFace[0] )
-            .GetGeometryObjectFromReference( topFace[0] ) as Face;
+        {         
+            Floor floor = _doc.GetElement( id ) as Floor;
+            var topFace = HostObjectUtils.GetTopFaces( floor );
 
-          FaceAnalyzer( _doc, floor );
+            face = _doc
+              .GetElement( topFace[0] )
+              .GetGeometryObjectFromReference( topFace[0] ) as Face;
 
+          using ( Transaction tx = new Transaction( _doc, "trans" ) )
+          {
+            tx.Start();
+
+            PlanarFace pf = face as PlanarFace;
+            Plane plane = Plane.CreateByNormalAndOrigin( pf.FaceNormal, pf.Origin );
+
+            SketchPlane sp = SketchPlane.Create( _doc, plane );
+
+            var crvloop = face.GetEdgesAsCurveLoops();
+
+            foreach ( var crv in crvloop[0] )
+            {
+              var pt1 = crv.GetEndPoint( 0 );
+              var pt2 = crv.GetEndPoint( 1 );
+              crvlist.Add( crv );
+            }
+                  
+            foreach ( var c in crvlist )
+            {
+              var pt = c.GetEndPoint( 0 );
+              pts.Add( pt );
+            }
+
+            var p1 = pts[0];
+            var p2 = pts[1];
+            var p3 = pts[2];
+            var p4 = pts[3];
+
+            var mid1 = Util.Midpoint( p1, p2 );
+            var mid2 = Util.Midpoint( p3, p4 );
+            var mid3 = Util.Midpoint( p2, p3 );
+            var mid4 = Util.Midpoint( p4, p1 );
+
+            Line line1 = Line.CreateBound( mid3, mid4 );
+            Line line2 = Line.CreateBound( mid1, mid2 );
+
+            _doc.Create.NewModelCurve( line1, sp );
+            _doc.Create.NewModelCurve( line2, sp );
+
+
+            tx.Commit();
+          }
         }
-        TaskDialog.Show( "...", face.Area.ToString() );
       }
       catch ( Exception ex )
       {
@@ -69,44 +112,6 @@ namespace NoahDesign.Cmd4_Test
       }
 
       return Result.Succeeded;
-    }
-
-
-    private void FaceAnalyzer( Document doc, Floor floor )
-    {
-      var refe = HostObjectUtils.GetTopFaces( floor );
-
-      var singleFace = doc
-        .GetElement( refe[0] )
-        .GetGeometryObjectFromReference( refe[0] ) as Face;
-
-      var lines = new List<Line>();
-
-      if ( singleFace.Area > 0 )
-      {
-        var crvs = singleFace.GetEdgesAsCurveLoops() as IList<Curve>;
-
-        foreach ( var crv in crvs )
-        {
-          if ( crv is Line )
-            lines.Add( crv as Line );
-        }
-      }
-
-      if ( lines != null )
-      {
-        var ptList = new List<XYZ>();
-
-        foreach ( var line in lines )
-        {
-          XYZ p1 = line.GetEndPoint( 0 );
-          XYZ p2 = line.GetEndPoint( 1 );
-          var midpt = Util.Midpoint( p1, p2 );
-          ptList.Add( midpt );
-        }
-
-        TaskDialog.Show( "...", ptList.Count.ToString() );
-      }
     }
   }
 }

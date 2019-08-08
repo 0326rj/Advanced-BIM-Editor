@@ -85,7 +85,7 @@ namespace NoahDesign
       #region Drawing+ -> Cmd4_Test
       // 1. Push Button 과 Command 연결
       PushButtonData data_cmd4test = new PushButtonData(
-          "TestCMD", "TEST\n実行", path,
+          "TestCMD1", "TEST1\n実行", path,
           "NoahDesign.Cmd4_Test.CmdTest" );
       BitmapSource logo4 = GetEmbededImage(
           "NoahDesign.Folder_Image.test32_2.png" );
@@ -94,9 +94,23 @@ namespace NoahDesign
       data_cmd4test.ToolTip = "TEST";
 
       // 2. 버튼 데이터 추가
-      RibbonItem itemTest4 = panel_DrawingPlus.AddItem( data_cmd4test );
+      RibbonItem itemTest1 = panel_DrawingPlus.AddItem( data_cmd4test );
       #endregion
 
+      #region Drawing+ -> Cmd5_Test
+      // 1. Push Button 과 Command 연결
+      PushButtonData data_cmd5test = new PushButtonData(
+          "TestCMD2", "TEST2\n実行", path,
+          "NoahDesign.Cmd5_Test.CmdTest2" );
+      BitmapSource logo5 = GetEmbededImage(
+          "NoahDesign.Folder_Image.test32_2.png" );
+
+      data_cmd5test.LargeImage = logo4;
+      data_cmd5test.ToolTip = "TEST";
+
+      // 2. 버튼 데이터 추가
+      RibbonItem itemTest2 = panel_DrawingPlus.AddItem( data_cmd5test );
+      #endregion
 
       #region VersionInfo -> ShowVersionInfo
       // 1. Push Button 과 Command 연결

@@ -47,9 +47,11 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="RevitAPI">
       <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Revit 2018\RevitAPI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="RevitAPIUI">
       <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Revit 2018\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -62,7 +64,14 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cmd3_FloorTagControl\FormProgressBar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cmd3_FloorTagControl\FormProgressBar.Designer.cs">
+      <DependentUpon>FormProgressBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Cmd4_Test\CmdTest.cs" />
+    <Compile Include="Cmd5_Test\CmdTest2.cs" />
     <Compile Include="Folder_Component\Util_CreateDirectShape.cs" />
     <Compile Include="Cmd2_ConcreteFormwork\CmdConcreteFormwork.cs" />
     <Compile Include="Folder_Component\FilterRuleBuilder.cs" />
@@ -108,6 +117,9 @@
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Cmd3_FloorTagControl\FormProgressBar.resx">
+      <DependentUpon>FormProgressBar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Folder_Image\formwork32.png" />
     <EmbeddedResource Include="Folder_Image\test32.png" />
     <EmbeddedResource Include="Folder_Image\floorTag32.png" />
