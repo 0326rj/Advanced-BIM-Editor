@@ -19,7 +19,7 @@ namespace NoahDesign.Cmd4_Test
   // Test1
   // Z coordが異なるポイント同士、ModelCurveを作成
 
-  [Transaction( TransactionMode.Manual )]
+  [Transaction( TransactionMode.Manual )] 
   class CmdTest : IExternalCommand
   {
     #region Property
@@ -66,7 +66,7 @@ namespace NoahDesign.Cmd4_Test
 
             PlanarFace pf = face as PlanarFace;
             Plane plane = Plane.CreateByNormalAndOrigin( pf.FaceNormal, pf.Origin );
-
+            
             SketchPlane sp = SketchPlane.Create( _doc, plane );
 
             var crvloop = face.GetEdgesAsCurveLoops();
@@ -99,7 +99,7 @@ namespace NoahDesign.Cmd4_Test
 
             _doc.Create.NewModelCurve( line1, sp );
             _doc.Create.NewModelCurve( line2, sp );
-
+            
 
             tx.Commit();
           }
