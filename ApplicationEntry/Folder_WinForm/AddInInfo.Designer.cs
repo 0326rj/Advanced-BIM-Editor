@@ -29,7 +29,6 @@
     private void InitializeComponent()
     {
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddInInfo));
-      this.linkHome = new System.Windows.Forms.Button();
       this.buttonClose = new System.Windows.Forms.Button();
       this.textBox6 = new System.Windows.Forms.TextBox();
       this.textBox7 = new System.Windows.Forms.TextBox();
@@ -38,24 +37,9 @@
       this.label1 = new System.Windows.Forms.Label();
       this.label3 = new System.Windows.Forms.Label();
       this.label4 = new System.Windows.Forms.Label();
+      this.linkHome = new System.Windows.Forms.Button();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.SuspendLayout();
-      // 
-      // linkHome
-      // 
-      this.linkHome.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(78)))), ((int)(((byte)(184)))), ((int)(((byte)(206)))));
-      this.linkHome.Cursor = System.Windows.Forms.Cursors.Hand;
-      this.linkHome.FlatAppearance.BorderSize = 0;
-      this.linkHome.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.linkHome.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.linkHome.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-      this.linkHome.Location = new System.Drawing.Point(491, 165);
-      this.linkHome.Name = "linkHome";
-      this.linkHome.Size = new System.Drawing.Size(93, 24);
-      this.linkHome.TabIndex = 5;
-      this.linkHome.Text = "Noah Design";
-      this.linkHome.UseVisualStyleBackColor = false;
-      this.linkHome.Click += new System.EventHandler(this.Button1_Click);
       // 
       // buttonClose
       // 
@@ -143,7 +127,7 @@
       this.label3.Name = "label3";
       this.label3.Size = new System.Drawing.Size(150, 14);
       this.label3.TabIndex = 15;
-      this.label3.Text = "Noah Design, Jaebum Kim";
+      this.label3.Text = "Jaebum Kim, Noah Design";
       // 
       // label4
       // 
@@ -156,6 +140,22 @@
       this.label4.TabIndex = 16;
       this.label4.Text = "Release: 19.08.01";
       this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      // 
+      // linkHome
+      // 
+      this.linkHome.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(78)))), ((int)(((byte)(184)))), ((int)(((byte)(206)))));
+      this.linkHome.Cursor = System.Windows.Forms.Cursors.Hand;
+      this.linkHome.FlatAppearance.BorderSize = 0;
+      this.linkHome.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.linkHome.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.linkHome.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+      this.linkHome.Location = new System.Drawing.Point(491, 165);
+      this.linkHome.Name = "linkHome";
+      this.linkHome.Size = new System.Drawing.Size(93, 24);
+      this.linkHome.TabIndex = 5;
+      this.linkHome.Text = "Noah Design";
+      this.linkHome.UseVisualStyleBackColor = false;
+      this.linkHome.Click += new System.EventHandler(this.Button1_Click);
       // 
       // AddInInfo
       // 
@@ -186,7 +186,6 @@
     }
 
     #endregion
-    private System.Windows.Forms.Button linkHome;
     private System.Windows.Forms.TextBox textBox6;
     private System.Windows.Forms.TextBox textBox7;
     private System.Windows.Forms.Button linkCybozu;
@@ -195,6 +194,7 @@
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.Label label4;
+    private System.Windows.Forms.Button linkHome;
   }
 }
 

@@ -11,7 +11,8 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using NoahDesign.Folder_WinForm;
 using System.Diagnostics;
-using BuildingCoder;
+using MyUtils;
+using System.IO;
 #endregion
 
 namespace NoahDesign.Cmd5_Test
@@ -23,66 +24,101 @@ namespace NoahDesign.Cmd5_Test
   [Transaction(TransactionMode.Manual)]
   public class CmdTest2 : IExternalCommand
   {
-    #region Property
-    public UIApplication _uiapp { get; private set; }
-    public Application _app { get; private set; }
-    public UIDocument _uidoc { get; private set; }
-    public Document _doc { get; private set; }
+    private const string _Name_stud = "1_スタッド";
+    private const string _Name_symbol = "スタッド_WS90";
 
-    public List<ElementId> _elementId { get; private set; }
-    public List<Element> _elements { get; private set; }
-    public List<Face> _faces { get; private set; }
+    #region Property
+    private UIApplication _uiapp;
+    private UIDocument _uidoc;
+    private Document _doc;
+
+    public UIApplication Uiapp
+    {
+      get { return _uiapp; }
+      set { _uiapp = value; }
+    }
+
+    public UIDocument Uidoc
+    {
+      get { return _uidoc; }
+      set { _uidoc = value; }
+    }
+
+    public Document Doc
+    {
+      get { return _doc; }
+      set { _doc = value; }
+    } 
     #endregion
 
     public Result Execute( ExternalCommandData commandData,
       ref string message, ElementSet elements )
     {
       _uiapp = commandData.Application;
-      _app = _uiapp.Application;
       _uidoc = _uiapp.ActiveUIDocument;
       _doc = _uidoc.Document;
 
+      var eref = _uidoc.Selection.PickObject( ObjectType.Element );
+      var elementSelected = _doc.GetElement( eref );
 
-      return Result.Succeeded;
-    }
-
-    private List<Face> GetWallTopFace( Wall wall )
-    {
-      List<Face> topfaces = new List<Face>();
-      var topFace = HostObjectUtils.GetTopFaces( wall );
-
-      foreach ( var tf in topFace )
+      using ( Transaction tx = new Transaction( _doc, "tx" ) ) 
       {
-        Face face = _doc
-         .GetElement( tf )
-         .GetGeometryObjectFromReference( tf ) as Face;
-        topfaces.Add( face );
-      }
-      return topfaces;
+        try
+        {
+          tx.Start();
+          if ( elementSelected != null && elementSelected is Wall )
+          {
+            Wall targetWall = elementSelected as Wall; 
+            FamilySymbol studSymbol = GetSymbol( _doc, _Name_stud, _Name_symbol );
+
+            // Create Stud Instance
+            var stud = Stud.Create_Stud_In_Wall( _doc, targetWall, studSymbol );
+          }
+          else
+          {
+            TaskDialog.Show( "...", "error" );
+          }
+          tx.Commit();
+          return Result.Succeeded;
+        }
+        catch ( Exception ex)
+        {
+          message = ex.Message;
+          return Result.Failed;
+        }     
+      }     
     }
 
-    private List<Face> GetWallBottomFace( Wall wall )
+    /// <summary>
+    /// 패밀리명, 타입명으로 문서상의 패밀리 심볼을 취득한다.
+    /// </summary>
+    /// <param name="doc"></param>
+    /// <param name="familyName"></param>
+    /// <param name="symbolName"></param>
+    /// <returns></returns>
+    private FamilySymbol GetSymbol( Document doc, string familyName, string symbolName )
     {
-      List<Face> bottomfaces = new List<Face>();
-      var bttFace = HostObjectUtils.GetTopFaces( wall );
-
-      foreach ( var bf in bttFace )
+      using ( var collector = new FilteredElementCollector( doc ) )
       {
-        Face face = _doc
-         .GetElement( bf )
-         .GetGeometryObjectFromReference( bf ) as Face;
-        bottomfaces.Add( face );
+        using ( var families = collector.OfClass( typeof( Family ) ) )
+        {
+          foreach ( Family family in families )
+          {
+            if ( family.Name == familyName )
+            {
+              foreach ( var symbolId in family.GetFamilySymbolIds() )
+              {
+                var symbol = doc.GetElement( symbolId ) as FamilySymbol;
+                if ( symbol.Name == symbolName )
+                  return symbol;
+              }
+            }
+          }
+        }
       }
-      return bottomfaces;
+      return null;
     }
 
-    private void CreateColumnArray(Document doc, Face topFace, Face bottomFace )
-    {
-
-    }
-     
 
   }
 }
-
-// https://forums.autodesk.com/t5/revit-api-forum/column-creation-questoin/td-p/2097223

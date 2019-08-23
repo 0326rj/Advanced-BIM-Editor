@@ -24,7 +24,7 @@ using Autodesk.Revit.UI.Selection;
 using System.Collections;
 #endregion // Namespaces
 
-namespace BuildingCoder
+namespace MyUtils
 {
   class Util
   {

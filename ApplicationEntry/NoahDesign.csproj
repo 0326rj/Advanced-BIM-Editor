@@ -72,6 +72,14 @@
     </Compile>
     <Compile Include="Cmd4_Test\CmdTest.cs" />
     <Compile Include="Cmd5_Test\CmdTest2.cs" />
+    <Compile Include="Cmd5_Test\Runner.cs" />
+    <Compile Include="Cmd5_Test\Stud.cs" />
+    <Compile Include="Cmd5_Test\Stud_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cmd5_Test\Stud_Form.Designer.cs">
+      <DependentUpon>Stud_Form.cs</DependentUpon>
+    </Compile>
     <Compile Include="Folder_Component\Util_CreateDirectShape.cs" />
     <Compile Include="Cmd2_ConcreteFormwork\CmdConcreteFormwork.cs" />
     <Compile Include="Folder_Component\FilterRuleBuilder.cs" />
@@ -117,8 +125,12 @@
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\03.JPG" />
     <EmbeddedResource Include="Cmd3_FloorTagControl\FormProgressBar.resx">
       <DependentUpon>FormProgressBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cmd5_Test\Stud_Form.resx">
+      <DependentUpon>Stud_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Folder_Image\formwork32.png" />
     <EmbeddedResource Include="Folder_Image\test32.png" />

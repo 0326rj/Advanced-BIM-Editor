@@ -21,7 +21,7 @@ namespace NoahDesign
       string path = Assembly.GetExecutingAssembly().Location;
 
       // Ribbon Tab 작성
-      string tabName = "Noah Design";
+      string tabName = "JAEBUM KIM";
       UICrdApp.CreateRibbonTab( tabName );
 
       // Ribbon Panel 작성
