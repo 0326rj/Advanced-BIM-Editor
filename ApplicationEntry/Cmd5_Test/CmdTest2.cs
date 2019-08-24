@@ -24,13 +24,20 @@ namespace NoahDesign.Cmd5_Test
   [Transaction(TransactionMode.Manual)]
   public class CmdTest2 : IExternalCommand
   {
-    private const string _Name_stud = "1_スタッド";
-    private const string _Name_symbol = "スタッド_WS90";
+    private const string _Name_stud_fam = "1_スタッド";
+    private const string _Name_stud_sym = "スタッド_WS90";
+
+    private const string _Name_runner_up_fam = "3_ランナー_上部";
+    private const string _Name_runner_up_sym = "ランナーWR90";
+
+    private const string _Name_runner_dn_fam = "2_ランナー_下部";
+    private const string _Name_runner_dn_sym = "ランナーWR90";
 
     #region Property
     private UIApplication _uiapp;
     private UIDocument _uidoc;
     private Document _doc;
+    private string _appTitle;
 
     public UIApplication Uiapp
     {
@@ -49,11 +56,18 @@ namespace NoahDesign.Cmd5_Test
       get { return _doc; }
       set { _doc = value; }
     } 
+
+    public string AppTitle
+    {
+      get { return _appTitle; }
+      set { _appTitle = value; }
+    }
     #endregion
 
     public Result Execute( ExternalCommandData commandData,
       ref string message, ElementSet elements )
     {
+      _appTitle = "JK 壁下地ゼネレーター";
       _uiapp = commandData.Application;
       _uidoc = _uiapp.ActiveUIDocument;
       _doc = _uidoc.Document;
@@ -68,15 +82,30 @@ namespace NoahDesign.Cmd5_Test
           tx.Start();
           if ( elementSelected != null && elementSelected is Wall )
           {
-            Wall targetWall = elementSelected as Wall; 
-            FamilySymbol studSymbol = GetSymbol( _doc, _Name_stud, _Name_symbol );
+            Wall targetWall = elementSelected as Wall;
 
-            // Create Stud Instance
-            var stud = Stud.Create_Stud_In_Wall( _doc, targetWall, studSymbol );
+            // Get Stud FamilySymbol in this Document
+            FamilySymbol studSymbol = GetSymbol( _doc, _Name_stud_fam, _Name_stud_sym );
+
+            if ( studSymbol != null )
+            {
+              // Create Stud Instance
+              var stud = StudManager.Create_Stud_In_Wall( _doc, targetWall, studSymbol );
+
+              // Array Stud
+              var arr = StudManager.Array_Stud_In_Wall( _doc, targetWall, stud, 1 );
+
+              // Create Runner 
+              var modelCrvs = RunnerManager.CreateWallTopModelLines( _doc, targetWall );
+            }
+            else
+            {
+              TaskDialog.Show( AppTitle, "ファミリがロードされていません。" );
+            }           
           }
           else
           {
-            TaskDialog.Show( "...", "error" );
+            TaskDialog.Show( AppTitle, "壁が選択されませんでした。" );
           }
           tx.Commit();
           return Result.Succeeded;

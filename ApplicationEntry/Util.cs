@@ -3146,5 +3146,11 @@ namespace MyUtils
       double meter = UnitUtils.Convert( feet, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_MILLIMETERS );
       return meter;
     }
+
+    public static double MillimetersLenthToFeet( double meter )
+    {
+      double feet = UnitUtils.Convert( meter, DisplayUnitType.DUT_MILLIMETERS, DisplayUnitType.DUT_DECIMAL_FEET );
+      return feet;
+    }
   }
 }

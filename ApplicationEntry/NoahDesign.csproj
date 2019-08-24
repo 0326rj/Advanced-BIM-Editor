@@ -72,8 +72,9 @@
     </Compile>
     <Compile Include="Cmd4_Test\CmdTest.cs" />
     <Compile Include="Cmd5_Test\CmdTest2.cs" />
-    <Compile Include="Cmd5_Test\Runner.cs" />
-    <Compile Include="Cmd5_Test\Stud.cs" />
+    <Compile Include="Cmd5_Test\RunnerManager.cs" />
+    <Compile Include="Cmd5_Test\SteadyBraceManager.cs" />
+    <Compile Include="Cmd5_Test\StudManager.cs" />
     <Compile Include="Cmd5_Test\Stud_Form.cs">
       <SubType>Form</SubType>
     </Compile>

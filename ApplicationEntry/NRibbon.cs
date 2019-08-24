@@ -100,7 +100,7 @@ namespace NoahDesign
       #region Drawing+ -> Cmd5_Test
       // 1. Push Button 과 Command 연결
       PushButtonData data_cmd5test = new PushButtonData(
-          "TestCMD2", "TEST2\n実行", path,
+          "TestCMD2", "Automatic\nMetal stud", path,
           "NoahDesign.Cmd5_Test.CmdTest2" );
       BitmapSource logo5 = GetEmbededImage(
           "NoahDesign.Folder_Image.test32_2.png" );
