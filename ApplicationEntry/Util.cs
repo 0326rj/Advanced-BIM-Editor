@@ -3141,13 +3141,13 @@ namespace MyUtils
  
   public static class UnitConvert
   {
-    public static double FeetToMillimetersLenth( double feet )
+    public static double FeetToMillimeters( double feet )
     {
       double meter = UnitUtils.Convert( feet, DisplayUnitType.DUT_DECIMAL_FEET, DisplayUnitType.DUT_MILLIMETERS );
       return meter;
     }
 
-    public static double MillimetersLenthToFeet( double meter )
+    public static double MillimetersToFeet( double meter )
     {
       double feet = UnitUtils.Convert( meter, DisplayUnitType.DUT_MILLIMETERS, DisplayUnitType.DUT_DECIMAL_FEET );
       return feet;

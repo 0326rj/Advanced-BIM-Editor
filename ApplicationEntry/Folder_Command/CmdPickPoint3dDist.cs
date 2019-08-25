@@ -136,7 +136,7 @@ namespace NoahDesign.Folder_Command
         Point2 = pt2;
 
         double pointToPoint = UnitConvert.
-          FeetToMillimetersLenth( pt1.DistanceTo( pt2 ) );
+          FeetToMillimeters( pt1.DistanceTo( pt2 ) );
 
         TaskDialog.Show( "Distance", pointToPoint.ToString() );
 

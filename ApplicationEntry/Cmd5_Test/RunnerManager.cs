@@ -10,6 +10,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Structure;
+using Autodesk.Revit.DB.IFC;
 using System.Diagnostics;
 using MyUtils;
 #endregion
@@ -19,50 +20,70 @@ namespace NoahDesign.Cmd5_Test
   static class RunnerManager
   {
 
-    internal static List<ModelCurve> CreateWallTopModelLines( Document doc, Wall wall )
+    /// <summary>
+    /// Wall 객체와 그 AnalyticalModel Line의 완전 평면직선을 인수로 받아
+    /// Wall 상부 직선만을 ModelCurve화 시킨다.
+    /// (Wall 인수는 insert 조작을 위해 입력)
+    /// </summary>
+    /// <param name="doc"></param>
+    /// <param name="wall"></param>
+    internal static void Get_Wall_Top_ModelLines( Document doc, Wall wall )
     {
+      var inserts = wall.FindInserts( true, true, true, true );
 
-      var am = wall.GetAnalyticalModel();
-      var wallCurves = am.GetCurves( AnalyticalCurveType.RawCurves );
 
-      List<Line> wallLines = new List<Line>();
-      foreach ( Line line in wallCurves )
+
+      List<Line> horizontalLines = New_Horizontal_Lines_By_Wall( doc, wall );
+      if ( horizontalLines.Count == 2 )
       {
-        wallLines.Add( line );
-      }
-
-      List<Line> horizontalLines = new List<Line>();
-      List<Line> verticalLines = new List<Line>();
-
-      if ( wallLines.Count > 3 )
-      {
-        
-        foreach ( Line line in wallLines )
+        if ( horizontalLines[0].Origin.Z > horizontalLines[1].Origin.Z )
         {
-          if ( !( line.Direction.Z == 1.0 || line.Direction.Z == -1.0 ) )
-          {
-            if ( !(line.Direction.X == 0.0 && line.Direction.Y == 0.0) )
-            {
-              horizontalLines.Add( line );
-            }
-          }
+          SketchPlane sketchPlane = StudManager.NewSkethPlanePassLine( horizontalLines[0], doc );
+          ModelCurve horizontalCurve = doc.Create.NewModelCurve( horizontalLines[0], sketchPlane );
+        }
+        else
+        {
+          SketchPlane sketchPlane = StudManager.NewSkethPlanePassLine( horizontalLines[1], doc );
+          ModelCurve horizontalCurve = doc.Create.NewModelCurve( horizontalLines[1], sketchPlane );
         }
       }
-
-      List<SketchPlane> sketchPlanes = new List<SketchPlane>();
-      List<ModelCurve> modelCurves = new List<ModelCurve>();
-      foreach ( var line in horizontalLines )
-      {
-        sketchPlanes.Add( StudManager.NewSkethPlanePassLine( line, doc ) );
-        foreach ( var sketchPlane in sketchPlanes )
-        {
-          ModelCurve mc = doc.Create.NewModelCurve( line, sketchPlane );
-          modelCurves.Add( mc );
-        }
-      }
-
-      return modelCurves;
     }
 
+    /// <summary>
+    /// Wall 객체를 인수로 받아 AnalyticalModel Line의 완전 평면직선을 반환한다.
+    /// </summary>
+    /// <param name="doc"></param>
+    /// <param name="wall"></param>
+    /// <returns></returns>
+    public static List<Line> New_Horizontal_Lines_By_Wall( Document doc, Wall wall )
+    {
+      List<Line> horizontalLine = new List<Line>();
+      var analyticalModel = wall.GetAnalyticalModel();
+      var baseCurves = analyticalModel.GetCurves( AnalyticalCurveType.RawCurves );
+
+      if ( baseCurves != null )
+      {
+        foreach ( var curve in baseCurves )
+        {
+          Line axisLine = curve as Line;
+          
+          // 완전 평면방향 벡터인 직선만 필터시킨다.
+          if ( !( axisLine.Direction.Z == 1.0 || axisLine.Direction.Z == -1.0 ) )
+          {
+            horizontalLine.Add( axisLine );             
+          }
+        }
+        return horizontalLine;
+      }
+      else
+        return null;
+    }
+
+
+    public static void GetPlanarFaceOuterLoops( Wall wall )
+    {
+      var wallAm = wall.GetAnalyticalModel();
+
+    }
   }
 }

@@ -38,13 +38,27 @@ namespace NoahDesign.Cmd5_Test
         var wall_Top_Offset = wall.get_Parameter( BuiltInParameter.WALL_TOP_OFFSET ).AsDouble();
         var wall_base_Offset = wall.get_Parameter( BuiltInParameter.WALL_BASE_OFFSET ).AsDouble();
 
-        // field of Wall crv , points
-        var wallCurve = wall.GetCurve();
-        var p1 = wallCurve.GetEndPoint( 0 );
+        // field of Wall curve , points
+        var wallCurve = wall.Location as LocationCurve;
+        var L = wallCurve.Curve as Line;
+        var p1 = wallCurve.Curve.GetEndPoint( 0 );
+
+        // Move to Core Center Line ( p1 )
+        // 각도와 벡터간의 수학적 이해가 필요.
+        WallType wallType = wall.WallType;
+        CompoundStructure comStructure = wallType.GetCompoundStructure();
+        double coreOffsetValue = comStructure.GetOffsetForLocationLine( WallLocationLine.CoreCenterline );
+
+        double angle90 = UnitConvert.MillimetersToFeet( 90.0 );
+
+        Transform trans = Transform.CreateRotation( p1, Math.PI / 2 );
+        var L2 = L.CreateTransformed( trans ) as Line;
+
+        XYZ Vector1 = L2.Direction * coreOffsetValue;
 
         // Create Stud Instance
         var studInst = doc.Create.NewFamilyInstance(
-          p1,
+          p1 + Vector1,
           studSymbol,
           wallBaseLevel,
           Autodesk.Revit.DB.Structure.StructuralType.Column );
@@ -114,15 +128,15 @@ namespace NoahDesign.Cmd5_Test
       double endPointOffset = 22.5 
       )
     {
-      double startOffset = UnitConvert.MillimetersLenthToFeet( startPointOffset );
-      double endOffset = UnitConvert.MillimetersLenthToFeet( endPointOffset );
+      double startOffset = UnitConvert.MillimetersToFeet( startPointOffset );
+      double endOffset = UnitConvert.MillimetersToFeet( endPointOffset );
 
       ICollection<ElementId> linearArray = null;
       var locationCurve = wall.Location as LocationCurve;
       var line = locationCurve.Curve as Line;
 
       var lineLength = line.Length - endOffset;
-      var wallLength = UnitConvert.FeetToMillimetersLenth( lineLength );
+      var wallLength = UnitConvert.FeetToMillimeters( lineLength );
       var arrayVector = line.Direction * ( lineLength - startOffset );
 
       List<double> pitchList = new List<double>();

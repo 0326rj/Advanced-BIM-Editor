@@ -96,7 +96,7 @@ namespace NoahDesign.Cmd5_Test
               var arr = StudManager.Array_Stud_In_Wall( _doc, targetWall, stud, 1 );
 
               // Create Runner 
-              var modelCrvs = RunnerManager.CreateWallTopModelLines( _doc, targetWall );
+              RunnerManager.Get_Wall_Top_ModelLines( _doc, targetWall );
             }
             else
             {
