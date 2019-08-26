@@ -22,7 +22,7 @@ namespace NoahDesign.Cmd5_Test
   // 2018.8 Jaebum Kim
 
   [Transaction(TransactionMode.Manual)]
-  public class CmdTest2 : IExternalCommand
+  public class Cmd : IExternalCommand
   {
     private const string _Name_stud_fam = "1_スタッド";
     private const string _Name_stud_sym = "スタッド_WS90";
@@ -96,7 +96,6 @@ namespace NoahDesign.Cmd5_Test
               var arr = StudManager.Array_Stud_In_Wall( _doc, targetWall, stud, 1 );
 
               // Create Runner 
-              RunnerManager.Get_Wall_Top_ModelLines( _doc, targetWall );
             }
             else
             {

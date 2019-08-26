@@ -74,7 +74,8 @@
       <DependentUpon>FormProgressBar.cs</DependentUpon>
     </Compile>
     <Compile Include="Cmd4_Test\CmdTest.cs" />
-    <Compile Include="Cmd5_Test\CmdTest2.cs" />
+    <Compile Include="Cmd5_Test\Cmd.cs" />
+    <Compile Include="Cmd5_Test\Property.cs" />
     <Compile Include="Cmd5_Test\RunnerManager.cs" />
     <Compile Include="Cmd5_Test\SteadyBraceManager.cs" />
     <Compile Include="Cmd5_Test\StudManager.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Cmd5_Test\Stud_Form.Designer.cs">
       <DependentUpon>Stud_Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="Cmd5_Test\Tools.cs" />
     <Compile Include="Folder_Component\Util_CreateDirectShape.cs" />
     <Compile Include="Cmd2_ConcreteFormwork\CmdConcreteFormwork.cs" />
     <Compile Include="Folder_Component\FilterRuleBuilder.cs" />

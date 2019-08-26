@@ -17,7 +17,7 @@ using MyUtils;
 
 namespace NoahDesign.Cmd5_Test
 {
-  static class RunnerManager
+  internal static class RunnerManager
   {
 
     /// <summary>
@@ -29,21 +29,17 @@ namespace NoahDesign.Cmd5_Test
     /// <param name="wall"></param>
     internal static void Get_Wall_Top_ModelLines( Document doc, Wall wall )
     {
-      var inserts = wall.FindInserts( true, true, true, true );
-
-
-
       List<Line> horizontalLines = New_Horizontal_Lines_By_Wall( doc, wall );
       if ( horizontalLines.Count == 2 )
       {
         if ( horizontalLines[0].Origin.Z > horizontalLines[1].Origin.Z )
         {
-          SketchPlane sketchPlane = StudManager.NewSkethPlanePassLine( horizontalLines[0], doc );
+          SketchPlane sketchPlane = Tools.NewSkethPlanePassLine( horizontalLines[0], doc );
           ModelCurve horizontalCurve = doc.Create.NewModelCurve( horizontalLines[0], sketchPlane );
         }
         else
         {
-          SketchPlane sketchPlane = StudManager.NewSkethPlanePassLine( horizontalLines[1], doc );
+          SketchPlane sketchPlane = Tools.NewSkethPlanePassLine( horizontalLines[1], doc );
           ModelCurve horizontalCurve = doc.Create.NewModelCurve( horizontalLines[1], sketchPlane );
         }
       }
@@ -77,13 +73,6 @@ namespace NoahDesign.Cmd5_Test
       }
       else
         return null;
-    }
-
-
-    public static void GetPlanarFaceOuterLoops( Wall wall )
-    {
-      var wallAm = wall.GetAnalyticalModel();
-
     }
   }
 }
