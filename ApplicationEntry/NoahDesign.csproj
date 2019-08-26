@@ -73,19 +73,20 @@
     <Compile Include="Cmd3_FloorTagControl\FormProgressBar.Designer.cs">
       <DependentUpon>FormProgressBar.cs</DependentUpon>
     </Compile>
-    <Compile Include="Cmd4_Test\CmdTest.cs" />
-    <Compile Include="Cmd5_Test\Cmd.cs" />
-    <Compile Include="Cmd5_Test\Property.cs" />
-    <Compile Include="Cmd5_Test\RunnerManager.cs" />
-    <Compile Include="Cmd5_Test\SteadyBraceManager.cs" />
-    <Compile Include="Cmd5_Test\StudManager.cs" />
-    <Compile Include="Cmd5_Test\Stud_Form.cs">
+    <Compile Include="Cmd4_SplitWall\Cmd_SplitWall.cs" />
+    <Compile Include="Cmd4_SplitWall\Tools.cs" />
+    <Compile Include="Cmd5_MetalFraming\Cmd_MetalFraming.cs" />
+    <Compile Include="Cmd5_MetalFraming\Property.cs" />
+    <Compile Include="Cmd5_MetalFraming\RunnerManager.cs" />
+    <Compile Include="Cmd5_MetalFraming\SteadyBraceManager.cs" />
+    <Compile Include="Cmd5_MetalFraming\StudManager.cs" />
+    <Compile Include="Cmd5_MetalFraming\Stud_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Cmd5_Test\Stud_Form.Designer.cs">
+    <Compile Include="Cmd5_MetalFraming\Stud_Form.Designer.cs">
       <DependentUpon>Stud_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Cmd5_Test\Tools.cs" />
+    <Compile Include="Cmd5_MetalFraming\Tools.cs" />
     <Compile Include="Folder_Component\Util_CreateDirectShape.cs" />
     <Compile Include="Cmd2_ConcreteFormwork\CmdConcreteFormwork.cs" />
     <Compile Include="Folder_Component\FilterRuleBuilder.cs" />
@@ -93,7 +94,6 @@
     <Compile Include="Folder_Component\Util_ConcreteVolume.cs" />
     <Compile Include="Folder_Command\CmdAdvanceFaceWall.cs" />
     <Compile Include="Folder_Command\CmdAutoFloorTag.cs" />
-    <Compile Include="Cmd2_ConcreteFormwork\Util_Formwork.cs" />
     <Compile Include="Cmd1_ConcreteVolume\CmdConcreteUtil.cs" />
     <Compile Include="Folder_Command\CmdPickPoint3dDist.cs" />
     <Compile Include="Folder_Command\CmdPickPoint3d.cs" />
@@ -135,13 +135,15 @@
     <EmbeddedResource Include="Cmd3_FloorTagControl\FormProgressBar.resx">
       <DependentUpon>FormProgressBar.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Cmd5_Test\Stud_Form.resx">
+    <EmbeddedResource Include="Cmd5_MetalFraming\Stud_Form.resx">
       <DependentUpon>Stud_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Folder_Image\formwork32.png" />
     <EmbeddedResource Include="Folder_Image\test32.png" />
     <EmbeddedResource Include="Folder_Image\floorTag32.png" />
     <EmbeddedResource Include="Folder_Image\test32_2.png" />
+    <EmbeddedResource Include="Folder_Image\splite32.png" />
+    <EmbeddedResource Include="Folder_Image\stud32.png" />
     <Content Include="NoahDesign.addin" />
     <EmbeddedResource Include="Folder_Image\cube32.png" />
     <EmbeddedResource Include="Folder_Image\Noah32.png" />

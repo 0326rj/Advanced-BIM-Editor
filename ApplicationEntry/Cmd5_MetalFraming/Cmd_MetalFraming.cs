@@ -15,14 +15,14 @@ using MyUtils;
 using System.IO;
 #endregion
 
-namespace NoahDesign.Cmd5_Test
+namespace NoahDesign.Cmd5_MetalFraming
 {
   // Test2
   // Auto Array family Instances in Wall solid
   // 2018.8 Jaebum Kim
 
   [Transaction(TransactionMode.Manual)]
-  public class Cmd : IExternalCommand
+  public class Cmd_MetalFraming : IExternalCommand
   {
     private const string _Name_stud_fam = "1_スタッド";
     private const string _Name_stud_sym = "スタッド_WS90";
@@ -37,7 +37,7 @@ namespace NoahDesign.Cmd5_Test
     private UIApplication _uiapp;
     private UIDocument _uidoc;
     private Document _doc;
-    private string _appTitle;
+    
 
     public UIApplication Uiapp
     {
@@ -55,8 +55,9 @@ namespace NoahDesign.Cmd5_Test
     {
       get { return _doc; }
       set { _doc = value; }
-    } 
+    }
 
+    private string _appTitle;
     public string AppTitle
     {
       get { return _appTitle; }
@@ -85,12 +86,17 @@ namespace NoahDesign.Cmd5_Test
             Wall targetWall = elementSelected as Wall;
 
             // Get Stud FamilySymbol in this Document
-            FamilySymbol studSymbol = GetSymbol( _doc, _Name_stud_fam, _Name_stud_sym );
+            FamilySymbol _studSymbol = Tools.GetSymbol( _doc, _Name_stud_fam, _Name_stud_sym );
+            FamilySymbol _runnerSymbol = Tools.GetSymbol( _doc, _Name_runner_up_fam, _Name_runner_up_sym );
 
-            if ( studSymbol != null )
+
+            if ( _studSymbol != null )
             {
+              // Change Wall Color
+              Tools.Change_Color_Object( _doc, elementSelected, 75 );
+
               // Create Stud Instance
-              var stud = StudManager.Create_Stud_In_Wall( _doc, targetWall, studSymbol );
+              var stud = StudManager.Create_Stud_In_Wall( _doc, targetWall, _studSymbol );
 
               // Array Stud
               var arr = StudManager.Array_Stud_In_Wall( _doc, targetWall, stud, 1 );
@@ -117,35 +123,7 @@ namespace NoahDesign.Cmd5_Test
       }     
     }
 
-    /// <summary>
-    /// 패밀리명, 타입명으로 문서상의 패밀리 심볼을 취득한다.
-    /// </summary>
-    /// <param name="doc"></param>
-    /// <param name="familyName"></param>
-    /// <param name="symbolName"></param>
-    /// <returns></returns>
-    private FamilySymbol GetSymbol( Document doc, string familyName, string symbolName )
-    {
-      using ( var collector = new FilteredElementCollector( doc ) )
-      {
-        using ( var families = collector.OfClass( typeof( Family ) ) )
-        {
-          foreach ( Family family in families )
-          {
-            if ( family.Name == familyName )
-            {
-              foreach ( var symbolId in family.GetFamilySymbolIds() )
-              {
-                var symbol = doc.GetElement( symbolId ) as FamilySymbol;
-                if ( symbol.Name == symbolName )
-                  return symbol;
-              }
-            }
-          }
-        }
-      }
-      return null;
-    }
+
 
 
   }

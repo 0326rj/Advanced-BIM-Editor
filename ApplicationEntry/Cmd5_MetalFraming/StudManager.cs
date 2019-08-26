@@ -15,8 +15,12 @@ using System.Diagnostics;
 using MyUtils;
 #endregion
 
-namespace NoahDesign.Cmd5_Test
+namespace NoahDesign.Cmd5_MetalFraming
 {
+  // 2019.8.26
+  // LinearArray 보다 ElementTransformUtils.CopyElement 메서드를
+  // 사용하면 더 효율적으로 배열이 가능하지 않을까?
+
   static class StudManager
   {
 

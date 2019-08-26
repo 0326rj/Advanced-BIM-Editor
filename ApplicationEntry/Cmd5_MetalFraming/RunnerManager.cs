@@ -15,7 +15,7 @@ using System.Diagnostics;
 using MyUtils;
 #endregion
 
-namespace NoahDesign.Cmd5_Test
+namespace NoahDesign.Cmd5_MetalFraming
 {
   internal static class RunnerManager
   {
