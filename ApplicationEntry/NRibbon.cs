@@ -21,7 +21,7 @@ namespace NoahDesign
       string path = Assembly.GetExecutingAssembly().Location;
 
       // Ribbon Tab 작성
-      string tabName = "JAEBUM KIM";
+      string tabName = "JAEBUM KIM > REVIT+";
       UICrdApp.CreateRibbonTab( tabName );
 
       // Ribbon Panel 작성
@@ -31,7 +31,7 @@ namespace NoahDesign
 
       RibbonPanel panel_MetalFraming = UICrdApp.CreateRibbonPanel( tabName, "Automatic Metal Framing" );
 
-      RibbonPanel panel_Test = UICrdApp.CreateRibbonPanel( tabName, "Debug Commands" );
+      RibbonPanel panel_debug = UICrdApp.CreateRibbonPanel( tabName, "Debug Commands" );
 
       RibbonPanel panel_Info = UICrdApp.CreateRibbonPanel( tabName, "Info" );
 
@@ -122,14 +122,87 @@ namespace NoahDesign
 
 
       // Debug Commands
-      
+      #region Debug Commands -> Debug Commmand 1
+      // 1. Push Button 과 Command 연결
+      PushButtonData data_debug1 = new PushButtonData(
+          "Debug1", "Debug\nCommand 1", path,
+          "NoahDesign.Folder_Command.Cmd_Null" );
+      BitmapSource logo6 = GetEmbededImage(
+          "NoahDesign.Folder_Image.test32_3.png" );
+
+      data_debug1.LargeImage = logo6;
+      data_debug1.ToolTip = "TEST";
+
+      // 2. 버튼 데이터 추가
+      RibbonItem itemTest3 = panel_debug.AddItem( data_debug1 );
+      #endregion
+      panel_debug.AddSeparator();
+      #region Debug Commands -> Debug Commmand 2
+      // 1. Push Button 과 Command 연결
+      PushButtonData data_debug2 = new PushButtonData(
+          "Debug2", "Debug\nCommand 2", path,
+          "NoahDesign.Folder_Command.Cmd_Null" );
+      BitmapSource logo7 = GetEmbededImage(
+          "NoahDesign.Folder_Image.test32_3.png" );
+
+      data_debug2.LargeImage = logo7;
+      data_debug2.ToolTip = "TEST";
+
+      // 2. 버튼 데이터 추가
+      RibbonItem itemTest4 = panel_debug.AddItem( data_debug2 );
+      #endregion
+      panel_debug.AddSeparator();
+      #region Debug Commands -> Debug Commmand 3
+      // 1. Push Button 과 Command 연결
+      PushButtonData data_debug3 = new PushButtonData(
+          "Debug3", "Debug\nCommand 3", path,
+          "NoahDesign.Folder_Command.Cmd_Null" );
+      BitmapSource logo8 = GetEmbededImage(
+          "NoahDesign.Folder_Image.test32_3.png" );
+
+      data_debug3.LargeImage = logo8;
+      data_debug3.ToolTip = "TEST";
+
+      // 2. 버튼 데이터 추가
+      RibbonItem itemTest5 = panel_debug.AddItem( data_debug3 );
+      #endregion
+      panel_debug.AddSeparator();
+      #region Debug Commands -> Debug Commmand 4
+      // 1. Push Button 과 Command 연결
+      PushButtonData data_debug4 = new PushButtonData(
+          "Debug4", "Debug\nCommand 4", path,
+          "NoahDesign.Folder_Command.Cmd_Null" );
+      BitmapSource logo9 = GetEmbededImage(
+          "NoahDesign.Folder_Image.test32_3.png" );
+
+      data_debug4.LargeImage = logo9;
+      data_debug4.ToolTip = "TEST";
+
+      // 2. 버튼 데이터 추가
+      RibbonItem itemTest6 = panel_debug.AddItem( data_debug4 );
+      #endregion
+      panel_debug.AddSeparator();
+      #region Debug Commands -> Debug Commmand 5
+      // 1. Push Button 과 Command 연결
+      PushButtonData data_debug5 = new PushButtonData(
+          "Debug5", "Debug\nCommand 5", path,
+          "NoahDesign.Folder_Command.Cmd_Null" );
+      BitmapSource logo10 = GetEmbededImage(
+          "NoahDesign.Folder_Image.test32_3.png" );
+
+      data_debug5.LargeImage = logo10;
+      data_debug5.ToolTip = "TEST";
+
+      // 2. 버튼 데이터 추가
+      RibbonItem itemTest7 = panel_debug.AddItem( data_debug5 );
+      #endregion
 
 
       // Info
       #region VersionInfo -> ShowVersionInfo
       // 1. Push Button 과 Command 연결
       PushButtonData data_Version = new PushButtonData(
-          "vesionInfo", "バージョン\n情報", path,
+          "vesionInfo", "Add-In\nVersion", path,
           "NoahDesign.Folder_Command.ShowVersionInfo" );
       BitmapSource noahLoge = GetEmbededImage(
           "NoahDesign.Folder_Image.Noah32.png" );

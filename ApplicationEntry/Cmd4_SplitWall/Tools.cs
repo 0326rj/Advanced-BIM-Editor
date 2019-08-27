@@ -20,18 +20,74 @@ namespace NoahDesign.Cmd4_SplitWall
 {
   internal static class Tools
   {
+    /// <summary>
+    /// 선택된 그리드와 벽을 다중처리하여 그리드선을 기준으로 벽체를 Split한다.
+    /// </summary>
+    /// <param name="doc"></param>
+    /// <param name="walls"></param>
+    /// <param name="grids"></param>
+    /// <returns></returns>
+    internal static void Get_Split_Wall_By_Grids( Wall wall, List<Grid> grids )
+    {
+      List<Curve> _wallCurves = new List<Curve>();
+      List<Curve> _gridCurves = new List<Curve>();
+      List<Line> _gridLines = new List<Line>();
+      List<XYZ> _intersects = new List<XYZ>();
+
+      Line wallLine = null;
+      Curve wallCurve = ( ( LocationCurve )wall.Location ).Curve;
+
+      _wallCurves.Add( wallCurve );
+
+      if ( wallCurve is Line )
+      {
+        wallLine = ( Line )wallCurve;
+      }
+
+      foreach ( Grid grid in grids )
+      {
+        Line gridLine;
+        Curve gridCurve = grid.Curve;
+
+        _gridCurves.Add( gridCurve );
+
+        if ( gridCurve is Line )
+        {
+          gridLine = ( Line )gridCurve;
+          _gridLines.Add( gridLine );
+        }
+      }
+      
+      List<Line> interGridLines = new List<Line>();
+      foreach ( Line gridLine in _gridLines )
+      {
+        XYZ intersect = Get_Intersection_Point( wallLine, gridLine );
+        if ( intersect != null )
+        {
+          _intersects.Add( intersect );
+
+        }
+     
+      }
+
+      TaskDialog.Show( "...", "intersection : " + _intersects.Count );
+
+    }
 
 
-    internal static Wall Get_Split_Wall( Document doc, Wall wall, Grid grid )
+
+
+
+    internal static Wall Get_Split_Wall_By_Grid( Document doc, Wall wall, Grid grid )
     {
       // Get wall base level by level ID
       var wall_Top_LevelId = wall.get_Parameter( BuiltInParameter.WALL_HEIGHT_TYPE ).AsElementId();
       var wall_height = wall.get_Parameter( BuiltInParameter.WALL_USER_HEIGHT_PARAM ).AsDouble();
-      double wall_Top_Offset = wall.get_Parameter( BuiltInParameter.WALL_TOP_OFFSET ).AsDouble();
       double wall_base_Offset = wall.get_Parameter( BuiltInParameter.WALL_BASE_OFFSET ).AsDouble();
 
-      Curve wallCurve = ( ( LocationCurve )wall.Location ).Curve;
-      Curve gridCurve = grid.Curve;
+      var wallCurve = ( ( LocationCurve )wall.Location ).Curve;
+      var gridCurve = grid.Curve;
+
       var startParam = wallCurve.GetEndParameter( 0 );
       var endParam = wallCurve.GetEndParameter( 1 );
       var startPoint = wallCurve.Evaluate( startParam, false );
@@ -39,19 +95,17 @@ namespace NoahDesign.Cmd4_SplitWall
 
       if ( wallCurve is Line && gridCurve is Line )
       {
-        Line wallLine = ( Line )wallCurve;
-        Line gridLine = ( Line )gridCurve;
-        XYZ wallPt = wallLine.Origin;
-        XYZ gridPt = gridLine.Origin;
+        var wallLine = ( Line )wallCurve;
+        var gridLine = ( Line )gridCurve;
+        
+        var wallPt = wallLine.Origin;
+        var gridPt = gridLine.Origin;
 
-        Transform toWallLine = Transform.CreateTranslation( XYZ.BasisZ * (wallPt.Z - gridPt.Z) );
-        Line newGridLine = gridLine.CreateTransformed( toWallLine ) as Line;
+        var toWallLine = Transform.CreateTranslation( XYZ.BasisZ * (wallPt.Z - gridPt.Z) );
+        var newGridLine = gridLine.CreateTransformed( toWallLine ) as Line;
 
-        var interPt = Get_Intersection_UV( ( Line )wallCurve, newGridLine );
+        var interPt = Get_Intersection_Point( wallCurve, newGridLine );
 
-        string str = String.Format( "X = {0}\n" + "Y = {1}\n" + "Z = {2}\n", interPt.X, interPt.Y, interPt.Z );
-        string str2 = String.Format( "X = {0}\n" + "Y = {1}\n" + "Z = {2}\n", startPoint.X, startPoint.Y, startPoint.Z );
-        TaskDialog.Show( "...", str + "\n\n" + str2 );
 
         var midPoint = new XYZ( interPt.X, interPt.Y, startPoint.Z );
 
@@ -84,7 +138,7 @@ namespace NoahDesign.Cmd4_SplitWall
     }
 
 
-    private static XYZ Get_Intersection_UV( Line line1, Line line2 )
+    private static XYZ Get_Intersection_Point( Curve line1, Curve line2 )
     {
       IntersectionResultArray results;
       SetComparisonResult result = line1.Intersect( line2, out results );

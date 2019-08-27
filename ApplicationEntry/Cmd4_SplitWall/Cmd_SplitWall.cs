@@ -44,49 +44,57 @@ namespace NoahDesign.Cmd4_SplitWall
       _doc = _uidoc.Document;
       _appTitle = "JK Wall Split Tool";
 
-      Wall cutWall = null;
-      var refGrid = _uidoc.Selection.PickObject( ObjectType.Element );
-      var elementGrid = _doc.GetElement( refGrid );
-      
+      var selectedElements = _uidoc.Selection
+        .PickObjects( ObjectType.Element );
+
+      List<Wall> walls = new List<Wall>();
+      List<Grid> selectedGrids = new List<Grid>();
+
+      List<Element> elementList = new List<Element>();
+
+
+      if ( selectedElements != null )
+      {
+        foreach ( Reference reference in selectedElements )
+        {
+          Element element = _doc.GetElement( reference );
+          elementList.Add( element );
+        }
+
+        foreach ( var e in elementList )
+        {
+          if ( e is Grid )
+          {
+            selectedGrids.Add( e as Grid );
+          }
+          else if ( e is Wall )
+          {
+            walls.Add( e as Wall );
+          }
+        }
+      }
 
       try
       {
-        if ( elementGrid.Category.Id != new ElementId(BuiltInCategory.OST_Grids) )
+        if ( selectedGrids == null && walls.Count > 1 )
         {
-          TaskDialog.Show( _appTitle, "切断基準のグリッドを選択してください。" );
+          TaskDialog.Show( _appTitle, "切断基準のグリッドと壁をを選択してください。" );
           return Result.Failed;
         }
         else
         {
-          var refWall = _uidoc.Selection.PickObject( ObjectType.Element );
-          var elementWall = _doc.GetElement( refWall );
-
-          if ( elementWall.Category.Id != new ElementId( BuiltInCategory.OST_Walls ) )
+          using ( Transaction trans = new Transaction( _doc, "Wall Split" ) )
           {
-            TaskDialog.Show( _appTitle, "対象の壁を選択してください。" );
-            return Result.Failed;
-          }
-          else
-          {
-            Grid grid = elementGrid as Grid;
-            Wall wall = elementWall as Wall;
-            
+            trans.Start();
 
-            using ( Transaction trans = new Transaction( _doc, "Wall Split" ) )
+            foreach ( Grid grid in selectedGrids )
             {
-              trans.Start();
-              
-              using ( SubTransaction subTrans1 = new SubTransaction( _doc ) )
-              {
-                subTrans1.Start();
-
-                cutWall = Tools.Get_Split_Wall( _doc, wall, grid );
-
-                subTrans1.Commit();
-              }
-
-              trans.Commit();
+              Wall cutWall = Tools.Get_Split_Wall_By_Grid( _doc, walls[0], grid );
             }
+
+            //Tools.Get_Split_Wall_By_Grids( walls[0], selectedGrids );
+
+            trans.Commit();
           }
         }
       }
