@@ -44,8 +44,10 @@ namespace NoahDesign.Cmd4_SplitWall
       _doc = _uidoc.Document;
       _appTitle = "JK Wall Split Tool";
 
+      Wall cutWall = null;
       var refGrid = _uidoc.Selection.PickObject( ObjectType.Element );
       var elementGrid = _doc.GetElement( refGrid );
+      
 
       try
       {
@@ -68,11 +70,21 @@ namespace NoahDesign.Cmd4_SplitWall
           {
             Grid grid = elementGrid as Grid;
             Wall wall = elementWall as Wall;
+            
 
             using ( Transaction trans = new Transaction( _doc, "Wall Split" ) )
             {
               trans.Start();
-              Tools.Split_Wall_By_Grid( _doc, wall );
+              
+              using ( SubTransaction subTrans1 = new SubTransaction( _doc ) )
+              {
+                subTrans1.Start();
+
+                cutWall = Tools.Get_Split_Wall( _doc, wall, grid );
+
+                subTrans1.Commit();
+              }
+
               trans.Commit();
             }
           }
@@ -80,7 +92,7 @@ namespace NoahDesign.Cmd4_SplitWall
       }
       catch ( Exception ex )
       {
-        TaskDialog.Show( "...", ex.Message );
+        message = ex.Message;
         return Result.Failed;
       }
       return Result.Succeeded;

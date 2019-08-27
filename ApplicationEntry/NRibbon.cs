@@ -40,7 +40,7 @@ namespace NoahDesign
       #region Geometry+ -> Cmd1_ConcreteVolume
       // 1. Push Button 과 Command 연결
       PushButtonData data_conVolume = new PushButtonData(
-          "ConcreteVolume", "RC\n体積計算", path,
+          "ConcreteVolume", "Concrete\nVolume", path,
           "NoahDesign.Cmd1_ConcreteVolume.CmdConcreteUtil" );
       BitmapSource conVolume = GetEmbededImage(
           "NoahDesign.Folder_Image.cube32.png" );
@@ -57,7 +57,7 @@ namespace NoahDesign
       #region Geometry+ -> Cmd2_ConcreteFormwork
       // 1. Push Button 과 Command 연결
       PushButtonData data_conForm = new PushButtonData(
-          "Formwork", "RC\n型枠計算", path,
+          "Formwork", "Formwork\nMaker", path,
           "NoahDesign.Cmd2_ConcreteFormwork.CmdConcreteFormwork" );
       BitmapSource conForm = GetEmbededImage(
           "NoahDesign.Folder_Image.cube32.png" );
@@ -76,7 +76,7 @@ namespace NoahDesign
       #region Drawing+ -> Cmd3_FloorTagControl
       // 1. Push Button 과 Command 연결
       PushButtonData data_floortag = new PushButtonData(
-          "FloorTagCMD", "床タグ\n配置", path,
+          "FloorTagCMD", "Automatic\nFloor Tag", path,
           "NoahDesign.Cmd3_FloorTagControl.CmdFloorTagControl" );
       BitmapSource testLogo = GetEmbededImage(
           "NoahDesign.Folder_Image.floorTag32.png" );
@@ -93,10 +93,10 @@ namespace NoahDesign
       #region Automatic Metal Framing -> Cmd4_Test
       // 1. Push Button 과 Command 연결
       PushButtonData data_cmd4test = new PushButtonData(
-          "TestCMD1", "Split Wall\nBy Grid", path,
+          "TestCMD1", "Split Wall\nBy Grids", path,
           "NoahDesign.Cmd4_SplitWall.Cmd_SplitWall" );
       BitmapSource logo4 = GetEmbededImage(
-          "NoahDesign.Folder_Image.test32.png" );
+          "NoahDesign.Folder_Image.split32.png" );
 
       data_cmd4test.LargeImage = logo4;
       data_cmd4test.ToolTip = "TEST";
