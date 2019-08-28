@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Windows.Media.Imaging;
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using NoahDesign.Folder_RibbonData;
 #endregion
 
 namespace NoahDesign
@@ -17,218 +17,284 @@ namespace NoahDesign
   {
     public static void AddRibbonPanel_VersionInfo( UIControlledApplication UICrdApp )
     {
-      // dll assembly path 취득
-      string path = Assembly.GetExecutingAssembly().Location;
 
-      // Ribbon Tab 작성
+      // dll assembly path
       string tabName = "JAEBUM KIM > REVIT+";
+      string path = Assembly.GetExecutingAssembly().Location;    
       UICrdApp.CreateRibbonTab( tabName );
 
-      // Ribbon Panel 작성
+
+      // Ribbon Panels
       RibbonPanel panel_GeometryPlus = UICrdApp.CreateRibbonPanel( tabName, "Geometry+" );
-
       RibbonPanel panel_DrawingPlus = UICrdApp.CreateRibbonPanel( tabName, "Drawing+" );
-
       RibbonPanel panel_MetalFraming = UICrdApp.CreateRibbonPanel( tabName, "Automatic Metal Framing" );
-
-      RibbonPanel panel_debug = UICrdApp.CreateRibbonPanel( tabName, "Debug Commands" );
-
-      RibbonPanel panel_Info = UICrdApp.CreateRibbonPanel( tabName, "Info" );
+      RibbonPanel panel_debug = UICrdApp.CreateRibbonPanel( tabName, "Debug Commands 1" );
+      RibbonPanel panel_debug2 = UICrdApp.CreateRibbonPanel( tabName, "Debug Commands 2" );
+      RibbonPanel panel_Info = UICrdApp.CreateRibbonPanel( tabName, "Infomation" );
 
 
       // Geometry+
       #region Geometry+ -> Cmd1_ConcreteVolume
-      // 1. Push Button 과 Command 연결
-      PushButtonData data_conVolume = new PushButtonData(
-          "ConcreteVolume", "Concrete\nVolume", path,
-          "NoahDesign.Cmd1_ConcreteVolume.CmdConcreteUtil" );
-      BitmapSource conVolume = GetEmbededImage(
-          "NoahDesign.Folder_Image.cube32.png" );
 
-      data_conVolume.LargeImage = conVolume;
-      data_conVolume.ToolTip =
-          "インプレイス一般モデルの中に含まれる部材の体積を求めます。"
-          + "\n実行する前に一般モデルを作成してください。";
 
-      // 2. 버튼 데이터 추가
-      RibbonItem formwork = panel_GeometryPlus.AddItem( data_conVolume );
+      RibbonItem item_ConcreteVolume = MyButtonControl.Add_PushButton(
+        panel_GeometryPlus,
+        "Concrete Volume",
+        "Concrete\nVolume",
+        path,
+        "NoahDesign.Cmd1_ConcreteVolume.CmdConcreteUtil",
+        "NoahDesign.Folder_Image.cube32.png",
+        true,
+        "インプレイス一般モデルの中に含まれる部材の体積を求めます。"
+          + "\n実行する前に一般モデルを作成してください。" );
+
+
       #endregion
       panel_GeometryPlus.AddSeparator();
       #region Geometry+ -> Cmd2_ConcreteFormwork
-      // 1. Push Button 과 Command 연결
-      PushButtonData data_conForm = new PushButtonData(
-          "Formwork", "Formwork\nMaker", path,
-          "NoahDesign.Cmd2_ConcreteFormwork.CmdConcreteFormwork" );
-      BitmapSource conForm = GetEmbededImage(
-          "NoahDesign.Folder_Image.cube32.png" );
 
-      data_conForm.LargeImage = conForm;
-      data_conForm.ToolTip =
-          "インプレイス一般モデルの中に含まれる部材の体積を求めます。"
-          + "\n実行する前に一般モデルを作成してください。";
 
-      // 2. 버튼 데이터 추가
-      RibbonItem itemConForm = panel_GeometryPlus.AddItem( data_conForm );
+      RibbonItem item_ConcreteFromwork = MyButtonControl.Add_PushButton(
+        panel_GeometryPlus,
+        "Concrete Formwork",
+        "Formwork\nMaker",
+        path,
+        "NoahDesign.Cmd2_ConcreteFormwork.CmdConcreteFormwork",
+        "NoahDesign.Folder_Image.cube32.png",
+        true,
+        "インプレイス一般モデルの中に含まれる部材の体積を求めます。"
+          + "\n実行する前に一般モデルを作成してください。" );
+
+
       #endregion
 
 
       // Drawing+
       #region Drawing+ -> Cmd3_FloorTagControl
-      // 1. Push Button 과 Command 연결
-      PushButtonData data_floortag = new PushButtonData(
-          "FloorTagCMD", "Automatic\nFloor Tag", path,
-          "NoahDesign.Cmd3_FloorTagControl.CmdFloorTagControl" );
-      BitmapSource testLogo = GetEmbededImage(
-          "NoahDesign.Folder_Image.floorTag32.png" );
 
-      data_floortag.LargeImage = testLogo;
-      data_floortag.ToolTip = "TEST";
 
-      // 2. 버튼 데이터 추가
-      RibbonItem itemTest = panel_DrawingPlus.AddItem( data_floortag );
+      RibbonItem item_AutoFloorTag = MyButtonControl.Add_PushButton(
+        panel_DrawingPlus,
+        "Auto Floor Tag",
+        "Automatic\nFloor Tag",
+        path,
+        "NoahDesign.Cmd3_FloorTagControl.CmdFloorTagControl",
+        "NoahDesign.Folder_Image.floorTag32.png",
+        true,
+        "選択した壁から床タグのタイプを自動判定し配置します。" );
+
+
       #endregion
 
 
       // Automatic Metal Framing
       #region Automatic Metal Framing -> Cmd4_Test
-      // 1. Push Button 과 Command 연결
-      PushButtonData data_cmd4test = new PushButtonData(
-          "TestCMD1", "Split Wall\nBy Grids", path,
-          "NoahDesign.Cmd4_SplitWall.Cmd_SplitWall" );
-      BitmapSource logo4 = GetEmbededImage(
-          "NoahDesign.Folder_Image.split32.png" );
 
-      data_cmd4test.LargeImage = logo4;
-      data_cmd4test.ToolTip = "TEST";
 
-      // 2. 버튼 데이터 추가
-      RibbonItem itemTest1 = panel_MetalFraming.AddItem( data_cmd4test );
+      RibbonItem item_splitWall = MyButtonControl.Add_PushButton(
+        panel_MetalFraming,
+        "Split Wall",
+        "Split Wall\nBy Grids",
+        path,
+        "NoahDesign.Cmd4_SplitWall.Cmd_SplitWall",
+        "NoahDesign.Folder_Image.split32.png",
+        true,
+        "通り心を基準に壁を切断できます" );
+
+
       #endregion
       panel_MetalFraming.AddSeparator();
       #region Automatic Metal Framing -> Cmd5_MetalFraming
-      // 1. Push Button 과 Command 연결
-      PushButtonData data_cmd5test = new PushButtonData(
-          "TestCMD2", "Automatic\nMetal stud", path,
-          "NoahDesign.Cmd5_MetalFraming.Cmd_MetalFraming" );
-      BitmapSource logo5 = GetEmbededImage(
-          "NoahDesign.Folder_Image.stud32.png" );
 
-      data_cmd5test.LargeImage = logo5;
-      data_cmd5test.ToolTip = "TEST";
 
-      // 2. 버튼 데이터 추가
-      RibbonItem itemTest2 = panel_MetalFraming.AddItem( data_cmd5test );
+      RibbonItem item_Stud = MyButtonControl.Add_PushButton(
+        panel_MetalFraming,
+        "Stud",
+        "Automatic\nLGS stud",
+        path,
+        "NoahDesign.Cmd5_MetalFraming.Cmd_MetalFraming",
+        "NoahDesign.Folder_Image.stud32.png",
+        true,
+        "選択した壁にLGSスタッドを自動配置します。" );
+
+
       #endregion
 
 
-      // Debug Commands
+      // Debug Commands 1
+      string className_Debug = "NoahDesign.Folder_Command.Cmd_Null";
+      string imageName32_Debug = "NoahDesign.Folder_Image.test32_3.png";
+      string imageName16_Debug = "NoahDesign.Folder_Image.test16.png";
+      string toolTip_Debug = "This is for debug";
+
       #region Debug Commands -> Debug Commmand 1
-      // 1. Push Button 과 Command 연결
-      PushButtonData data_debug1 = new PushButtonData(
-          "Debug1", "Debug\nCommand 1", path,
-          "NoahDesign.Folder_Command.Cmd_Null" );
-      BitmapSource logo6 = GetEmbededImage(
-          "NoahDesign.Folder_Image.test32_3.png" );
 
-      data_debug1.LargeImage = logo6;
-      data_debug1.ToolTip = "TEST";
+      MyButtonControl.Add_PushButton(
+        panel_debug,
+        "debug1",
+        "Debug\nCommand 1",
+        path,
+        className_Debug,
+        imageName32_Debug,
+        true,
+        toolTip_Debug );
 
-      // 2. 버튼 데이터 추가
-      RibbonItem itemTest3 = panel_debug.AddItem( data_debug1 );
       #endregion
       panel_debug.AddSeparator();
       #region Debug Commands -> Debug Commmand 2
-      // 1. Push Button 과 Command 연결
-      PushButtonData data_debug2 = new PushButtonData(
-          "Debug2", "Debug\nCommand 2", path,
-          "NoahDesign.Folder_Command.Cmd_Null" );
-      BitmapSource logo7 = GetEmbededImage(
-          "NoahDesign.Folder_Image.test32_3.png" );
 
-      data_debug2.LargeImage = logo7;
-      data_debug2.ToolTip = "TEST";
 
-      // 2. 버튼 데이터 추가
-      RibbonItem itemTest4 = panel_debug.AddItem( data_debug2 );
+      MyButtonControl.Add_PushButton(
+        panel_debug,
+        "debug2",
+        "Debug\nCommand 2",
+        path,
+        className_Debug,
+        imageName32_Debug,
+        true,
+        toolTip_Debug );
+
       #endregion
       panel_debug.AddSeparator();
       #region Debug Commands -> Debug Commmand 3
-      // 1. Push Button 과 Command 연결
-      PushButtonData data_debug3 = new PushButtonData(
-          "Debug3", "Debug\nCommand 3", path,
-          "NoahDesign.Folder_Command.Cmd_Null" );
-      BitmapSource logo8 = GetEmbededImage(
-          "NoahDesign.Folder_Image.test32_3.png" );
 
-      data_debug3.LargeImage = logo8;
-      data_debug3.ToolTip = "TEST";
+      MyButtonControl.Add_PushButton(
+        panel_debug,
+        "debug3",
+        "Debug\nCommand 3",
+        path,
+        className_Debug,
+        imageName32_Debug,
+        true,
+        toolTip_Debug );
 
-      // 2. 버튼 데이터 추가
-      RibbonItem itemTest5 = panel_debug.AddItem( data_debug3 );
       #endregion
       panel_debug.AddSeparator();
       #region Debug Commands -> Debug Commmand 4
-      // 1. Push Button 과 Command 연결
-      PushButtonData data_debug4 = new PushButtonData(
-          "Debug4", "Debug\nCommand 4", path,
-          "NoahDesign.Folder_Command.Cmd_Null" );
-      BitmapSource logo9 = GetEmbededImage(
-          "NoahDesign.Folder_Image.test32_3.png" );
 
-      data_debug4.LargeImage = logo9;
-      data_debug4.ToolTip = "TEST";
 
-      // 2. 버튼 데이터 추가
-      RibbonItem itemTest6 = panel_debug.AddItem( data_debug4 );
+      MyButtonControl.Add_PushButton(
+        panel_debug,
+        "debug4",
+        "Debug\nCommand 4",
+        path,
+        className_Debug,
+        imageName32_Debug,
+        true,
+        toolTip_Debug );
+
+
       #endregion
       panel_debug.AddSeparator();
       #region Debug Commands -> Debug Commmand 5
-      // 1. Push Button 과 Command 연결
-      PushButtonData data_debug5 = new PushButtonData(
-          "Debug5", "Debug\nCommand 5", path,
-          "NoahDesign.Folder_Command.Cmd_Null" );
-      BitmapSource logo10 = GetEmbededImage(
-          "NoahDesign.Folder_Image.test32_3.png" );
 
-      data_debug5.LargeImage = logo10;
-      data_debug5.ToolTip = "TEST";
 
-      // 2. 버튼 데이터 추가
-      RibbonItem itemTest7 = panel_debug.AddItem( data_debug5 );
+      MyButtonControl.Add_PushButton(
+        panel_debug,
+        "debug5",
+        "Debug\nCommand 5",
+        path,
+        className_Debug,
+        imageName32_Debug,
+        true,
+        toolTip_Debug );
+
+
       #endregion
+
+      // Debug Commands 2
+      #region Debug Commands -> Debug Commmand 6 ~ 10
+
+
+      var splitData1 = MyButtonControl.Create_PushButtonData(
+        "split1",
+        "Debug Command 6",
+        path, className_Debug, imageName32_Debug, true, toolTip_Debug );
+
+      var splitData2 = MyButtonControl.Create_PushButtonData(
+        "split2",
+      "Debug Command 7",
+      path, className_Debug, imageName32_Debug, true, toolTip_Debug );
+
+      var splitData3 = MyButtonControl.Create_PushButtonData(
+      "split3",
+      "Debug Command 8",
+      path, className_Debug, imageName32_Debug, true, toolTip_Debug );
+
+      var splitData4 = MyButtonControl.Create_PushButtonData(
+       "split4",
+       "Debug Command 9",
+       path, className_Debug, imageName32_Debug, true, toolTip_Debug );
+
+      var splitData5 = MyButtonControl.Create_PushButtonData(
+       "split5",
+       "Debug Command 10",
+       path, className_Debug, imageName32_Debug, true, toolTip_Debug );
+
+      List<PushButtonData> datas = new List<PushButtonData>();
+      datas.Add( splitData1 );
+      datas.Add( splitData2 );
+      datas.Add( splitData3 );
+      datas.Add( splitData4 );
+      datas.Add( splitData5 );
+      MyButtonControl.Add_SplitButton( panel_debug2, "Split Test", "Test", datas );
+
+
+      #endregion
+
+      #region Debug Commands -> Debug Commmand 11 ~ 13
+
+      var stackedButtonData1 = MyButtonControl.Create_PushButtonData(
+        "stacked1",
+        "Debug Command 11",
+        path,
+        className_Debug,
+        imageName16_Debug,
+        false,
+        "Tool Tip" );
+
+      var stackedButtonData2 = MyButtonControl.Create_PushButtonData(
+        "stacked2",
+        "Debug Command 12",
+        path,
+        className_Debug,
+        imageName16_Debug,
+        false,
+        "Tool Tip" );
+
+      var stackedButtonData3 = MyButtonControl.Create_PushButtonData(
+        "stacked3",
+        "Debug Command 13",
+        path,
+        className_Debug,
+        imageName16_Debug,
+        false,
+        "Tool Tip" );
+
+      List<PushButtonData> pushButtonDatas = new List<PushButtonData>();
+      pushButtonDatas.Add( stackedButtonData1 );
+      pushButtonDatas.Add( stackedButtonData2 );
+      pushButtonDatas.Add( stackedButtonData3 );
+      MyButtonControl.Add_RibbonStackItems_ToRibbonPanel( panel_debug2, pushButtonDatas );
+      #endregion
+
 
 
       // Info
       #region VersionInfo -> ShowVersionInfo
-      // 1. Push Button 과 Command 연결
-      PushButtonData data_Version = new PushButtonData(
-          "vesionInfo", "Add-In\nVersion", path,
-          "NoahDesign.Folder_Command.ShowVersionInfo" );
-      BitmapSource noahLoge = GetEmbededImage(
-          "NoahDesign.Folder_Image.Noah32.png" );
 
-      data_Version.LargeImage = noahLoge;
-      data_Version.ToolTip = "アドインバージョン情報を開きます。";
+      MyButtonControl.Add_PushButton(
+       panel_Info,
+       "VersionInfo",
+       "Add-In Version",
+       path,
+       "NoahDesign.Folder_Command.ShowVersionInfo",
+       "NoahDesign.Folder_Image.Noah32.png",
+       true,
+       "Version Information" );
 
-      // 2. 버튼 데이터 추가
-      RibbonItem versionInfo = panel_Info.AddItem( data_Version );
       #endregion
-      panel_Info.AddSeparator();
 
-    }
-
-    public static BitmapSource GetEmbededImage( string name )
-    {
-      try
-      {
-        Assembly a = Assembly.GetExecutingAssembly();
-        Stream s = a.GetManifestResourceStream( name );
-        return BitmapFrame.Create( s );
-      }
-      catch
-      {
-        return null;
-      }
     }
   }
 }
