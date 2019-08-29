@@ -21,61 +21,67 @@ namespace NoahDesign.Cmd4_SplitWall
   internal static class Tools
   {
     /// <summary>
-    /// 선택된 그리드와 벽을 다중처리하여 그리드선을 기준으로 벽체를 Split한다.
+    /// 선택된 모든 그리드와 벽을 다중처리하여 그리드선을 기준으로 벽체를 Split한다.
     /// </summary>
     /// <param name="doc"></param>
     /// <param name="walls"></param>
     /// <param name="grids"></param>
     /// <returns></returns>
-    internal static void Get_Split_Wall_By_Grids( Wall wall, List<Grid> grids )
+    internal static List<Wall> Get_Split_Wall_By_Grids( Document doc, Wall wall, List<Grid> grids )
     {
-      List<Curve> _wallCurves = new List<Curve>();
-      List<Curve> _gridCurves = new List<Curve>();
-      List<Line> _gridLines = new List<Line>();
-      List<XYZ> _intersects = new List<XYZ>();
+      bool flag = false;
+      List<Grid> trueGrids = new List<Grid>();
 
-      Line wallLine = null;
-      Curve wallCurve = ( ( LocationCurve )wall.Location ).Curve;
-
-      _wallCurves.Add( wallCurve );
-
-      if ( wallCurve is Line )
+      if ( grids.Count >= 1 && grids.Count <= 100 )
       {
-        wallLine = ( Line )wallCurve;
-      }
-
-      foreach ( Grid grid in grids )
-      {
-        Line gridLine;
-        Curve gridCurve = grid.Curve;
-
-        _gridCurves.Add( gridCurve );
-
-        if ( gridCurve is Line )
+        List<Wall> addWalls = new List<Wall>();
+        addWalls.Add( wall );
+       
+        foreach ( Grid grid in grids )
         {
-          gridLine = ( Line )gridCurve;
-          _gridLines.Add( gridLine );
+          flag = IsGridInterstionWall( wall, grid );
+
+          if ( flag == true )
+          {
+            trueGrids.Add( grid );
+          }
         }
-      }
-      
-      List<Line> interGridLines = new List<Line>();
-      foreach ( Line gridLine in _gridLines )
-      {
-        XYZ intersect = Get_Intersection_Point( wallLine, gridLine );
-        if ( intersect != null )
+
+        var wallCurve = ( LocationCurve )wall.Location;
+        var wallLine = wallCurve.Curve as Line;
+        var d = wallLine.Direction;
+
+
+
+        if ( d.X > 0 && d.Y > 0 )
         {
-          _intersects.Add( intersect );
-
+          for ( int i = 0; i < trueGrids.Count; i++ )
+          {
+            addWalls.Add( Get_Split_Wall_By_Grid( doc, addWalls[i], trueGrids[i] ) );
+          }
         }
-     
+        else if ( d.X > 0 && d.Y < 0 )
+        {
+          for ( int i = 0; i < trueGrids.Count; i++ )
+          {
+            addWalls.Add( Get_Split_Wall_By_Grid( doc, addWalls[i], trueGrids[i] ) );
+          }
+        }
+        else
+        {
+          trueGrids.Reverse();
+          for ( int i = 0; i < trueGrids.Count; i++ )
+          {
+            addWalls.Add( Get_Split_Wall_By_Grid( doc, addWalls[i], trueGrids[i] ) );
+          }
+        }
+
+        return addWalls;
       }
-
-      TaskDialog.Show( "...", "intersection : " + _intersects.Count );
-
+      else
+        return null;
     }
-
-
-
+  
 
 
     internal static Wall Get_Split_Wall_By_Grid( Document doc, Wall wall, Grid grid )
@@ -84,6 +90,7 @@ namespace NoahDesign.Cmd4_SplitWall
       var wall_Top_LevelId = wall.get_Parameter( BuiltInParameter.WALL_HEIGHT_TYPE ).AsElementId();
       var wall_height = wall.get_Parameter( BuiltInParameter.WALL_USER_HEIGHT_PARAM ).AsDouble();
       double wall_base_Offset = wall.get_Parameter( BuiltInParameter.WALL_BASE_OFFSET ).AsDouble();
+      double wall_top_Offset = wall.get_Parameter( BuiltInParameter.WALL_TOP_OFFSET ).AsDouble();
 
       var wallCurve = ( ( LocationCurve )wall.Location ).Curve;
       var gridCurve = grid.Curve;
@@ -96,8 +103,7 @@ namespace NoahDesign.Cmd4_SplitWall
       if ( wallCurve is Line && gridCurve is Line )
       {
         var wallLine = ( Line )wallCurve;
-        var gridLine = ( Line )gridCurve;
-        
+        var gridLine = ( Line )gridCurve;       
         var wallPt = wallLine.Origin;
         var gridPt = gridLine.Origin;
 
@@ -106,35 +112,46 @@ namespace NoahDesign.Cmd4_SplitWall
 
         var interPt = Get_Intersection_Point( wallCurve, newGridLine );
 
-
-        var midPoint = new XYZ( interPt.X, interPt.Y, startPoint.Z );
-
-        Line newLine1 = Line.CreateBound( startPoint, midPoint );
-
-        if ( WallUtils.IsWallJoinAllowedAtEnd( wall, 1 ) )
+        if ( interPt != null )
         {
-          WallUtils.DisallowWallJoinAtEnd( wall, 1 );
-        }
+          var midPoint = new XYZ( interPt.X, interPt.Y, startPoint.Z );
+
+          Line newLine1 = Line.CreateBound( startPoint, midPoint );
+
+          if ( WallUtils.IsWallJoinAllowedAtEnd( wall, 1 ) )
+          {
+            WallUtils.DisallowWallJoinAtEnd( wall, 1 );
+          }
 
         //align original wall with the new curve
-        ( ( LocationCurve )wall.Location ).Curve = newLine1;
+          ( ( LocationCurve )wall.Location ).Curve = newLine1;
 
-        Line newLine2 = Line.CreateBound( midPoint, endPoint );
-   
-        Wall wall_2 = Wall.Create( 
-          doc,
-          newLine2,
-          wall.GetTypeId(),  
-          wall.LevelId,
-          wall_height,
-          wall_base_Offset,
-          wall.Flipped,
-          true );
+          Line newLine2 = Line.CreateBound( midPoint, endPoint );
 
-        return wall_2;
+          Wall wall_2 = Wall.Create(
+            doc,
+            newLine2,
+            wall.GetTypeId(),
+            wall.LevelId,
+            wall_height,
+            wall_base_Offset,
+            wall.Flipped,
+            true );
+
+          wall_2.get_Parameter( BuiltInParameter.WALL_HEIGHT_TYPE ).Set( wall_Top_LevelId );
+          wall_2.get_Parameter( BuiltInParameter.WALL_TOP_OFFSET ).Set( wall_top_Offset );
+          return wall_2;
+        }
+        else
+        {
+          return null;
+        }  
       }
       else
+      {
         return null;
+      }
+        
     }
 
 
@@ -144,12 +161,37 @@ namespace NoahDesign.Cmd4_SplitWall
       SetComparisonResult result = line1.Intersect( line2, out results );
 
       if ( result != SetComparisonResult.Overlap )
-        throw new InvalidOperationException( "交差していません。" );
+        return null;
+      //throw new InvalidOperationException( "交差していない通り心が含まれています。" );
       if ( results == null || results.Size != 1 )
-        throw new InvalidOperationException( "交差していません。" );
+        return null;
+      //throw new InvalidOperationException( "交差していない通り心が含まれています。" );
+      if ( result == SetComparisonResult.BothEmpty)
+        return null;
 
       IntersectionResult iResult = results.get_Item( 0 );
       return iResult.XYZPoint;
+    }
+
+
+    private static bool IsGridInterstionWall( Wall wall, Grid grid )
+    {
+      XYZ interPt = null;
+      var wallCurve = ( ( LocationCurve )wall.Location ).Curve;
+      var gridCurve = grid.Curve;
+      var wallLine = ( Line )wallCurve;
+      var gridLine = ( Line )gridCurve;
+      var wallPt = wallLine.Origin;
+      var gridPt = gridLine.Origin;
+      var toWallLine = Transform.CreateTranslation( XYZ.BasisZ * ( wallPt.Z - gridPt.Z ) );
+      var newGridLine = gridLine.CreateTransformed( toWallLine ) as Line;
+   
+      interPt = Get_Intersection_Point( wallCurve, newGridLine );
+
+      if ( !( interPt is null ) )
+        return true;
+      else
+        return false;
     }
   }
 }

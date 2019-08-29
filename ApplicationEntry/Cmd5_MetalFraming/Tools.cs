@@ -116,7 +116,7 @@ namespace NoahDesign.Cmd5_MetalFraming
     /// <param name="doc"></param>
     /// <param name="targetElement"></param>
     /// <param name="transparency"></param>
-    internal static void Change_Color_Object(
+    public static void Change_Color_Object(
       Document doc,
       Element targetElement,
       int transparency

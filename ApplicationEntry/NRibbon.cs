@@ -85,21 +85,57 @@ namespace NoahDesign
 
 
       #endregion
+      #region Drawing + ->Cmd_FloorColorFilter
 
+
+      RibbonItem item_AutoFloorColorFilter = MyButtonControl.Add_PushButton(
+       panel_DrawingPlus,
+       "Floor Color Filter",
+       "Floor\nFilter",
+       path,
+       "NoahDesign.Folder_Command.Cmd_Null",
+       "NoahDesign.Folder_Image.floorFilter32.png",
+       true );
+
+
+      #endregion
 
       // Automatic Metal Framing
-      #region Automatic Metal Framing -> Cmd4_Test
+      #region Automatic Metal Framing -> Cmd_SplitWall
 
 
-      RibbonItem item_splitWall = MyButtonControl.Add_PushButton(
-        panel_MetalFraming,
+      var item_splitWall = MyButtonControl.Create_PushButtonData(
         "Split Wall",
         "Split Wall\nBy Grids",
         path,
         "NoahDesign.Cmd4_SplitWall.Cmd_SplitWall",
-        "NoahDesign.Folder_Image.split32.png",
-        true,
+        "NoahDesign.Folder_Image.split16.png",
+        false,
         "通り心を基準に壁を切断できます" );
+
+      var item_splitWall_Sub1 = MyButtonControl.Create_PushButtonData(
+        "Split Wall Sub 1",
+        "Sub Command 1",
+        path,
+        "NoahDesign.Cmd4_SplitWall.Cmd_SplitWall",
+        "NoahDesign.Folder_Image.test16.png",
+        false,
+        "Sub1" );
+
+      var item_splitWall_Sub2 = MyButtonControl.Create_PushButtonData(
+       "Split Wall Sub 2",
+       "Sub Command 2",
+       path,
+       "NoahDesign.Cmd4_SplitWall.Cmd_SplitWall",
+       "NoahDesign.Folder_Image.test16.png",
+       false,
+       "Sub2" );
+
+      List<PushButtonData> splitWallCommands = new List<PushButtonData>();
+      splitWallCommands.Add( item_splitWall );
+      splitWallCommands.Add( item_splitWall_Sub1 );
+      splitWallCommands.Add( item_splitWall_Sub2 );
+      MyButtonControl.Add_RibbonStackItems_ToRibbonPanel( panel_MetalFraming, splitWallCommands );
 
 
       #endregion
@@ -110,12 +146,42 @@ namespace NoahDesign
       RibbonItem item_Stud = MyButtonControl.Add_PushButton(
         panel_MetalFraming,
         "Stud",
-        "Automatic\nLGS stud",
+        "Auto LGS\nstud",
         path,
         "NoahDesign.Cmd5_MetalFraming.Cmd_MetalFraming",
         "NoahDesign.Folder_Image.stud32.png",
         true,
         "選択した壁にLGSスタッドを自動配置します。" );
+
+
+      #endregion
+      #region Automatic Metal Framing -> RunnerManager
+
+
+      RibbonItem item_Runner = MyButtonControl.Add_PushButton(
+       panel_MetalFraming,
+       "Runner",
+       "Auto LGS\nRunner",
+       path,
+       "NoahDesign.Cmd5_MetalFraming.Cmd_MetalFraming",
+       "NoahDesign.Folder_Image.stud32.png",
+       true,
+       "選択した壁にLGSランナーを自動配置します。" );
+
+
+      #endregion
+      #region Automatic Metal Framing -> SteadyBraceManager
+
+
+      RibbonItem item_SteadyBrace = MyButtonControl.Add_PushButton(
+       panel_MetalFraming,
+       "Steady Brace",
+       "Auto LGS\nBrace",
+       path,
+       "NoahDesign.Cmd5_MetalFraming.Cmd_RunnerManager",
+       "NoahDesign.Folder_Image.stud32.png",
+       true,
+       "選択した壁にLGS振れ止めを自動配置します。" ); 
 
 
       #endregion
@@ -140,7 +206,7 @@ namespace NoahDesign
         toolTip_Debug );
 
       #endregion
-      panel_debug.AddSeparator();
+
       #region Debug Commands -> Debug Commmand 2
 
 
@@ -155,7 +221,7 @@ namespace NoahDesign
         toolTip_Debug );
 
       #endregion
-      panel_debug.AddSeparator();
+
       #region Debug Commands -> Debug Commmand 3
 
       MyButtonControl.Add_PushButton(
@@ -169,7 +235,7 @@ namespace NoahDesign
         toolTip_Debug );
 
       #endregion
-      panel_debug.AddSeparator();
+
       #region Debug Commands -> Debug Commmand 4
 
 
@@ -185,7 +251,7 @@ namespace NoahDesign
 
 
       #endregion
-      panel_debug.AddSeparator();
+
       #region Debug Commands -> Debug Commmand 5
 
 

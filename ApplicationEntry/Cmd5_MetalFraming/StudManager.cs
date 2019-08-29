@@ -44,22 +44,25 @@ namespace NoahDesign.Cmd5_MetalFraming
         var wall_Top_LevelId = wall.get_Parameter( BuiltInParameter.WALL_HEIGHT_TYPE ).AsElementId();
         var wall_Top_Offset = wall.get_Parameter( BuiltInParameter.WALL_TOP_OFFSET ).AsDouble();
         var wall_base_Offset = wall.get_Parameter( BuiltInParameter.WALL_BASE_OFFSET ).AsDouble();
+        var wall_user_Height = wall.get_Parameter( BuiltInParameter.WALL_USER_HEIGHT_PARAM ).AsDouble();
 
         // field of Wall curve , points
         var wallCurve = wall.Location as LocationCurve;
         var p1 = wallCurve.Curve.GetEndPoint( 0 );
 
         // Create Stud Instance
-        var studInst = doc.Create.NewFamilyInstance(
-          p1,
-          studSymbol,
-          wallBaseLevel,
-          Autodesk.Revit.DB.Structure.StructuralType.Column );
+        FamilyInstance studInst = doc.Create.NewFamilyInstance(
+        p1,
+        studSymbol,
+        wallBaseLevel,
+        Autodesk.Revit.DB.Structure.StructuralType.Column );
+
 
         // Set Stud level parameter same to wall
         studInst.get_Parameter( BuiltInParameter.FAMILY_TOP_LEVEL_PARAM ).Set( wall_Top_LevelId );
         studInst.get_Parameter( BuiltInParameter.FAMILY_TOP_LEVEL_OFFSET_PARAM ).Set( wall_Top_Offset );
         studInst.get_Parameter( BuiltInParameter.FAMILY_BASE_LEVEL_OFFSET_PARAM ).Set( wall_base_Offset );
+
 
         // Get wall rotation angle information
         double angle = 0.0;
@@ -76,6 +79,8 @@ namespace NoahDesign.Cmd5_MetalFraming
         else
           TaskDialog.Show(".", "Wall LocationCurve is Null");
 
+
+        // 問題
         // Rotate Stud angle by Wall curve direction 
         var am = studInst.GetAnalyticalModel();
         var axisCrvs = am.GetCurves( AnalyticalCurveType.BaseCurve );
@@ -88,16 +93,15 @@ namespace NoahDesign.Cmd5_MetalFraming
         else if ( wallDirection.X > 0 && wallDirection.Y < 0 )
         {
           angle = -1.0 * angle;
-        }  
-
-        // Implement Ratation
-        studInst.Location.Rotate( axisLine,  angle + Math.PI / 2 );    
+        }
+        studInst.Location.Rotate( axisLine, angle + Math.PI / 2 );
 
         return studInst;
       }
       else
         return null;
     }
+
 
     /// <summary>
     /// 기준벽체와 배치된 스터드 한개를 인수로 받아 Array를 실행한다.
@@ -125,6 +129,7 @@ namespace NoahDesign.Cmd5_MetalFraming
       var locationCurve = wall.Location as LocationCurve;
       var line = locationCurve.Curve as Line;
 
+
       // Get wall vertor and rotate wall vector  
       var normalVector = line.Direction.Normalize();
       var rotatedNormalVector = Tools.Rotate_Vector_From_Line( locationCurve.Curve, Math.PI / 2 );
@@ -132,6 +137,7 @@ namespace NoahDesign.Cmd5_MetalFraming
       var lineLength = line.Length - endOffset;
       var wallLength = UnitConvert.FeetToMillimeters( lineLength );
       var arrayVector = normalVector * ( lineLength - startOffset );
+
 
       // Get Wall Layer and core line offset
       WallType wallType = wall.WallType;
@@ -148,6 +154,7 @@ namespace NoahDesign.Cmd5_MetalFraming
         familyInstance.Location.Move( normalVector * startOffset );
         familyInstance.Location.Move( -( rotatedNormalVector ) * coreOffsetValue );
       }
+
 
       // 보드매수 1장의 경우 [290 ~ 310mm]폭으로 배열한다.
       List<double> pitchList = new List<double>();
@@ -182,6 +189,7 @@ namespace NoahDesign.Cmd5_MetalFraming
         }      
       }
 
+
       // 보드매수 2장의 경우 450mm 정도의 폭으로 배열한다.
       else if ( finishCount == 2 )
       {
@@ -203,6 +211,7 @@ namespace NoahDesign.Cmd5_MetalFraming
           ( int )studCount,
           arrayVector,
           ArrayAnchorMember.Last );
+
 
         // 생성결과 정보 출력
         String str1 = String.Format( "スタッド数 : {0}", studCount.ToString() );

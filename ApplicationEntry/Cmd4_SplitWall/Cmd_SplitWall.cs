@@ -87,12 +87,7 @@ namespace NoahDesign.Cmd4_SplitWall
           {
             trans.Start();
 
-            foreach ( Grid grid in selectedGrids )
-            {
-              Wall cutWall = Tools.Get_Split_Wall_By_Grid( _doc, walls[0], grid );
-            }
-
-            //Tools.Get_Split_Wall_By_Grids( walls[0], selectedGrids );
+            Tools.Get_Split_Wall_By_Grids( _doc, walls[0], selectedGrids );
 
             trans.Commit();
           }

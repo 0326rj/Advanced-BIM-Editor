@@ -148,7 +148,8 @@
     <EmbeddedResource Include="Folder_Image\split32.png" />
     <EmbeddedResource Include="Folder_Image\test32_3.png" />
     <EmbeddedResource Include="Folder_Image\test16.png" />
-    <EmbeddedResource Include="Folder_Image\icon16.png" />
+    <EmbeddedResource Include="Folder_Image\split16.png" />
+    <EmbeddedResource Include="Folder_Image\floorFilter32.png" />
     <Content Include="NoahDesign.addin" />
     <EmbeddedResource Include="Folder_Image\cube32.png" />
     <EmbeddedResource Include="Folder_Image\Noah32.png" />
