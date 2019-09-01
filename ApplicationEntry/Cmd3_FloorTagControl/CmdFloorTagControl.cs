@@ -110,11 +110,10 @@ namespace NoahDesign.Cmd3_FloorTagControl
       {
         try
         {
-
-
           using ( FormProgressBar progress = new FormProgressBar() )
           {
             progress.Show();
+
 
             tx.Start();
 

@@ -44,14 +44,20 @@ namespace NoahDesign.Cmd4_SplitWall
       _doc = _uidoc.Document;
       _appTitle = "JK Wall Split Tool";
 
-      var selectedElements = _uidoc.Selection
-        .PickObjects( ObjectType.Element );
-
       List<Wall> walls = new List<Wall>();
       List<Grid> selectedGrids = new List<Grid>();
-
       List<Element> elementList = new List<Element>();
 
+      IList<Reference> selectedElements;
+      try
+      {
+        selectedElements = _uidoc.Selection
+         .PickObjects( ObjectType.Element );
+      }
+      catch
+      {
+        return Result.Cancelled;
+      }
 
       if ( selectedElements != null )
       {
@@ -73,30 +79,43 @@ namespace NoahDesign.Cmd4_SplitWall
           }
         }
       }
-
-      try
+      else
       {
-        if ( selectedGrids == null && walls.Count > 1 )
-        {
-          TaskDialog.Show( _appTitle, "切断基準のグリッドと壁をを選択してください。" );
-          return Result.Failed;
-        }
-        else
-        {
-          using ( Transaction trans = new Transaction( _doc, "Wall Split" ) )
+        return Result.Cancelled;
+      }
+
+      if ( ( selectedGrids.Count > 0 && selectedGrids.Count <= 100 )
+        && ( walls.Count > 0 && walls.Count <= 100 ) )
+      {
+        using ( Transaction trans = new Transaction( _doc, "Wall Split" ) )
+        {      
+          try
           {
             trans.Start();
-
-            Tools.Get_Split_Wall_By_Grids( _doc, walls[0], selectedGrids );
-
+            IEnumerator<Wall> enumerator = walls.GetEnumerator();
+            while ( enumerator.MoveNext() )
+            {
+              Tool_SplitWall.Get_Split_Wall_By_Grids( _doc, enumerator.Current, selectedGrids );
+            }
             trans.Commit();
           }
+          catch
+          {
+            TaskDialog.Show( _appTitle,
+              "通り芯交差する壁を選択してください。",
+              TaskDialogCommonButtons.Ok );
+            trans.RollBack();
+          }        
         }
       }
-      catch ( Exception ex )
+      else
       {
-        message = ex.Message;
-        return Result.Failed;
+        TaskDialog.Show( _appTitle,
+          "選択した通り心、壁の数が多すぎます。\n"
+          + "数を調整してください。",
+          TaskDialogCommonButtons.Ok );
+        
+        return Result.Cancelled;
       }
       return Result.Succeeded;
     }

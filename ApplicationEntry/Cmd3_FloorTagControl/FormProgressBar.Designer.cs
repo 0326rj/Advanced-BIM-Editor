@@ -49,7 +49,7 @@
       this.MinimizeBox = false;
       this.Name = "FormProgressBar";
       this.ShowIcon = false;
-      this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+      this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "Process";
       this.Load += new System.EventHandler(this.FormProgressBar_Load);
       this.ResumeLayout(false);

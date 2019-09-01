@@ -19,7 +19,10 @@ namespace NoahDesign.Cmd3_FloorTagControl
 
     private void FormProgressBar_Load( object sender, EventArgs e )
     {
-      progressBar1.Style = ProgressBarStyle.Continuous;  
+      progressBar1.Style = ProgressBarStyle.Continuous;
+
+
+
     }
   }
 }

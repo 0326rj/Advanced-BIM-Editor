@@ -74,7 +74,7 @@
       <DependentUpon>FormProgressBar.cs</DependentUpon>
     </Compile>
     <Compile Include="Cmd4_SplitWall\Cmd_SplitWall.cs" />
-    <Compile Include="Cmd4_SplitWall\Tools.cs" />
+    <Compile Include="Cmd4_SplitWall\Tool_SplitWall.cs" />
     <Compile Include="Cmd5_MetalFraming\Cmd_MetalFraming.cs" />
     <Compile Include="Cmd5_MetalFraming\Property.cs" />
     <Compile Include="Cmd5_MetalFraming\RunnerManager.cs" />
