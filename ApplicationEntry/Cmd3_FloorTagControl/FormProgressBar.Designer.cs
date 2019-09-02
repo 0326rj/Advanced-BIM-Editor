@@ -35,7 +35,7 @@
       // 
       this.progressBar1.Location = new System.Drawing.Point(12, 12);
       this.progressBar1.Name = "progressBar1";
-      this.progressBar1.Size = new System.Drawing.Size(360, 38);
+      this.progressBar1.Size = new System.Drawing.Size(440, 34);
       this.progressBar1.Step = 1;
       this.progressBar1.TabIndex = 0;
       // 
@@ -43,15 +43,15 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(384, 62);
+      this.ClientSize = new System.Drawing.Size(464, 61);
       this.Controls.Add(this.progressBar1);
       this.MaximizeBox = false;
       this.MinimizeBox = false;
       this.Name = "FormProgressBar";
       this.ShowIcon = false;
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-      this.Text = "Process";
-      this.Load += new System.EventHandler(this.FormProgressBar_Load);
+      this.Text = "適用しています...";
+      this.TopMost = true;
       this.ResumeLayout(false);
 
     }

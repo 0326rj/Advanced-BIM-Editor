@@ -214,9 +214,9 @@ namespace NoahDesign.Cmd5_MetalFraming
 
 
         // 생성결과 정보 출력
-        String str1 = String.Format( "スタッド数 : {0}", studCount.ToString() );
-        String str2 = String.Format( "計算ビッチ : {0:N2} mm", pitchList[0] );
-        TaskDialog.Show( ".", str1 + "\n" + str2 );
+        //String str1 = String.Format( "スタッド数 : {0}", studCount.ToString() );
+        //String str2 = String.Format( "計算ビッチ : {0:N2} mm", pitchList[0] );
+        //TaskDialog.Show( ".", str1 + "\n" + str2 );
       }
       else
       {

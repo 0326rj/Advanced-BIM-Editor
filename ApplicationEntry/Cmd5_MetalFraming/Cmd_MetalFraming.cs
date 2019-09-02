@@ -30,8 +30,8 @@ namespace NoahDesign.Cmd5_MetalFraming
     private const string _Name_runner_up_fam = "3_ランナー_上部";
     private const string _Name_runner_up_sym = "ランナーWR90";
 
-    private const string _Name_runner_dn_fam = "2_ランナー_下部";
-    private const string _Name_runner_dn_sym = "ランナーWR90";
+    //private const string _Name_runner_dn_fam = "2_ランナー_下部";
+    //private const string _Name_runner_dn_sym = "ランナーWR90";
 
     #region Property
     private UIApplication _uiapp;
@@ -87,7 +87,10 @@ namespace NoahDesign.Cmd5_MetalFraming
 
             // Get Stud FamilySymbol in this Document
             FamilySymbol _studSymbol = Tools.GetSymbol( _doc, _Name_stud_fam, _Name_stud_sym );
-            FamilySymbol _runnerSymbol = Tools.GetSymbol( _doc, _Name_runner_up_fam, _Name_runner_up_sym );
+
+            // Get Runner FamilySymbol in this Document
+            FamilySymbol _runnerSymbol_Up = Tools.GetSymbol( _doc, _Name_runner_up_fam, _Name_runner_up_sym );
+            //FamilySymbol _runnerSymbol_Down = Tools.GetSymbol( _doc, _Name_runner_dn_fam, _Name_runner_dn_sym );
 
 
             if ( _studSymbol != null )
@@ -102,6 +105,8 @@ namespace NoahDesign.Cmd5_MetalFraming
               var arr = StudManager.Array_Stud_In_Wall( _doc, targetWall, stud, 1 );
 
               // Create Runner 
+              RunnerManager.Create_Runner_In_Wall( _doc, targetWall, _runnerSymbol_Up );
+
             }
             else
             {

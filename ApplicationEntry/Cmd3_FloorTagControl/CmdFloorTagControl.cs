@@ -8,6 +8,7 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
+using Autodesk.Revit.ApplicationServices;
 using NoahDesign.Folder_WinForm;
 using System.Diagnostics;
 #endregion
@@ -36,6 +37,8 @@ namespace NoahDesign.Cmd3_FloorTagControl
 
     #region Property
     private string _dialogTitle;
+    private UIApplication _uiapp;
+    private Application _app;
     private UIDocument _uidoc;
     private Document _doc;
     private List<Reference> _floorRefs;
@@ -48,6 +51,16 @@ namespace NoahDesign.Cmd3_FloorTagControl
     {
       get { return _dialogTitle; }
       set { _dialogTitle = value; }
+    }
+
+    public UIApplication UIApplication
+    {
+      get { return _uiapp; }
+    }
+
+    public Application Application
+    {
+      get { return _app; }
     }
 
     public UIDocument UIDocument
@@ -91,9 +104,14 @@ namespace NoahDesign.Cmd3_FloorTagControl
       ref string message,
       ElementSet elements )
     {
-      _uidoc = commandData.Application.ActiveUIDocument;
+      _uiapp = commandData.Application;
+      _app = _uiapp.Application;
+      _uidoc = _uiapp.ActiveUIDocument;
       _doc = _uidoc.Document;
       DialogTitle = "JK Automatic Tag Control";
+
+      
+
 
       try
       {
@@ -110,11 +128,8 @@ namespace NoahDesign.Cmd3_FloorTagControl
       {
         try
         {
-          using ( FormProgressBar progress = new FormProgressBar() )
+          using ( FormProgressBar progress = new FormProgressBar( _floorRefs.Count ) )
           {
-            progress.Show();
-
-
             tx.Start();
 
             if ( _floorRefs != null &&
@@ -143,6 +158,8 @@ namespace NoahDesign.Cmd3_FloorTagControl
                   tx.RollBack();
                   return Result.Failed;
                 }
+
+                progress.Increment();
               }
             }
             else
@@ -152,9 +169,10 @@ namespace NoahDesign.Cmd3_FloorTagControl
               return Result.Cancelled;
             }
 
+
             tx.Commit();
 
-            progress.Close();
+            
           }
 
 
