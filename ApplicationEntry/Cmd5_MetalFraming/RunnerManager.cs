@@ -52,7 +52,6 @@ namespace NoahDesign.Cmd5_MetalFraming
             .NewFamilyInstance( topBottomLines[1], runnerSymbol, null, StructuralType.Beam );
 
           downInstance.get_Parameter( BuiltInParameter.STRUCTURAL_BEND_DIR_ANGLE ).Set( Math.PI );
-          downInstance.Split( 0.5 );
         }
       }
 

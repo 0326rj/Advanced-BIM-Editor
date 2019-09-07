@@ -105,20 +105,20 @@ namespace NoahDesign
 
 
       var item_splitWall = MyButtonControl.Create_PushButtonData(
-        "Split Wall",
-        "Split Wall\nBy Grids",
+        "Split Wall By Grids",
+        "Split Wall By Grids",
         path,
         "NoahDesign.Cmd4_SplitWall.Cmd_SplitWall",
         "NoahDesign.Folder_Image.split16.png",
         false,
         "通り心を基準に壁を切断できます" );
 
-      var item_splitWall_Sub1 = MyButtonControl.Create_PushButtonData(
-        "Split Wall Sub 1",
-        "Sub Command 1",
+      var item_splitWall_by_void = MyButtonControl.Create_PushButtonData(
+        "Split Wall By Void",
+        "Split Wall By Void",
         path,
-        "NoahDesign.Cmd4_SplitWall.Cmd_SplitWall",
-        "NoahDesign.Folder_Image.test16.png",
+        "NoahDesign.Cmd4_SplitWall.Cmd_SplitWallByVoid",
+        "NoahDesign.Folder_Image.split16.png",
         false,
         "Sub1" );
 
@@ -133,7 +133,7 @@ namespace NoahDesign
 
       List<PushButtonData> splitWallCommands = new List<PushButtonData>();
       splitWallCommands.Add( item_splitWall );
-      splitWallCommands.Add( item_splitWall_Sub1 );
+      splitWallCommands.Add( item_splitWall_by_void );
       splitWallCommands.Add( item_splitWall_Sub2 );
       MyButtonControl.Add_RibbonStackItems_ToRibbonPanel( panel_MetalFraming, splitWallCommands );
 
