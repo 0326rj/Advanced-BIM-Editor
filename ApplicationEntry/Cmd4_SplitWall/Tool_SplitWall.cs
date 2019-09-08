@@ -21,6 +21,13 @@ namespace NoahDesign.Cmd4_SplitWall
 
   internal static class Tool_SplitWall
   {
+
+    /// <summary>
+    /// 보이드 측면 교차하는 벽체를 절단한다.
+    /// </summary>
+    /// <param name="doc"></param>
+    /// <param name="wall"></param>
+    /// <returns></returns>
     internal static List<Wall> Get_Split_Wall_By_Voids(Document doc, Wall wall )
     {
       List<Wall> resultWalls = new List<Wall>();

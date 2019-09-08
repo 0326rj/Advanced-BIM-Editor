@@ -81,6 +81,7 @@
     <Compile Include="Cmd5_MetalFraming\RunnerManager.cs" />
     <Compile Include="Cmd5_MetalFraming\SteadyBraceManager.cs" />
     <Compile Include="Cmd5_MetalFraming\StudManager.cs" />
+    <Compile Include="Cmd5_MetalFraming\StudManager_V2.cs" />
     <Compile Include="Cmd5_MetalFraming\Stud_Form.cs">
       <SubType>Form</SubType>
     </Compile>

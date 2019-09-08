@@ -19,7 +19,33 @@ namespace NoahDesign.Cmd5_MetalFraming
 {
   internal static class Tools
   {
+    /// <summary>
+    /// 대상 패밀리 인스턴스를 벽체 코어중심선으로 이동시킨다.
+    /// </summary>
+    /// <param name="wall"></param>
+    /// <param name="familyInstance"></param>
+    /// <returns></returns>
+    internal static FamilyInstance MoveToCoreLayer( Wall wall, FamilyInstance familyInstance )
+    {
+      var locationCurve = wall.Location as LocationCurve;
+      var line = locationCurve.Curve as Line;
+      var normalVector = line.Direction.Normalize();
+      var rotatedNormalVector = Tools.Rotate_Vector_From_Line( locationCurve.Curve, Math.PI / 2 );
 
+      WallType wallType = wall.WallType;
+      CompoundStructure comStructure = wallType.GetCompoundStructure();
+      double coreOffsetValue = comStructure.GetOffsetForLocationLine( WallLocationLine.CoreCenterline );
+
+      if ( !( wall.Flipped ) )
+      {
+        familyInstance.Location.Move( rotatedNormalVector * coreOffsetValue );
+      }
+      else
+      {
+        familyInstance.Location.Move( -( rotatedNormalVector ) * coreOffsetValue );
+      }
+      return familyInstance;
+    }
 
     /// <summary>
     /// 패밀리명, 타입명으로 문서상의 패밀리 심볼을 취득한다.

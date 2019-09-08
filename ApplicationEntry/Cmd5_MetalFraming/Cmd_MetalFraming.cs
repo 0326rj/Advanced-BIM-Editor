@@ -30,8 +30,9 @@ namespace NoahDesign.Cmd5_MetalFraming
     private const string _Name_runner_up_fam = "3_ランナー_上部";
     private const string _Name_runner_up_sym = "ランナーWR90";
 
-    //private const string _Name_runner_dn_fam = "2_ランナー_下部";
-    //private const string _Name_runner_dn_sym = "ランナーWR90";
+    private const string _Name_steady_fam = "4_振れ止め";
+    private const string _Name_steady_sym = "振れ止め_WB25";
+
 
     #region Property
     private UIApplication _uiapp;
@@ -90,7 +91,11 @@ namespace NoahDesign.Cmd5_MetalFraming
 
             // Get Runner FamilySymbol in this Document
             FamilySymbol _runnerSymbol_Up = Tools.GetSymbol( _doc, _Name_runner_up_fam, _Name_runner_up_sym );
-            //FamilySymbol _runnerSymbol_Down = Tools.GetSymbol( _doc, _Name_runner_dn_fam, _Name_runner_dn_sym );
+
+            // Get Steady Brace FamilySymbol in this Document
+            FamilySymbol _steadySymbol = Tools.GetSymbol( _doc, _Name_steady_fam, _Name_steady_sym );
+
+
 
 
             if ( _studSymbol != null )
@@ -99,13 +104,16 @@ namespace NoahDesign.Cmd5_MetalFraming
               Tools.Change_Color_Object( _doc, elementSelected, 75 );
 
               // Create Stud Instance
-              var stud = StudManager.Create_Stud_In_Wall( _doc, targetWall, _studSymbol );
+              var stud = StudManager_V2.Create_Stud_In_Wall_2( _doc, targetWall, _studSymbol );
 
               // Array Stud
-              var arr = StudManager.Array_Stud_In_Wall( _doc, targetWall, stud, 1 );
+              var arr = StudManager_V2.Array_Stud_In_Wall_2( _doc, targetWall, stud, 1 );
 
               // Create Runner 
               RunnerManager.Create_Runner_In_Wall( _doc, targetWall, _runnerSymbol_Up );
+
+              // Create Steady Brace
+              SteadyBraceManager.Create_SteadyBrace_In_Wall( _doc, targetWall, _steadySymbol, 1200 );
 
             }
             else
