@@ -157,8 +157,6 @@ namespace NoahDesign.Cmd5_MetalFraming
 
       if ( finishCount == 1 )
       {
-
-
         if ( wallOriginLength > 909.0 )
         {
           var lastStud = ElementTransformUtils

@@ -58,6 +58,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
@@ -67,6 +68,16 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cmd0_FormTest\CmdFormTest.cs" />
+    <Compile Include="Cmd0_FormTest\EnumParseUtility.cs" />
+    <Compile Include="Cmd0_FormTest\Everywhere.cs" />
+    <Compile Include="Cmd0_FormTest\WindowHandle.cs" />
+    <Compile Include="Cmd0_FormTest\TestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cmd0_FormTest\TestForm.Designer.cs">
+      <DependentUpon>TestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Cmd3_FloorTagControl\FormProgressBar.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -136,6 +147,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\03.JPG" />
+    <EmbeddedResource Include="Cmd0_FormTest\TestForm.resx">
+      <DependentUpon>TestForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Cmd3_FloorTagControl\FormProgressBar.resx">
       <DependentUpon>FormProgressBar.cs</DependentUpon>
     </EmbeddedResource>

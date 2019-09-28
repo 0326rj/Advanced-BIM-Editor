@@ -19,7 +19,7 @@ namespace NoahDesign
     {
 
       // dll assembly path
-      string tabName = "Noah Design_TEST";
+      string tabName = "JAEBUM KIM >REVIT+";
       string path = Assembly.GetExecutingAssembly().Location;    
       UICrdApp.CreateRibbonTab( tabName );
 
@@ -200,7 +200,7 @@ namespace NoahDesign
         "debug1",
         "Debug\nCommand 1",
         path,
-        className_Debug,
+        "NoahDesign.Cmd0_FormTest.CmdFormTest",
         imageName32_Debug,
         true,
         toolTip_Debug );
