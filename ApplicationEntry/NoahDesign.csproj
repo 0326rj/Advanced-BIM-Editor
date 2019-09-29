@@ -71,6 +71,8 @@
     <Compile Include="Cmd0_FormTest\CmdFormTest.cs" />
     <Compile Include="Cmd0_FormTest\EnumParseUtility.cs" />
     <Compile Include="Cmd0_FormTest\Everywhere.cs" />
+    <Compile Include="Cmd0_FormTest\TierObject.cs" />
+    <Compile Include="Cmd0_FormTest\TreeViewModel.cs" />
     <Compile Include="Cmd0_FormTest\WindowHandle.cs" />
     <Compile Include="Cmd0_FormTest\TestForm.cs">
       <SubType>Form</SubType>
@@ -138,15 +140,9 @@
     <Compile Include="Cmd3_FloorTagControl\CmdFloorTagControl.cs" />
     <Compile Include="NRibbon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\03.JPG" />
     <EmbeddedResource Include="Cmd0_FormTest\TestForm.resx">
       <DependentUpon>TestForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -166,6 +162,7 @@
     <EmbeddedResource Include="Folder_Image\test16.png" />
     <EmbeddedResource Include="Folder_Image\split16.png" />
     <EmbeddedResource Include="Folder_Image\floorFilter32.png" />
+    <EmbeddedResource Include="Folder_Image\dynamicFilter32.png" />
     <Content Include="NoahDesign.addin" />
     <EmbeddedResource Include="Folder_Image\cube32.png" />
     <EmbeddedResource Include="Folder_Image\Noah32.png" />
@@ -178,7 +175,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

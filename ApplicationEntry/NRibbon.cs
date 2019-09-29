@@ -155,36 +155,6 @@ namespace NoahDesign
 
 
       #endregion
-      #region Automatic Metal Framing -> RunnerManager
-
-
-      RibbonItem item_Runner = MyButtonControl.Add_PushButton(
-       panel_MetalFraming,
-       "Runner",
-       "Auto LGS\nRunner",
-       path,
-       "NoahDesign.Cmd5_MetalFraming.Cmd_MetalFraming",
-       "NoahDesign.Folder_Image.stud32.png",
-       true,
-       "選択した壁にLGSランナーを自動配置します。" );
-
-
-      #endregion
-      #region Automatic Metal Framing -> SteadyBraceManager
-
-
-      RibbonItem item_SteadyBrace = MyButtonControl.Add_PushButton(
-       panel_MetalFraming,
-       "Steady Brace",
-       "Auto LGS\nBrace",
-       path,
-       "NoahDesign.Cmd5_MetalFraming.Cmd_RunnerManager",
-       "NoahDesign.Folder_Image.stud32.png",
-       true,
-       "選択した壁にLGS振れ止めを自動配置します。" ); 
-
-
-      #endregion
 
 
       // Debug Commands 1
@@ -193,15 +163,15 @@ namespace NoahDesign
       string imageName16_Debug = "NoahDesign.Folder_Image.test16.png";
       string toolTip_Debug = "This is for debug";
 
-      #region Debug Commands -> Debug Commmand 1
+      #region Debug Commands -> Dynamic Filter
 
       MyButtonControl.Add_PushButton(
         panel_debug,
         "debug1",
-        "Debug\nCommand 1",
+        "Dynamic\nFilter",
         path,
         "NoahDesign.Cmd0_FormTest.CmdFormTest",
-        imageName32_Debug,
+        "NoahDesign.Folder_Image.dynamicFilter32.png",
         true,
         toolTip_Debug );
 

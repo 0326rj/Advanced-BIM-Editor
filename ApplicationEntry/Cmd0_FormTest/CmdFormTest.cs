@@ -55,7 +55,7 @@ namespace NoahDesign.Cmd0_FormTest
       uidoc = uiapp.ActiveUIDocument;
       doc = uidoc.Document;
 
-      TestForm winForm = new TestForm( uidoc, doc );      
+      TestForm winForm = new TestForm( uidoc, doc, commandData );      
       try
       {
         using ( Transaction trans = new Transaction(doc, "Show TestForm") )

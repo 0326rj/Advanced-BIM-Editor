@@ -38,6 +38,7 @@
       this.buttonUnselectAll = new System.Windows.Forms.Button();
       this.checkBox1 = new System.Windows.Forms.CheckBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.buttonLookup = new System.Windows.Forms.Button();
       this.groupBox2 = new System.Windows.Forms.GroupBox();
       this.textBox1 = new System.Windows.Forms.TextBox();
       this.buttonFamilyName = new System.Windows.Forms.Button();
@@ -45,9 +46,7 @@
       this.textBox2 = new System.Windows.Forms.TextBox();
       this.buttonFamTypeName = new System.Windows.Forms.Button();
       this.groupBox4 = new System.Windows.Forms.GroupBox();
-      this.listViewFamilyType = new System.Windows.Forms.ListView();
-      this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-      this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.treeViewFamily = new System.Windows.Forms.TreeView();
       this.button2 = new System.Windows.Forms.Button();
       this.button3 = new System.Windows.Forms.Button();
       this.buttonSelectFamily = new System.Windows.Forms.Button();
@@ -55,6 +54,9 @@
       this.tabPage1 = new System.Windows.Forms.TabPage();
       this.tabPage2 = new System.Windows.Forms.TabPage();
       this.tabPage3 = new System.Windows.Forms.TabPage();
+      this.tabPage4 = new System.Windows.Forms.TabPage();
+      this.tabPage5 = new System.Windows.Forms.TabPage();
+      this.tabPage6 = new System.Windows.Forms.TabPage();
       this.groupBox5 = new System.Windows.Forms.GroupBox();
       this.textBox5 = new System.Windows.Forms.TextBox();
       this.textBox6 = new System.Windows.Forms.TextBox();
@@ -77,12 +79,12 @@
       this.label12 = new System.Windows.Forms.Label();
       this.label10 = new System.Windows.Forms.Label();
       this.buttonRefreshForm = new System.Windows.Forms.Button();
-      this.tabPage4 = new System.Windows.Forms.TabPage();
       this.buttonHelp = new System.Windows.Forms.Button();
-      this.tabPage5 = new System.Windows.Forms.TabPage();
-      this.tabPage6 = new System.Windows.Forms.TabPage();
-      this.buttonLookup = new System.Windows.Forms.Button();
-      this.treeViewFamily = new System.Windows.Forms.TreeView();
+      this.labelSum = new System.Windows.Forms.Label();
+      this.label7 = new System.Windows.Forms.Label();
+      this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+      this.groupBox7 = new System.Windows.Forms.GroupBox();
+      this.checkBoxTreeView = new System.Windows.Forms.CheckBox();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -91,6 +93,7 @@
       this.tabPage1.SuspendLayout();
       this.groupBox5.SuspendLayout();
       this.groupBox6.SuspendLayout();
+      this.groupBox7.SuspendLayout();
       this.SuspendLayout();
       // 
       // buttonClose
@@ -113,7 +116,7 @@
       this.buttonSelectObject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
       this.buttonSelectObject.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
       this.buttonSelectObject.ForeColor = System.Drawing.Color.LightGray;
-      this.buttonSelectObject.Location = new System.Drawing.Point(202, 555);
+      this.buttonSelectObject.Location = new System.Drawing.Point(8, 554);
       this.buttonSelectObject.Name = "buttonSelectObject";
       this.buttonSelectObject.Size = new System.Drawing.Size(257, 33);
       this.buttonSelectObject.TabIndex = 2;
@@ -138,7 +141,6 @@
       this.listViewCategories.TabIndex = 9;
       this.listViewCategories.UseCompatibleStateImageBehavior = false;
       this.listViewCategories.View = System.Windows.Forms.View.Details;
-      this.listViewCategories.SelectedIndexChanged += new System.EventHandler(this.listViewCategories_SelectedIndexChanged);
       // 
       // columnHeader1
       // 
@@ -158,7 +160,7 @@
       // buttonSelectAll
       // 
       this.buttonSelectAll.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.buttonSelectAll.Location = new System.Drawing.Point(8, 555);
+      this.buttonSelectAll.Location = new System.Drawing.Point(271, 554);
       this.buttonSelectAll.Name = "buttonSelectAll";
       this.buttonSelectAll.Size = new System.Drawing.Size(91, 33);
       this.buttonSelectAll.TabIndex = 13;
@@ -169,7 +171,7 @@
       // buttonUnselectAll
       // 
       this.buttonUnselectAll.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.buttonUnselectAll.Location = new System.Drawing.Point(105, 555);
+      this.buttonUnselectAll.Location = new System.Drawing.Point(368, 554);
       this.buttonUnselectAll.Name = "buttonUnselectAll";
       this.buttonUnselectAll.Size = new System.Drawing.Size(91, 33);
       this.buttonUnselectAll.TabIndex = 14;
@@ -191,6 +193,8 @@
       // 
       // groupBox1
       // 
+      this.groupBox1.Controls.Add(this.label7);
+      this.groupBox1.Controls.Add(this.labelSum);
       this.groupBox1.Controls.Add(this.buttonLookup);
       this.groupBox1.Controls.Add(this.listViewCategories);
       this.groupBox1.Controls.Add(this.checkBox1);
@@ -204,6 +208,17 @@
       this.groupBox1.TabIndex = 16;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Lookup カテゴリ";
+      // 
+      // buttonLookup
+      // 
+      this.buttonLookup.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+      this.buttonLookup.Location = new System.Drawing.Point(8, 17);
+      this.buttonLookup.Name = "buttonLookup";
+      this.buttonLookup.Size = new System.Drawing.Size(451, 33);
+      this.buttonLookup.TabIndex = 16;
+      this.buttonLookup.Text = "Lookup >>";
+      this.buttonLookup.UseVisualStyleBackColor = true;
+      this.buttonLookup.Click += new System.EventHandler(this.buttonLookup_Click);
       // 
       // groupBox2
       // 
@@ -277,8 +292,8 @@
       // 
       // groupBox4
       // 
+      this.groupBox4.Controls.Add(this.checkBoxTreeView);
       this.groupBox4.Controls.Add(this.treeViewFamily);
-      this.groupBox4.Controls.Add(this.listViewFamilyType);
       this.groupBox4.Controls.Add(this.button2);
       this.groupBox4.Controls.Add(this.button3);
       this.groupBox4.Controls.Add(this.buttonSelectFamily);
@@ -290,38 +305,17 @@
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = "Lookup ファミリ / タイプ";
       // 
-      // listViewFamilyType
+      // treeViewFamily
       // 
-      this.listViewFamilyType.CheckBoxes = true;
-      this.listViewFamilyType.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader2,
-            this.columnHeader3});
-      this.listViewFamilyType.GridLines = true;
-      this.listViewFamilyType.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-      this.listViewFamilyType.HideSelection = false;
-      this.listViewFamilyType.HoverSelection = true;
-      this.listViewFamilyType.Location = new System.Drawing.Point(6, 341);
-      this.listViewFamilyType.Name = "listViewFamilyType";
-      this.listViewFamilyType.Size = new System.Drawing.Size(366, 189);
-      this.listViewFamilyType.Sorting = System.Windows.Forms.SortOrder.Ascending;
-      this.listViewFamilyType.TabIndex = 16;
-      this.listViewFamilyType.UseCompatibleStateImageBehavior = false;
-      this.listViewFamilyType.View = System.Windows.Forms.View.Details;
-      // 
-      // columnHeader2
-      // 
-      this.columnHeader2.Text = "ファミリ(Family)名";
-      this.columnHeader2.Width = 120;
-      // 
-      // columnHeader3
-      // 
-      this.columnHeader3.Text = "タイプ(Type)名";
-      this.columnHeader3.Width = 150;
+      this.treeViewFamily.Location = new System.Drawing.Point(6, 17);
+      this.treeViewFamily.Name = "treeViewFamily";
+      this.treeViewFamily.Size = new System.Drawing.Size(366, 513);
+      this.treeViewFamily.TabIndex = 18;
       // 
       // button2
       // 
       this.button2.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.button2.Location = new System.Drawing.Point(103, 554);
+      this.button2.Location = new System.Drawing.Point(281, 554);
       this.button2.Name = "button2";
       this.button2.Size = new System.Drawing.Size(91, 33);
       this.button2.TabIndex = 17;
@@ -331,7 +325,7 @@
       // button3
       // 
       this.button3.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.button3.Location = new System.Drawing.Point(6, 554);
+      this.button3.Location = new System.Drawing.Point(184, 554);
       this.button3.Name = "button3";
       this.button3.Size = new System.Drawing.Size(91, 33);
       this.button3.TabIndex = 16;
@@ -347,7 +341,7 @@
       this.buttonSelectFamily.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
       this.buttonSelectFamily.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
       this.buttonSelectFamily.ForeColor = System.Drawing.Color.LightGray;
-      this.buttonSelectFamily.Location = new System.Drawing.Point(200, 555);
+      this.buttonSelectFamily.Location = new System.Drawing.Point(6, 554);
       this.buttonSelectFamily.Name = "buttonSelectFamily";
       this.buttonSelectFamily.Size = new System.Drawing.Size(172, 33);
       this.buttonSelectFamily.TabIndex = 16;
@@ -402,6 +396,36 @@
       this.tabPage3.TabIndex = 2;
       this.tabPage3.Text = "パラメータフィルタ";
       this.tabPage3.UseVisualStyleBackColor = true;
+      // 
+      // tabPage4
+      // 
+      this.tabPage4.Location = new System.Drawing.Point(4, 24);
+      this.tabPage4.Name = "tabPage4";
+      this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+      this.tabPage4.Size = new System.Drawing.Size(862, 606);
+      this.tabPage4.TabIndex = 3;
+      this.tabPage4.Text = "TEXT フィルタ";
+      this.tabPage4.UseVisualStyleBackColor = true;
+      // 
+      // tabPage5
+      // 
+      this.tabPage5.Location = new System.Drawing.Point(4, 24);
+      this.tabPage5.Name = "tabPage5";
+      this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+      this.tabPage5.Size = new System.Drawing.Size(862, 606);
+      this.tabPage5.TabIndex = 4;
+      this.tabPage5.Text = "壁レイヤーフィルタ";
+      this.tabPage5.UseVisualStyleBackColor = true;
+      // 
+      // tabPage6
+      // 
+      this.tabPage6.Location = new System.Drawing.Point(4, 24);
+      this.tabPage6.Name = "tabPage6";
+      this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+      this.tabPage6.Size = new System.Drawing.Size(862, 606);
+      this.tabPage6.TabIndex = 5;
+      this.tabPage6.Text = "床レイヤーフィルタ";
+      this.tabPage6.UseVisualStyleBackColor = true;
       // 
       // groupBox5
       // 
@@ -640,19 +664,9 @@
       this.buttonRefreshForm.Name = "buttonRefreshForm";
       this.buttonRefreshForm.Size = new System.Drawing.Size(319, 33);
       this.buttonRefreshForm.TabIndex = 34;
-      this.buttonRefreshForm.Text = "初期化";
+      this.buttonRefreshForm.Text = "初期化(Reset)";
       this.buttonRefreshForm.UseVisualStyleBackColor = true;
       this.buttonRefreshForm.Click += new System.EventHandler(this.buttonRefreshForm_Click);
-      // 
-      // tabPage4
-      // 
-      this.tabPage4.Location = new System.Drawing.Point(4, 24);
-      this.tabPage4.Name = "tabPage4";
-      this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPage4.Size = new System.Drawing.Size(862, 606);
-      this.tabPage4.TabIndex = 3;
-      this.tabPage4.Text = "TEXT フィルタ";
-      this.tabPage4.UseVisualStyleBackColor = true;
       // 
       // buttonHelp
       // 
@@ -661,53 +675,67 @@
       this.buttonHelp.Name = "buttonHelp";
       this.buttonHelp.Size = new System.Drawing.Size(151, 33);
       this.buttonHelp.TabIndex = 35;
-      this.buttonHelp.Text = "Help";
+      this.buttonHelp.Text = "バージョン情報";
       this.buttonHelp.UseVisualStyleBackColor = true;
       this.buttonHelp.Click += new System.EventHandler(this.buttonHelp_Click);
       // 
-      // tabPage5
+      // labelSum
       // 
-      this.tabPage5.Location = new System.Drawing.Point(4, 24);
-      this.tabPage5.Name = "tabPage5";
-      this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPage5.Size = new System.Drawing.Size(862, 606);
-      this.tabPage5.TabIndex = 4;
-      this.tabPage5.Text = "壁レイヤーフィルタ";
-      this.tabPage5.UseVisualStyleBackColor = true;
+      this.labelSum.Location = new System.Drawing.Point(409, 534);
+      this.labelSum.Name = "labelSum";
+      this.labelSum.Size = new System.Drawing.Size(50, 15);
+      this.labelSum.TabIndex = 34;
+      this.labelSum.Text = "100000";
+      this.labelSum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
       // 
-      // tabPage6
+      // label7
       // 
-      this.tabPage6.Location = new System.Drawing.Point(4, 24);
-      this.tabPage6.Name = "tabPage6";
-      this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPage6.Size = new System.Drawing.Size(862, 606);
-      this.tabPage6.TabIndex = 5;
-      this.tabPage6.Text = "床レイヤーフィルタ";
-      this.tabPage6.UseVisualStyleBackColor = true;
+      this.label7.Location = new System.Drawing.Point(359, 534);
+      this.label7.Name = "label7";
+      this.label7.Size = new System.Drawing.Size(50, 15);
+      this.label7.TabIndex = 35;
+      this.label7.Text = "SUM=";
+      this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
       // 
-      // buttonLookup
+      // richTextBox1
       // 
-      this.buttonLookup.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.buttonLookup.Location = new System.Drawing.Point(8, 17);
-      this.buttonLookup.Name = "buttonLookup";
-      this.buttonLookup.Size = new System.Drawing.Size(451, 33);
-      this.buttonLookup.TabIndex = 16;
-      this.buttonLookup.Text = "Lookup >>";
-      this.buttonLookup.UseVisualStyleBackColor = true;
-      this.buttonLookup.Click += new System.EventHandler(this.buttonLookup_Click);
+      this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+      this.richTextBox1.Location = new System.Drawing.Point(7, 18);
+      this.richTextBox1.Name = "richTextBox1";
+      this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+      this.richTextBox1.Size = new System.Drawing.Size(306, 108);
+      this.richTextBox1.TabIndex = 36;
+      this.richTextBox1.Text = "";
       // 
-      // treeViewFamily
+      // groupBox7
       // 
-      this.treeViewFamily.Location = new System.Drawing.Point(6, 17);
-      this.treeViewFamily.Name = "treeViewFamily";
-      this.treeViewFamily.Size = new System.Drawing.Size(366, 318);
-      this.treeViewFamily.TabIndex = 18;
+      this.groupBox7.Controls.Add(this.richTextBox1);
+      this.groupBox7.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+      this.groupBox7.Location = new System.Drawing.Point(875, 415);
+      this.groupBox7.Name = "groupBox7";
+      this.groupBox7.Size = new System.Drawing.Size(319, 132);
+      this.groupBox7.TabIndex = 28;
+      this.groupBox7.TabStop = false;
+      this.groupBox7.Text = "検索結果";
+      // 
+      // checkBoxTreeView
+      // 
+      this.checkBoxTreeView.AutoSize = true;
+      this.checkBoxTreeView.Checked = true;
+      this.checkBoxTreeView.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.checkBoxTreeView.Location = new System.Drawing.Point(6, 533);
+      this.checkBoxTreeView.Name = "checkBoxTreeView";
+      this.checkBoxTreeView.Size = new System.Drawing.Size(150, 19);
+      this.checkBoxTreeView.TabIndex = 36;
+      this.checkBoxTreeView.Text = "すべての項目を展開します";
+      this.checkBoxTreeView.UseVisualStyleBackColor = true;
       // 
       // TestForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(1203, 636);
+      this.Controls.Add(this.groupBox7);
       this.Controls.Add(this.buttonHelp);
       this.Controls.Add(this.buttonRefreshForm);
       this.Controls.Add(this.groupBox6);
@@ -731,12 +759,14 @@
       this.groupBox3.ResumeLayout(false);
       this.groupBox3.PerformLayout();
       this.groupBox4.ResumeLayout(false);
+      this.groupBox4.PerformLayout();
       this.tabControl1.ResumeLayout(false);
       this.tabPage1.ResumeLayout(false);
       this.groupBox5.ResumeLayout(false);
       this.groupBox5.PerformLayout();
       this.groupBox6.ResumeLayout(false);
       this.groupBox6.PerformLayout();
+      this.groupBox7.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
@@ -787,9 +817,6 @@
     private System.Windows.Forms.Button button6;
     private System.Windows.Forms.Label label11;
     private System.Windows.Forms.Label label12;
-    private System.Windows.Forms.ListView listViewFamilyType;
-    private System.Windows.Forms.ColumnHeader columnHeader2;
-    private System.Windows.Forms.ColumnHeader columnHeader3;
     private System.Windows.Forms.Button buttonRefreshForm;
     private System.Windows.Forms.TabPage tabPage4;
     private System.Windows.Forms.Button buttonHelp;
@@ -797,5 +824,10 @@
     private System.Windows.Forms.TabPage tabPage6;
     private System.Windows.Forms.Button buttonLookup;
     private System.Windows.Forms.TreeView treeViewFamily;
+    private System.Windows.Forms.Label labelSum;
+    private System.Windows.Forms.Label label7;
+    private System.Windows.Forms.CheckBox checkBoxTreeView;
+    private System.Windows.Forms.RichTextBox richTextBox1;
+    private System.Windows.Forms.GroupBox groupBox7;
   }
 }

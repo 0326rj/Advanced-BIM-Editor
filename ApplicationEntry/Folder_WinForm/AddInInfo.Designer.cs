@@ -31,7 +31,6 @@
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddInInfo));
       this.buttonClose = new System.Windows.Forms.Button();
       this.textBox6 = new System.Windows.Forms.TextBox();
-      this.textBox7 = new System.Windows.Forms.TextBox();
       this.linkCybozu = new System.Windows.Forms.Button();
       this.pictureBox1 = new System.Windows.Forms.PictureBox();
       this.label1 = new System.Windows.Forms.Label();
@@ -63,23 +62,11 @@
       this.textBox6.BorderStyle = System.Windows.Forms.BorderStyle.None;
       this.textBox6.Font = new System.Drawing.Font("Meiryo UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
       this.textBox6.ForeColor = System.Drawing.Color.WhiteSmoke;
-      this.textBox6.Location = new System.Drawing.Point(23, 187);
+      this.textBox6.Location = new System.Drawing.Point(22, 201);
       this.textBox6.Name = "textBox6";
       this.textBox6.Size = new System.Drawing.Size(288, 14);
       this.textBox6.TabIndex = 8;
       this.textBox6.Text = "E-mail : km-zbm00@pub.taisei.co.jp";
-      // 
-      // textBox7
-      // 
-      this.textBox7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(36)))), ((int)(((byte)(49)))));
-      this.textBox7.BorderStyle = System.Windows.Forms.BorderStyle.None;
-      this.textBox7.Font = new System.Drawing.Font("Meiryo UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.textBox7.ForeColor = System.Drawing.Color.WhiteSmoke;
-      this.textBox7.Location = new System.Drawing.Point(71, 202);
-      this.textBox7.Name = "textBox7";
-      this.textBox7.Size = new System.Drawing.Size(152, 14);
-      this.textBox7.TabIndex = 10;
-      this.textBox7.Text = "kim@noah-desing.jp";
       // 
       // linkCybozu
       // 
@@ -123,7 +110,7 @@
       this.label3.AutoSize = true;
       this.label3.Font = new System.Drawing.Font("Meiryo UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
       this.label3.ForeColor = System.Drawing.Color.WhiteSmoke;
-      this.label3.Location = new System.Drawing.Point(20, 171);
+      this.label3.Location = new System.Drawing.Point(19, 185);
       this.label3.Name = "label3";
       this.label3.Size = new System.Drawing.Size(150, 14);
       this.label3.TabIndex = 15;
@@ -138,7 +125,7 @@
       this.label4.Name = "label4";
       this.label4.Size = new System.Drawing.Size(111, 15);
       this.label4.TabIndex = 16;
-      this.label4.Text = "Release: 19.08.01";
+      this.label4.Text = "Release: 19.09.29";
       this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // linkHome
@@ -170,7 +157,6 @@
       this.Controls.Add(this.label4);
       this.Controls.Add(this.label1);
       this.Controls.Add(this.pictureBox1);
-      this.Controls.Add(this.textBox7);
       this.Controls.Add(this.textBox6);
       this.Controls.Add(this.label3);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -187,7 +173,6 @@
 
     #endregion
     private System.Windows.Forms.TextBox textBox6;
-    private System.Windows.Forms.TextBox textBox7;
     private System.Windows.Forms.Button linkCybozu;
     private System.Windows.Forms.PictureBox pictureBox1;
     public System.Windows.Forms.Button buttonClose;

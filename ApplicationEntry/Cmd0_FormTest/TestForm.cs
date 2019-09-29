@@ -26,8 +26,9 @@ namespace NoahDesign.Cmd0_FormTest
     /// <summary>
     /// 
     /// </summary>
-    Autodesk.Revit.UI.UIDocument uidoc;
-    Autodesk.Revit.DB.Document doc;
+    UIDocument uidoc;
+    Document doc;
+    ExternalCommandData commandData;
 
     /// <summary>
     /// 
@@ -45,11 +46,13 @@ namespace NoahDesign.Cmd0_FormTest
     bool _catChangedEventSuppress;
 
 
-    public TestForm( Autodesk.Revit.UI.UIDocument uidoc, Autodesk.Revit.DB.Document doc )
+    public TestForm( Autodesk.Revit.UI.UIDocument uidoc, Autodesk.Revit.DB.Document doc, ExternalCommandData commandData )
     {
       InitializeComponent();
       this.uidoc = uidoc;
       this.doc = doc;
+      this.commandData = commandData;
+
     }
 
     private void TestForm_Load( object sender, EventArgs e )
@@ -60,6 +63,7 @@ namespace NoahDesign.Cmd0_FormTest
     /// <summary>
     /// listViewCategories에 카테고리와 빌트인카테고리명을 추가한다.
     /// </summary>
+    
     void AddAppliableCategories()
     {
       listViewCategories.Items.Clear();
@@ -75,6 +79,7 @@ namespace NoahDesign.Cmd0_FormTest
           categoryDict.Add( category.Name, category.Id );
       }
 
+      int totalElementSum = 0;
       foreach ( var catName in categoryDict.Keys )
       {
         var elements = new FilteredElementCollector( doc, doc.ActiveView.Id )
@@ -84,15 +89,18 @@ namespace NoahDesign.Cmd0_FormTest
 
         string builtInCatName = EnumParseUtility<BuiltInCategory>
           .Parse( ( BuiltInCategory )categoryDict[catName].IntegerValue );
+
         int count = elements.Count;
+        totalElementSum += count;
 
         ListViewItem viewItem = new ListViewItem( catName );
         viewItem.SubItems.Add( builtInCatName );
         viewItem.SubItems.Add( count.ToString() );
-        listViewCategories.Items.Add( viewItem );     
+        listViewCategories.Items.Add( viewItem );
       }
-    }
 
+      labelSum.Text = totalElementSum.ToString();
+    }
 
 
     private void buttonSelectAll_Click( object sender, EventArgs e )
@@ -136,12 +144,12 @@ namespace NoahDesign.Cmd0_FormTest
     }
 
 
+
+
     private void buttonLookup_Click( object sender, EventArgs e )
     {
-      List<Element> elements = new List<Element>();
-
-      listViewFamilyType.Items.Clear();
       treeViewFamily.Nodes.Clear();
+
 
       if ( listViewCategories.CheckedItems.Count == 0 )
         return;
@@ -149,73 +157,91 @@ namespace NoahDesign.Cmd0_FormTest
       int checkedCount = listViewCategories.CheckedItems.Count;
       for ( int i = 0; i < checkedCount; i++ )
       {
-        string key = listViewCategories.CheckedItems[i].Text;
-        ElementId catId = categoryDict[key];
+        string catName = listViewCategories.CheckedItems[i].Text;
+        var catId = categoryDict[catName];
+        var bic = ( BuiltInCategory )catId.IntegerValue;
 
         var collection = new FilteredElementCollector( doc, doc.ActiveView.Id )
-          .OfCategoryId( catId )
-          .WhereElementIsNotElementType()
-          .ToElements()
-          .ToList();
-        elements.AddRange( collection );
-      }
+            .OfCategoryId( catId )
+            .WhereElementIsNotElementType()
+            .ToElements()
+            .ToList();
 
-      if ( elements.Count != 0 )
-      {
-        List<string> familyNames = new List<string>();
-        foreach ( Element element in elements )
-        {
-          string familyName = element.get_Parameter( BuiltInParameter.ELEM_FAMILY_PARAM ).AsValueString();
-          familyNames.Add( familyName );
-        }
-
-        familyNames.Distinct();
-        foreach ( string n in familyNames ) 
-        {
-          TreeNode familyNode = new TreeNode( n );
-          treeViewFamily.Nodes.Add( familyNode );
-        }
         
       }
-
-      
-
-
+      treeViewFamily.Sort();
+      treeViewFamily.CheckBoxes = true;
+      treeViewFamily.ExpandAll();
     }
 
 
-    private void listViewCategories_SelectedIndexChanged( object sender, EventArgs e )
-    {
-      if ( _catChangedEventSuppress )
-        return;
 
-      listViewFamilyType.Items.Clear();
 
-      List<ElementId> checkedCategoryIds = new List<ElementId>();
-      List<Element> checkedElements = new List<Element>();
 
-      int itemCount = listViewCategories.Items.Count;
-      for ( int ii = 0; ii < itemCount; ii++ )
-      {
-        string key = listViewCategories.Items[ii].Text;
-        ElementId catId = categoryDict[key];
-        checkedCategoryIds.Add( catId );
 
-        var collection = new FilteredElementCollector( doc, doc.ActiveView.Id )
-          .OfCategoryId( catId )
-          .WhereElementIsNotElementType()
-          .ToElements()
-          .ToList();
-        checkedElements.AddRange( collection );
-      }
+    //private void buttonLookup_Click( object sender, EventArgs e )
+    //{
+    //  treeViewFamily.Nodes.Clear();
+    //  List<Element> elements = new List<Element>();
 
-      for ( int ii = 0; ii < checkedElements.Count; ii++ )
-      {
-        ListViewItem viewItem = new ListViewItem( checkedElements[ii].Name );
-        listViewFamilyType.Items.Add( viewItem );
-      }
-    }
+    //  if ( listViewCategories.CheckedItems.Count == 0 )
+    //    return;
 
+    //  int checkedCount = listViewCategories.CheckedItems.Count;
+    //  for ( int i = 0; i < checkedCount; i++ )
+    //  {
+    //    string catName = listViewCategories.CheckedItems[i].Text;
+    //    var catId = categoryDict[catName];
+
+    //    var collector = new FilteredElementCollector( doc, doc.ActiveView.Id )
+    //      .OfCategoryId( catId )
+    //      .WhereElementIsNotElementType()
+    //      .ToElements()
+    //      .ToList();
+
+    //    String format = String.Format( "{0}_{1} (ID: {2})", i + 1, catName, catId.IntegerValue );
+    //    TreeNode familyNameNode = new TreeNode( format );
+
+    //    Dictionary<Element, string> dictFamily = new Dictionary<Element, string>();
+    //    List<Element> typeList = new List<Element>();
+    //    foreach ( Element ele in collector )
+    //    {
+    //      var familyName = ele.get_Parameter( BuiltInParameter.ELEM_FAMILY_PARAM ).AsValueString();
+    //      if ( familyName.Length != 0 )
+    //      {
+    //        dictFamily.Add( ele, familyName );
+    //        typeList.Add( ele );
+    //      }
+    //    }
+
+
+    //    if ( dictFamily.Keys.Count != 0 )
+    //    {
+    //      Dictionary<string, Element> dictType = new Dictionary<string, Element>();
+    //      foreach ( var nameValue in dictFamily.Values.Distinct() )
+    //      {
+    //        Element ele = dictFamily.FirstOrDefault( x => x.Value.Contains( nameValue ) ).Key;
+    //        dictType.Add( nameValue, ele );
+
+    //        familyNameNode.Nodes.Add( nameValue );
+    //      }
+
+    //      foreach ( var key in dictType.Keys )
+    //      {
+    //        int count = 0;
+    //        Element ele = dictType[key];
+
+    //        familyNameNode.Nodes[count].Nodes.Add( ele.Name );
+    //        count++;
+    //      }
+
+    //      treeViewFamily.Nodes.Add( familyNameNode );
+    //    }
+    //  }
+
+    //  treeViewFamily.CheckBoxes = true;
+    //  treeViewFamily.ExpandAll();
+    //}
 
 
     private void buttonSelectFamily_Click( object sender, EventArgs e )
@@ -224,12 +250,11 @@ namespace NoahDesign.Cmd0_FormTest
     }
 
 
-
     #region 폼닫기 / 헬프/ 초기화버튼
     private void buttonRefreshForm_Click( object sender, EventArgs e )
     {
       this.Dispose();
-      TestForm reloadForm = new TestForm( uidoc, doc );
+      TestForm reloadForm = new TestForm( uidoc, doc, commandData );
       reloadForm.Show();
     }
 
@@ -242,47 +267,10 @@ namespace NoahDesign.Cmd0_FormTest
 
     private void buttonClose_Click( object sender, EventArgs e )
     {
+      this.Dispose();
       this.Close();
     }
     #endregion
 
-
-
-
-
-
-    //private void listViewCategories_SelectedIndexChanged( object sender, EventArgs e )
-    //{
-    //  if ( _catChangedEventSuppress )
-    //    return;
-
-    //  List<ElementId> checkedCategoryIds = new List<ElementId>();
-    //  List<Element> checkedElements = new List<Element>();
-
-    //  int itemCount = listViewCategories.Items.Count;
-    //  for ( int ii = 0; ii < itemCount; ii++ )
-    //  {
-    //    bool addItemToChecked = false;
-    //    if ( null != e && e.Index == ii )
-    //    {
-    //      addItemToChecked = ( e.NewValue == CheckState.Checked );
-    //      if ( !addItemToChecked )
-    //        continue;
-    //    }
-
-    //    if ( addItemToChecked )
-    //    {
-    //      string key = listViewCategories.Items[ii].Text;
-    //      ElementId catId = categoryDict[key];
-    //      checkedCategoryIds.Add( catId );
-
-    //      var collection = new FilteredElementCollector( doc, doc.ActiveView.Id )
-    //        .OfCategoryId( catId )
-    //        .WhereElementIsNotElementType()
-    //        .ToElements()
-    //        .ToList();
-    //      checkedElements.AddRange( collection );
-    //    }
-    //  }
   }
 }

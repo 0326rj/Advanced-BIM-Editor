@@ -37,6 +37,7 @@
       this.progressBar1.Name = "progressBar1";
       this.progressBar1.Size = new System.Drawing.Size(440, 34);
       this.progressBar1.Step = 1;
+      this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
       this.progressBar1.TabIndex = 0;
       // 
       // FormProgressBar
