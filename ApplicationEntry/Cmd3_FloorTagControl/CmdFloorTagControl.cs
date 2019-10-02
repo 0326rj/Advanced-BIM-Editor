@@ -110,9 +110,6 @@ namespace NoahDesign.Cmd3_FloorTagControl
       _doc = _uidoc.Document;
       DialogTitle = "JK Automatic Tag Control";
 
-      
-
-
       try
       {
         FloorRefs = _uidoc.Selection
@@ -159,6 +156,7 @@ namespace NoahDesign.Cmd3_FloorTagControl
                   return Result.Failed;
                 }
 
+                //progress.Increment();
                 progress.Increment();
               }
             }
@@ -169,14 +167,8 @@ namespace NoahDesign.Cmd3_FloorTagControl
               return Result.Cancelled;
             }
 
-
-            tx.Commit();
-
-            
-          }
-
-
-         
+            tx.Commit();           
+          }        
         }
         catch ( Exception ex )
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,12 +9,14 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
+using MyUtils;
 
 namespace NoahDesign.Cmd1_ConcreteVolume
 {
   [Transaction( TransactionMode.Manual )]
   public class CmdConcreteUtil : IExternalCommand
   {
+   
     #region Property
     private Document m_doc;
     private UIDocument m_uidoc;
@@ -56,13 +59,24 @@ namespace NoahDesign.Cmd1_ConcreteVolume
 
     #endregion
 
-    public Result Execute( ExternalCommandData commandData,
-      ref string message, ElementSet elements )
-    {      
+    private static WindowHandle _hWndRevit = null;
+    private void SetHandle()
+    {
+      if ( null == _hWndRevit )
+      {
+        Process process = Process.GetCurrentProcess();
+        IntPtr h = process.MainWindowHandle;
+        _hWndRevit = new WindowHandle( h );
+      }
+    }
+
+    public Result Execute( ExternalCommandData commandData, ref string message, ElementSet elements )
+    {
+      SetHandle();
       m_uidoc = commandData.Application.ActiveUIDocument;
       m_doc = m_uidoc.Document;
-
-      Transaction t = new Transaction( m_doc, "ConcreteModel" );
+      FormConcreteVolume displayForm = new FormConcreteVolume( this, _hWndRevit );
+      
   
       if ( m_uidoc.ActiveView.ViewType == ViewType.ThreeD )
       {
@@ -79,13 +93,15 @@ namespace NoahDesign.Cmd1_ConcreteVolume
        
         if ( m_element.Category.Id == new ElementId( BuiltInCategory.OST_GenericModel ) )
         {
-          t.Start();
-          using ( FormConcreteVolume displayForm = new FormConcreteVolume( this ) )
+          using ( Transaction t = new Transaction( m_doc, "ConcreteModel" ) )
           {
-            displayForm.Refresh();
-            displayForm.ShowDialog();         
+            t.Start();
+            if ( _hWndRevit != null )
+            {
+              displayForm.ShowDialog( _hWndRevit );
+            }       
+            t.Commit();
           }
-          t.Commit();
         }
         else
         {

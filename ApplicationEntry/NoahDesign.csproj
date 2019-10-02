@@ -73,12 +73,18 @@
     <Compile Include="Cmd0_FormTest\Everywhere.cs" />
     <Compile Include="Cmd0_FormTest\TierObject.cs" />
     <Compile Include="Cmd0_FormTest\TreeViewModel.cs" />
-    <Compile Include="Cmd0_FormTest\WindowHandle.cs" />
     <Compile Include="Cmd0_FormTest\TestForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Cmd0_FormTest\TestForm.Designer.cs">
       <DependentUpon>TestForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cmd2_JoinGeometry\CmdJoinGeometry.cs" />
+    <Compile Include="Cmd2_JoinGeometry\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cmd2_JoinGeometry\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Cmd3_FloorTagControl\FormProgressBar.cs">
       <SubType>Form</SubType>
@@ -138,13 +144,16 @@
       <DependentUpon>FormConcreteVolume.cs</DependentUpon>
     </Compile>
     <Compile Include="Cmd3_FloorTagControl\CmdFloorTagControl.cs" />
-    <Compile Include="NRibbon.cs" />
+    <Compile Include="MyRibbon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Cmd0_FormTest\TestForm.resx">
       <DependentUpon>TestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cmd2_JoinGeometry\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Cmd3_FloorTagControl\FormProgressBar.resx">
       <DependentUpon>FormProgressBar.cs</DependentUpon>
@@ -163,6 +172,7 @@
     <EmbeddedResource Include="Folder_Image\split16.png" />
     <EmbeddedResource Include="Folder_Image\floorFilter32.png" />
     <EmbeddedResource Include="Folder_Image\dynamicFilter32.png" />
+    <EmbeddedResource Include="Folder_Image\join16.png" />
     <Content Include="NoahDesign.addin" />
     <EmbeddedResource Include="Folder_Image\cube32.png" />
     <EmbeddedResource Include="Folder_Image\Noah32.png" />

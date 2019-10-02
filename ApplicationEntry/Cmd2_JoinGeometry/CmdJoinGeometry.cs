@@ -4,40 +4,34 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ApplicationEntry.Cmd1_ConcreteVolume;
+
+using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Autodesk.Revit.UI.Selection;
 using MyUtils;
 
-namespace NoahDesign.Cmd0_FormTest
+namespace NoahDesign.Cmd2_JoinGeometry
 {
   [Transaction( TransactionMode.Manual )]
-  class CmdFormTest : IExternalCommand
+  class CmdJoinGeometry : IExternalCommand
   {
+
+    #region Fields
+
     UIApplication uiapp;
-    public UIApplication Uiapp 
-    { 
-      get { return uiapp; } 
-      set { uiapp = value; }
-    }
+
+    Application app;
 
     UIDocument uidoc;
-    public UIDocument Uidoc
-    {
-      get { return uidoc; } 
-      set { uidoc = value; }
-    }
 
     Document doc;
-    public Document Doc
-    {
-      get { return doc; } 
-      set { doc = value; }
-    }
 
-    private static WindowHandle _hWndRevit = null;
+    
+
+    #endregion
+
+    private static  WindowHandle _hWndRevit = null;
 
     private void SetHandle()
     {
@@ -52,27 +46,35 @@ namespace NoahDesign.Cmd0_FormTest
     public Result Execute( ExternalCommandData commandData, ref string message, ElementSet elements )
     {
       SetHandle();
-      uiapp = commandData.Application;
-      uidoc = uiapp.ActiveUIDocument;
-      doc = uidoc.Document;
+      this.uiapp = commandData.Application;
+      this.app = commandData.Application.Application;
+      this.uidoc = commandData.Application.ActiveUIDocument;
+      this.doc = commandData.Application.ActiveUIDocument.Document;
 
-      TestForm winForm = new TestForm( uidoc, doc, commandData, _hWndRevit );      
+      MainForm mainForm = new MainForm( doc, uidoc, commandData );
+
       try
       {
-        using ( Transaction trans = new Transaction(doc, "Show TestForm") )
+        using ( Transaction trans = new Transaction( doc, "tx" ) )
         {
+          trans.Start();
+
           if ( _hWndRevit != null )
           {
-            winForm.Show( _hWndRevit );
+            mainForm.Show( _hWndRevit );
           }
+          
+          trans.Commit();
         }
+
         return Result.Succeeded;
       }
       catch ( Exception ex )
       {
         message = ex.Message;
-        return Result.Cancelled;
-      } 
+        return Result.Failed;
+      }
+
     }
   }
 }

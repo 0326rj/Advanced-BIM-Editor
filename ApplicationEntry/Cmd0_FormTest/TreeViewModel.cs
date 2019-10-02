@@ -59,8 +59,6 @@ namespace NoahDesign.Cmd0_FormTest
         _uidoc = commandData.Application.ActiveUIDocument;
       }
 
-
-
       //ProcessElementInstances();
       InitializeDataSource();
     }
@@ -69,9 +67,13 @@ namespace NoahDesign.Cmd0_FormTest
     /// 작성 필요
     /// </summary>
     /// <returns></returns>
-    private static IEnumerable<Element> GetInstanceInProject()
+    private static IEnumerable<Element> GetInstanceInActiveView()
     {
       IEnumerable<Element> elements = null;
+
+      var aa = new FilteredElementCollector( _doc, _doc.ActiveView.Id )
+        .WhereElementIsNotElementType()
+        .ToElements();
 
       ColltupCount = elements.Count();
       return elements;
@@ -138,7 +140,6 @@ namespace NoahDesign.Cmd0_FormTest
         // Common Variables
         var elementType = _doc.GetElement( element.GetTypeId() ) as ElementType;
 
-
         // Tier 1 - Category
         var t1CategoryName = element.Category;
 
@@ -149,7 +150,7 @@ namespace NoahDesign.Cmd0_FormTest
 
 
         // Tier 2 - Family Name
-        var t2FamilyName = elementType.FamilyName;
+        var t2FamilyName = element.Name;
 
         if ( !t2DistinctFamilyNames.Exists( tuple => ( tuple.Item1.Name + tuple.Item2 ).Equals( t1CategoryName.Name + t2FamilyName ) ) )
         {

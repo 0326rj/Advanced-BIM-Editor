@@ -12,39 +12,52 @@ using System.Windows;
 
 namespace NoahDesign.Folder_WinForm
 {
-    public partial class AddInInfo : System.Windows.Forms.Form
+  public partial class AddInInfo : System.Windows.Forms.Form
+  {
+    const string _LinkNoah = "https://noah-design.jp";
+    const string _LinkCybozu = "https://www.youtube.com/channel/UChQ0_nEY87RxvhSqmC7jVmw/playlists";
+
+    public AddInInfo()
     {
-        const string _LinkNoah = "https://noah-design.jp";
-        const string _LinkCybozu = "https://www.youtube.com/channel/UChQ0_nEY87RxvhSqmC7jVmw/playlists";
-
-        public AddInInfo()
-        {
-            InitializeComponent();
-        }
-
-        //private void Window_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    System.Windows.Application curApp = System.Windows.Application.Current;
-        //    Window mainWindow = curApp.MainWindow;
-        //    this.Left = mainWindow.Left + (mainWindow.Width - this.ActualWidth)
-        //}
-
-        // NoahDesign 웹사이트 링크
-        private void Button1_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start(_LinkNoah);
-        }
-
-        // 현재의 Winform 닫기
-        private void ButtonClose_Click(object sender, EventArgs e)
-        {
-            AddInInfo.ActiveForm.Close();
-        }
-
-        // youtube tutorial 웹사이트 링크
-        private void LinkCybozu_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start(_LinkCybozu);
-        }
+      InitializeComponent();
     }
+
+    private void AddInInfo_Load( object sender, EventArgs e )
+    {
+      this.KeyPreview = true;
+    }
+
+    //private void Window_Loaded(object sender, RoutedEventArgs e)
+    //{
+    //    System.Windows.Application curApp = System.Windows.Application.Current;
+    //    Window mainWindow = curApp.MainWindow;
+    //    this.Left = mainWindow.Left + (mainWindow.Width - this.ActualWidth)
+    //}
+
+    // 웹사이트 링크
+    private void Button1_Click( object sender, EventArgs e )
+    {
+      System.Diagnostics.Process.Start( _LinkNoah );
+    }
+
+    // 현재의 Winform 닫기
+    private void ButtonClose_Click( object sender, EventArgs e )
+    {
+      AddInInfo.ActiveForm.Close();
+    }
+
+    // youtube tutorial 웹사이트 링크
+    private void LinkCybozu_Click( object sender, EventArgs e )
+    {
+      System.Diagnostics.Process.Start( _LinkCybozu );
+    }
+
+    private void AddInInfo_KeyUp( object sender, KeyEventArgs e )
+    {
+      if ( e.KeyCode == Keys.Escape )
+      {
+        this.Close();
+      }
+    }
+  }
 }

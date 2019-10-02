@@ -29,6 +29,7 @@ namespace NoahDesign.Cmd0_FormTest
     UIDocument uidoc;
     Document doc;
     ExternalCommandData commandData;
+    WindowHandle handle;
 
     /// <summary>
     /// 
@@ -46,17 +47,19 @@ namespace NoahDesign.Cmd0_FormTest
     bool _catChangedEventSuppress;
 
 
-    public TestForm( Autodesk.Revit.UI.UIDocument uidoc, Autodesk.Revit.DB.Document doc, ExternalCommandData commandData )
+    public TestForm( UIDocument uidoc, Document doc, ExternalCommandData commandData, WindowHandle handle )
     {
-      InitializeComponent();
       this.uidoc = uidoc;
       this.doc = doc;
       this.commandData = commandData;
+      this.handle = handle;
 
+      InitializeComponent();
     }
 
     private void TestForm_Load( object sender, EventArgs e )
     {
+      this.KeyPreview = true;
       AddAppliableCategories();
     }
 
@@ -176,9 +179,6 @@ namespace NoahDesign.Cmd0_FormTest
 
 
 
-
-
-
     //private void buttonLookup_Click( object sender, EventArgs e )
     //{
     //  treeViewFamily.Nodes.Clear();
@@ -254,7 +254,7 @@ namespace NoahDesign.Cmd0_FormTest
     private void buttonRefreshForm_Click( object sender, EventArgs e )
     {
       this.Dispose();
-      TestForm reloadForm = new TestForm( uidoc, doc, commandData );
+      TestForm reloadForm = new TestForm( uidoc, doc, commandData, handle );
       reloadForm.Show();
     }
 
@@ -267,10 +267,28 @@ namespace NoahDesign.Cmd0_FormTest
 
     private void buttonClose_Click( object sender, EventArgs e )
     {
-      this.Dispose();
-      this.Close();
+      this.Dispose(); this.Close();
     }
+
+    private void TestForm_KeyUp( object sender, KeyEventArgs e )
+    {
+      if ( e.KeyCode == Keys.Escape )
+      {
+        this.buttonClose_Click( sender, e );
+        this.Dispose();
+      }
+
+      if ( e.KeyCode == Keys.R )
+      {
+        this.buttonClose_Click( sender, e );
+        this.Dispose();
+        TestForm newForm = new TestForm( uidoc, doc, commandData, handle );
+        newForm.Show();
+      }       
+    }
+
     #endregion
+
 
   }
 }

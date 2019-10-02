@@ -12,12 +12,13 @@ namespace NoahDesign.Cmd3_FloorTagControl
 {
   public partial class FormProgressBar : Form
   {
-    string _format;
+    private int _max;
 
     public FormProgressBar( int max )
     {
-
       InitializeComponent();
+
+      _max = max;
 
       progressBar1.Minimum = 0;
       progressBar1.Maximum = max; 
@@ -29,9 +30,10 @@ namespace NoahDesign.Cmd3_FloorTagControl
 
     public void Increment()
     {
-      ++progressBar1.Value;
-      Application.DoEvents();
+      for ( int i = 0; i < _max; i++ )
+      {
+        progressBar1.PerformStep();
+      }
     }
-
   }
 }

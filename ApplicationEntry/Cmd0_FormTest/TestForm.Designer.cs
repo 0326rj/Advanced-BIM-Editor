@@ -38,6 +38,8 @@
       this.buttonUnselectAll = new System.Windows.Forms.Button();
       this.checkBox1 = new System.Windows.Forms.CheckBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.label7 = new System.Windows.Forms.Label();
+      this.labelSum = new System.Windows.Forms.Label();
       this.buttonLookup = new System.Windows.Forms.Button();
       this.groupBox2 = new System.Windows.Forms.GroupBox();
       this.textBox1 = new System.Windows.Forms.TextBox();
@@ -46,6 +48,7 @@
       this.textBox2 = new System.Windows.Forms.TextBox();
       this.buttonFamTypeName = new System.Windows.Forms.Button();
       this.groupBox4 = new System.Windows.Forms.GroupBox();
+      this.checkBoxTreeView = new System.Windows.Forms.CheckBox();
       this.treeViewFamily = new System.Windows.Forms.TreeView();
       this.button2 = new System.Windows.Forms.Button();
       this.button3 = new System.Windows.Forms.Button();
@@ -80,11 +83,8 @@
       this.label10 = new System.Windows.Forms.Label();
       this.buttonRefreshForm = new System.Windows.Forms.Button();
       this.buttonHelp = new System.Windows.Forms.Button();
-      this.labelSum = new System.Windows.Forms.Label();
-      this.label7 = new System.Windows.Forms.Label();
       this.richTextBox1 = new System.Windows.Forms.RichTextBox();
       this.groupBox7 = new System.Windows.Forms.GroupBox();
-      this.checkBoxTreeView = new System.Windows.Forms.CheckBox();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -99,7 +99,7 @@
       // buttonClose
       // 
       this.buttonClose.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.buttonClose.Location = new System.Drawing.Point(1032, 592);
+      this.buttonClose.Location = new System.Drawing.Point(1032, 615);
       this.buttonClose.Name = "buttonClose";
       this.buttonClose.Size = new System.Drawing.Size(162, 33);
       this.buttonClose.TabIndex = 1;
@@ -116,7 +116,7 @@
       this.buttonSelectObject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
       this.buttonSelectObject.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
       this.buttonSelectObject.ForeColor = System.Drawing.Color.LightGray;
-      this.buttonSelectObject.Location = new System.Drawing.Point(8, 554);
+      this.buttonSelectObject.Location = new System.Drawing.Point(8, 577);
       this.buttonSelectObject.Name = "buttonSelectObject";
       this.buttonSelectObject.Size = new System.Drawing.Size(257, 33);
       this.buttonSelectObject.TabIndex = 2;
@@ -136,7 +136,7 @@
       this.listViewCategories.HideSelection = false;
       this.listViewCategories.Location = new System.Drawing.Point(8, 55);
       this.listViewCategories.Name = "listViewCategories";
-      this.listViewCategories.Size = new System.Drawing.Size(451, 475);
+      this.listViewCategories.Size = new System.Drawing.Size(451, 495);
       this.listViewCategories.Sorting = System.Windows.Forms.SortOrder.Ascending;
       this.listViewCategories.TabIndex = 9;
       this.listViewCategories.UseCompatibleStateImageBehavior = false;
@@ -160,7 +160,7 @@
       // buttonSelectAll
       // 
       this.buttonSelectAll.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.buttonSelectAll.Location = new System.Drawing.Point(271, 554);
+      this.buttonSelectAll.Location = new System.Drawing.Point(271, 577);
       this.buttonSelectAll.Name = "buttonSelectAll";
       this.buttonSelectAll.Size = new System.Drawing.Size(91, 33);
       this.buttonSelectAll.TabIndex = 13;
@@ -171,7 +171,7 @@
       // buttonUnselectAll
       // 
       this.buttonUnselectAll.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.buttonUnselectAll.Location = new System.Drawing.Point(368, 554);
+      this.buttonUnselectAll.Location = new System.Drawing.Point(368, 577);
       this.buttonUnselectAll.Name = "buttonUnselectAll";
       this.buttonUnselectAll.Size = new System.Drawing.Size(91, 33);
       this.buttonUnselectAll.TabIndex = 14;
@@ -184,7 +184,7 @@
       this.checkBox1.AutoSize = true;
       this.checkBox1.Checked = true;
       this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.checkBox1.Location = new System.Drawing.Point(8, 533);
+      this.checkBox1.Location = new System.Drawing.Point(8, 556);
       this.checkBox1.Name = "checkBox1";
       this.checkBox1.Size = new System.Drawing.Size(231, 19);
       this.checkBox1.TabIndex = 15;
@@ -204,10 +204,28 @@
       this.groupBox1.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.groupBox1.Location = new System.Drawing.Point(7, 7);
       this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(465, 596);
+      this.groupBox1.Size = new System.Drawing.Size(465, 618);
       this.groupBox1.TabIndex = 16;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Lookup カテゴリ";
+      // 
+      // label7
+      // 
+      this.label7.Location = new System.Drawing.Point(359, 557);
+      this.label7.Name = "label7";
+      this.label7.Size = new System.Drawing.Size(50, 15);
+      this.label7.TabIndex = 35;
+      this.label7.Text = "SUM=";
+      this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+      // 
+      // labelSum
+      // 
+      this.labelSum.Location = new System.Drawing.Point(409, 557);
+      this.labelSum.Name = "labelSum";
+      this.labelSum.Size = new System.Drawing.Size(50, 15);
+      this.labelSum.TabIndex = 34;
+      this.labelSum.Text = "100000";
+      this.labelSum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
       // 
       // buttonLookup
       // 
@@ -300,22 +318,34 @@
       this.groupBox4.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.groupBox4.Location = new System.Drawing.Point(478, 7);
       this.groupBox4.Name = "groupBox4";
-      this.groupBox4.Size = new System.Drawing.Size(378, 596);
+      this.groupBox4.Size = new System.Drawing.Size(378, 618);
       this.groupBox4.TabIndex = 22;
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = "Lookup ファミリ / タイプ";
+      // 
+      // checkBoxTreeView
+      // 
+      this.checkBoxTreeView.AutoSize = true;
+      this.checkBoxTreeView.Checked = true;
+      this.checkBoxTreeView.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.checkBoxTreeView.Location = new System.Drawing.Point(6, 556);
+      this.checkBoxTreeView.Name = "checkBoxTreeView";
+      this.checkBoxTreeView.Size = new System.Drawing.Size(150, 19);
+      this.checkBoxTreeView.TabIndex = 36;
+      this.checkBoxTreeView.Text = "すべての項目を展開します";
+      this.checkBoxTreeView.UseVisualStyleBackColor = true;
       // 
       // treeViewFamily
       // 
       this.treeViewFamily.Location = new System.Drawing.Point(6, 17);
       this.treeViewFamily.Name = "treeViewFamily";
-      this.treeViewFamily.Size = new System.Drawing.Size(366, 513);
+      this.treeViewFamily.Size = new System.Drawing.Size(366, 533);
       this.treeViewFamily.TabIndex = 18;
       // 
       // button2
       // 
       this.button2.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.button2.Location = new System.Drawing.Point(281, 554);
+      this.button2.Location = new System.Drawing.Point(281, 577);
       this.button2.Name = "button2";
       this.button2.Size = new System.Drawing.Size(91, 33);
       this.button2.TabIndex = 17;
@@ -325,7 +355,7 @@
       // button3
       // 
       this.button3.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.button3.Location = new System.Drawing.Point(184, 554);
+      this.button3.Location = new System.Drawing.Point(184, 577);
       this.button3.Name = "button3";
       this.button3.Size = new System.Drawing.Size(91, 33);
       this.button3.TabIndex = 16;
@@ -341,7 +371,7 @@
       this.buttonSelectFamily.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
       this.buttonSelectFamily.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
       this.buttonSelectFamily.ForeColor = System.Drawing.Color.LightGray;
-      this.buttonSelectFamily.Location = new System.Drawing.Point(6, 554);
+      this.buttonSelectFamily.Location = new System.Drawing.Point(6, 577);
       this.buttonSelectFamily.Name = "buttonSelectFamily";
       this.buttonSelectFamily.Size = new System.Drawing.Size(172, 33);
       this.buttonSelectFamily.TabIndex = 16;
@@ -361,7 +391,7 @@
       this.tabControl1.Location = new System.Drawing.Point(-1, 6);
       this.tabControl1.Name = "tabControl1";
       this.tabControl1.SelectedIndex = 0;
-      this.tabControl1.Size = new System.Drawing.Size(870, 634);
+      this.tabControl1.Size = new System.Drawing.Size(870, 659);
       this.tabControl1.TabIndex = 23;
       // 
       // tabPage1
@@ -372,7 +402,7 @@
       this.tabPage1.Location = new System.Drawing.Point(4, 24);
       this.tabPage1.Name = "tabPage1";
       this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPage1.Size = new System.Drawing.Size(862, 606);
+      this.tabPage1.Size = new System.Drawing.Size(862, 631);
       this.tabPage1.TabIndex = 0;
       this.tabPage1.Text = "動的フィルタ";
       this.tabPage1.UseVisualStyleBackColor = true;
@@ -382,7 +412,7 @@
       this.tabPage2.Location = new System.Drawing.Point(4, 24);
       this.tabPage2.Name = "tabPage2";
       this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPage2.Size = new System.Drawing.Size(862, 606);
+      this.tabPage2.Size = new System.Drawing.Size(862, 631);
       this.tabPage2.TabIndex = 1;
       this.tabPage2.Text = "静的フィルタ";
       this.tabPage2.UseVisualStyleBackColor = true;
@@ -392,7 +422,7 @@
       this.tabPage3.Location = new System.Drawing.Point(4, 24);
       this.tabPage3.Name = "tabPage3";
       this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPage3.Size = new System.Drawing.Size(862, 606);
+      this.tabPage3.Size = new System.Drawing.Size(862, 631);
       this.tabPage3.TabIndex = 2;
       this.tabPage3.Text = "パラメータフィルタ";
       this.tabPage3.UseVisualStyleBackColor = true;
@@ -402,7 +432,7 @@
       this.tabPage4.Location = new System.Drawing.Point(4, 24);
       this.tabPage4.Name = "tabPage4";
       this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPage4.Size = new System.Drawing.Size(862, 606);
+      this.tabPage4.Size = new System.Drawing.Size(862, 631);
       this.tabPage4.TabIndex = 3;
       this.tabPage4.Text = "TEXT フィルタ";
       this.tabPage4.UseVisualStyleBackColor = true;
@@ -412,7 +442,7 @@
       this.tabPage5.Location = new System.Drawing.Point(4, 24);
       this.tabPage5.Name = "tabPage5";
       this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPage5.Size = new System.Drawing.Size(862, 606);
+      this.tabPage5.Size = new System.Drawing.Size(862, 631);
       this.tabPage5.TabIndex = 4;
       this.tabPage5.Text = "壁レイヤーフィルタ";
       this.tabPage5.UseVisualStyleBackColor = true;
@@ -422,7 +452,7 @@
       this.tabPage6.Location = new System.Drawing.Point(4, 24);
       this.tabPage6.Name = "tabPage6";
       this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPage6.Size = new System.Drawing.Size(862, 606);
+      this.tabPage6.Size = new System.Drawing.Size(862, 631);
       this.tabPage6.TabIndex = 5;
       this.tabPage6.Text = "床レイヤーフィルタ";
       this.tabPage6.UseVisualStyleBackColor = true;
@@ -660,7 +690,7 @@
       // buttonRefreshForm
       // 
       this.buttonRefreshForm.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.buttonRefreshForm.Location = new System.Drawing.Point(875, 553);
+      this.buttonRefreshForm.Location = new System.Drawing.Point(875, 576);
       this.buttonRefreshForm.Name = "buttonRefreshForm";
       this.buttonRefreshForm.Size = new System.Drawing.Size(319, 33);
       this.buttonRefreshForm.TabIndex = 34;
@@ -671,7 +701,7 @@
       // buttonHelp
       // 
       this.buttonHelp.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-      this.buttonHelp.Location = new System.Drawing.Point(875, 592);
+      this.buttonHelp.Location = new System.Drawing.Point(875, 615);
       this.buttonHelp.Name = "buttonHelp";
       this.buttonHelp.Size = new System.Drawing.Size(151, 33);
       this.buttonHelp.TabIndex = 35;
@@ -679,31 +709,13 @@
       this.buttonHelp.UseVisualStyleBackColor = true;
       this.buttonHelp.Click += new System.EventHandler(this.buttonHelp_Click);
       // 
-      // labelSum
-      // 
-      this.labelSum.Location = new System.Drawing.Point(409, 534);
-      this.labelSum.Name = "labelSum";
-      this.labelSum.Size = new System.Drawing.Size(50, 15);
-      this.labelSum.TabIndex = 34;
-      this.labelSum.Text = "100000";
-      this.labelSum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-      // 
-      // label7
-      // 
-      this.label7.Location = new System.Drawing.Point(359, 534);
-      this.label7.Name = "label7";
-      this.label7.Size = new System.Drawing.Size(50, 15);
-      this.label7.TabIndex = 35;
-      this.label7.Text = "SUM=";
-      this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-      // 
       // richTextBox1
       // 
       this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
       this.richTextBox1.Location = new System.Drawing.Point(7, 18);
       this.richTextBox1.Name = "richTextBox1";
       this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-      this.richTextBox1.Size = new System.Drawing.Size(306, 108);
+      this.richTextBox1.Size = new System.Drawing.Size(306, 131);
       this.richTextBox1.TabIndex = 36;
       this.richTextBox1.Text = "";
       // 
@@ -713,28 +725,16 @@
       this.groupBox7.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
       this.groupBox7.Location = new System.Drawing.Point(875, 415);
       this.groupBox7.Name = "groupBox7";
-      this.groupBox7.Size = new System.Drawing.Size(319, 132);
+      this.groupBox7.Size = new System.Drawing.Size(319, 155);
       this.groupBox7.TabIndex = 28;
       this.groupBox7.TabStop = false;
       this.groupBox7.Text = "検索結果";
-      // 
-      // checkBoxTreeView
-      // 
-      this.checkBoxTreeView.AutoSize = true;
-      this.checkBoxTreeView.Checked = true;
-      this.checkBoxTreeView.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.checkBoxTreeView.Location = new System.Drawing.Point(6, 533);
-      this.checkBoxTreeView.Name = "checkBoxTreeView";
-      this.checkBoxTreeView.Size = new System.Drawing.Size(150, 19);
-      this.checkBoxTreeView.TabIndex = 36;
-      this.checkBoxTreeView.Text = "すべての項目を展開します";
-      this.checkBoxTreeView.UseVisualStyleBackColor = true;
       // 
       // TestForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1203, 636);
+      this.ClientSize = new System.Drawing.Size(1203, 662);
       this.Controls.Add(this.groupBox7);
       this.Controls.Add(this.buttonHelp);
       this.Controls.Add(this.buttonRefreshForm);
@@ -752,6 +752,7 @@
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "Revit Dynamic Filter_V1_By キムジェボム";
       this.Load += new System.EventHandler(this.TestForm_Load);
+      this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TestForm_KeyUp);
       this.groupBox1.ResumeLayout(false);
       this.groupBox1.PerformLayout();
       this.groupBox2.ResumeLayout(false);

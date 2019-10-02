@@ -12,13 +12,14 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using NoahDesign.Cmd1_ConcreteVolume;
+using MyUtils;
 
 namespace ApplicationEntry.Cmd1_ConcreteVolume
 {
   public partial class FormConcreteVolume : System.Windows.Forms.Form
   {
     #region Field
-    const string _url = "https://www.youtube.com/channel/UChQ0_nEY87RxvhSqmC7jVmw/playlists";
+    WindowHandle _handle;
     private double _volume = 0;
     private int _index = 0;
     private CmdConcreteUtil _dataBuffer;
@@ -28,16 +29,16 @@ namespace ApplicationEntry.Cmd1_ConcreteVolume
     #endregion
 
     #region WindowsForm
-    public FormConcreteVolume( CmdConcreteUtil dataBuffer )
-    {    
+    public FormConcreteVolume( CmdConcreteUtil dataBuffer, WindowHandle handle )
+    {
       InitializeComponent();
       _dataBuffer = dataBuffer;
+      _handle = handle;
     }
 
-    
     private void FormConcreteVolume_Load( object sender, EventArgs e )
     {
-      //this.SuspendLayout();
+      this.KeyPreview = true;
       InitializeFilterData();
     }
 
@@ -54,29 +55,23 @@ namespace ApplicationEntry.Cmd1_ConcreteVolume
     }
 
 
-    /// <summary>
-    /// OK버튼으로 DirectShape를 최종 생성
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void Button3_Click( object sender, EventArgs e )
+    private void buttonStart_Click( object sender, EventArgs e )
     {
-      listView1.Refresh();
-
       if ( listView1.CheckedItems.Count != 0 )
       {
         foreach ( ListViewItem item in listView1.CheckedItems )
           _insideMass.Add( _dictFilters[item.Index] );
 
-        using ( SubTransaction subTransaction = new SubTransaction( _dataBuffer.Document ) )
+        using ( Transaction subTransaction = new Transaction( _dataBuffer.Document, "Trans" ) )
         {
+          //subTransaction.Start();
           List<Solid> intersecs = new List<Solid>();
           List<Solid> solids = new List<Solid>();
 
           Solid massSolid = Util_ConcreteVolume.GetElementSolid( _dataBuffer.Element );
 
           try
-          {          
+          {
             foreach ( var item in _insideMass )
             {
               var solid = Util_ConcreteVolume.GetElementSolid( item );
@@ -90,17 +85,18 @@ namespace ApplicationEntry.Cmd1_ConcreteVolume
               intersecs.Add( inter );
 
               if ( solid.Volume > 0 )
-                _volume += inter.Volume;       
+                _volume += inter.Volume;
             }
             _volume = UnitUtils.ConvertFromInternalUnits( _volume, DisplayUnitType.DUT_CUBIC_METERS );
-           
-            if ( intersecs != null  )
-            {          
+
+            if ( intersecs != null )
+            {
               if ( _volume > 0 )
               {
                 Util_ConcreteVolume.CreateDirectShape( _dataBuffer.Document, intersecs, _volume );
                 TaskDialog.Show( _dataBuffer.TaskDialogTitle, "完了しました。\n" +
                 "体積は「コメント」パラメータを参考してください。", TaskDialogCommonButtons.Close );
+
               }
               else
               {
@@ -108,7 +104,7 @@ namespace ApplicationEntry.Cmd1_ConcreteVolume
                 "正しくない部材が選択されています。", TaskDialogCommonButtons.Close );
               }
 
-              this.DialogResult = DialogResult.OK;      
+              this.DialogResult = DialogResult.OK;
               this.Close();
             }
             else
@@ -117,13 +113,13 @@ namespace ApplicationEntry.Cmd1_ConcreteVolume
                 "マスの範囲に該当するインスタンスがありまんせでした。" );
               this.DialogResult = DialogResult.Retry;
               this.Refresh();
-              return;         
-            }              
+              return;
+            }
           }
           catch ( Exception )
           {
             TaskDialog.Show( _dataBuffer.TaskDialogTitle, "範囲を正しく指定してください。\n" +
-              "RCではないインスタンスが含まれています。");
+              "RCではないインスタンスが含まれています。" );
             this.Dispose();
             this.DialogResult = DialogResult.Retry;
           }
@@ -131,6 +127,7 @@ namespace ApplicationEntry.Cmd1_ConcreteVolume
           {
             this.Dispose();
           }
+          
         }
       }
       else
@@ -151,15 +148,6 @@ namespace ApplicationEntry.Cmd1_ConcreteVolume
       this.Dispose();
     }
 
-    /// <summary>
-    /// Tutorialページのリンク
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void Button4_Click( object sender, EventArgs e )
-    {
-      System.Diagnostics.Process.Start( _url );
-    }
 
     /// <summary>
     /// 選択されたItemがない場合、何もしない
@@ -245,5 +233,11 @@ namespace ApplicationEntry.Cmd1_ConcreteVolume
       return listOfElements;
     }
     #endregion
+
+    private void FormConcreteVolume_KeyUp( object sender, KeyEventArgs e )
+    {
+      if ( e.KeyCode == Keys.Escape )
+        this.Dispose(); this.Close();
+    }
   }
 }

@@ -13,7 +13,7 @@ namespace NoahDesign
   {
     public Result OnStartup( UIControlledApplication a )
     {
-      NRibbon.AddRibbonPanel_VersionInfo( a );
+      MyRibbon.AddRibbonPanel_VersionInfo( a );
       return Result.Succeeded;
     }
 

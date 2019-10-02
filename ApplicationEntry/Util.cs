@@ -3154,5 +3154,28 @@ namespace MyUtils
     }
   }
 
+  public class WindowHandle : System.Windows.Forms.IWin32Window
+  {
+    IntPtr _hwnd;
+    public WindowHandle( IntPtr h )
+    {
+      Debug.Assert( IntPtr.Zero != h, "expected non-null window handle" );
+      _hwnd = h;
+    }
 
+    public IntPtr Handle
+    {
+      get { return _hwnd; }
+    }
+
+    //private void SetHandle()
+    //{
+    //  if ( null == _hWndRevit )
+    //  {
+    //    Process process = Process.GetCurrentProcess();
+    //    IntPtr h = process.MainWindowHandle;
+    //    _hWndRevit = new WindowHandle( h );
+    //  }
+    //}
+  }
 }

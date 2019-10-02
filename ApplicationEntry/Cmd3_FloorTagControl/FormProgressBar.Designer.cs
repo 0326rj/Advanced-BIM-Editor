@@ -33,19 +33,22 @@
       // 
       // progressBar1
       // 
-      this.progressBar1.Location = new System.Drawing.Point(12, 12);
+      this.progressBar1.Location = new System.Drawing.Point(12, 24);
+      this.progressBar1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
       this.progressBar1.Name = "progressBar1";
-      this.progressBar1.Size = new System.Drawing.Size(440, 34);
+      this.progressBar1.Size = new System.Drawing.Size(609, 25);
       this.progressBar1.Step = 1;
       this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
       this.progressBar1.TabIndex = 0;
       // 
       // FormProgressBar
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(464, 61);
+      this.ClientSize = new System.Drawing.Size(635, 60);
       this.Controls.Add(this.progressBar1);
+      this.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
       this.MaximizeBox = false;
       this.MinimizeBox = false;
       this.Name = "FormProgressBar";

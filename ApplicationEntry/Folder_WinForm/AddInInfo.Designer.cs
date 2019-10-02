@@ -165,6 +165,8 @@
       this.ShowInTaskbar = false;
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
       this.Text = "バージョン情報";
+      this.Load += new System.EventHandler(this.AddInInfo_Load);
+      this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.AddInInfo_KeyUp);
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
       this.ResumeLayout(false);
       this.PerformLayout();

@@ -29,7 +29,6 @@ namespace NoahDesign.Cmd0_FormTest
       sel.SetElementIds( collection );
       return sel;
     }
-
-    
+  
   }
 }
